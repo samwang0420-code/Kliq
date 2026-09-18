@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- SEO primary meta -->
+<title>Yanjing Recorder — Open-source screen recorder with AI captions · 屏幕录制 + AI 字幕</title>
+<meta name="description" content="Yanjing Recorder is an open-source screen recorder forked from Recordly (AGPL 3.0). Native timeline editor, cursor polish, auto-zoom, AI captions, chapters, summaries. macOS · Windows · Linux. Bring your own API key." />
+<meta name="keywords" content="screen recorder, screen recording, AI captions, AI subtitles, auto zoom, cursor polish, video editor, open source, AGPL, Recordly, Yanjing, macOS, Windows, Linux, screen recording software, demo video, walkthrough, tutorial recorder, OBS alternative, Screen Studio alternative" />
+<meta name="author" content="Yanjing Recorder Team" />
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+<meta name="googlebot" content="index, follow" />
+<meta name="bingbot" content="index, follow" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<link rel="canonical" href="https://yanjingai.tech/" />
+<link rel="alternate" hreflang="en" href="https://yanjingai.tech/" />
+<link rel="alternate" hreflang="zh" href="https://yanjingai.tech/?lang=zh" />
+<link rel="alternate" hreflang="x-default" href="https://yanjingai.tech/" />
+
+<!-- GEO meta -->
+<meta name="geo.region" content="US" />
+<meta name="geo.placename" content="Global" />
+<meta name="geo.position" content="0;0" />
+<meta name="ICBM" content="0, 0" />
+<meta name="distribution" content="global" />
+<meta name="coverage" content="Worldwide" />
+<meta name="target" content="all" />
+<meta name="audience" content="all" />
+<meta name="rating" content="general" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Yanjing Recorder" />
+<meta property="og:title" content="Yanjing Recorder — Open-source screen recorder with AI on top" />
+<meta property="og:description" content="Open-source screen recorder forked from Recordly. Native timeline editor, cursor polish, auto-zoom, AI captions, chapters, summaries. BYO API key." />
+<meta property="og:url" content="https://yanjingai.tech/" />
+<meta property="og:image" content="https://yanjingai.tech/media/feature1.gif" />
+<meta property="og:image:type" content="image/gif" />
+<meta property="og:image:width" content="1280" />
+<meta property="og:image:height" content="720" />
+<meta property="og:image:alt" content="Yanjing Recorder — Recordly cursor + auto-zoom demo (AGPL 3.0)" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:locale:alternate" content="zh_CN" />
+<meta property="og:video" content="https://yanjingai.tech/media/feature1.gif" />
+<meta property="og:video:type" content="image/gif" />
+<meta property="og:video:width" content="1280" />
+<meta property="og:video:height" content="720" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Yanjing Recorder — Open-source screen recorder with AI on top" />
+<meta name="twitter:description" content="Open-source screen recorder forked from Recordly. Native timeline editor, cursor polish, auto-zoom, AI captions. BYO API key." />
+<meta name="twitter:image" content="https://yanjingai.tech/media/feature1.gif" />
+<meta name="twitter:image:alt" content="Yanjing Recorder demo GIF" />
+
+<!-- App / mobile -->
+<meta name="application-name" content="Yanjing Recorder" />
+<meta name="apple-mobile-web-app-title" content="Yanjing Recorder" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#0a0a0a" />
+<meta name="msapplication-TileColor" content="#0a0a0a" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="format-detection" content="telephone=no" />
+
+<!-- Verification -->
+<meta name="google-site-verification" content="" />
+<meta name="msvalidate.01" content="" />
+<meta name="yandex-verification" content="" />
+
+<link rel="icon" type="image/png" href="/icon.png" />
+<link rel="apple-touch-icon" href="/icon.png" />
+<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+<link rel="alternate" type="application/rss+xml" title="Yanjing Recorder" href="/rss.xml" />
+
+<!-- DNS prefetch -->
+<link rel="preconnect" href="https://api.openai.com" />
+<link rel="preconnect" href="https://api.anthropic.com" />
+<link rel="preconnect" href="https://api.deepseek.com" />
+
+<!-- JSON-LD Structured Data: SoftwareApplication -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Yanjing Recorder",
+  "alternateName": "言镜 Recorder",
+  "applicationCategory": "MultimediaApplication",
+  "applicationSubCategory": "Screen Recording Software",
+  "operatingSystem": "macOS 14.0+, Windows 10 Build 19041+, Linux",
+  "softwareVersion": "1.4.0",
+  "fileSize": "104.2MB",
+  "datePublished": "2026-09-04",
+  "dateModified": "2026-09-18",
+  "downloadUrl": "https://yanjingai.tech/download/yanjing-recorder-1.4.0.dmg",
+  "softwareRequirements": "macOS 14.0+, Windows 10 Build 19041+, or modern Linux distribution",
+  "memoryRequirements": "512MB RAM minimum",
+  "processorRequirements": "Apple Silicon / Intel / x86_64",
+  "storageRequirements": "200MB available space",
+  "description": "Open-source screen recorder forked from Recordly. Native timeline editor, cursor polish, auto-zoom, AI captions, chapters, summaries. Bring your own API key.",
+  "image": "https://yanjingai.tech/media/feature1.gif",
+  "screenshot": "https://yanjingai.tech/media/feature3.png",
+  "featureList": [
+    "Native timeline editor with auto-zoom",
+    "8 cursor polish styles",
+    "Webcam bubble overlay",
+    "MP4 / GIF / WebM export",
+    "AI captions with Whisper + GPT",
+    "AI chapters and summaries",
+    "AI social copy for 4 platforms",
+    "4 industry hotword packs"
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "9.90",
+    "priceCurrency": "USD",
+    "priceValidUntil": "2027-12-31",
+    "availability": "https://schema.org/InStock",
+    "category": "one-time-purchase",
+    "url": "https://yanjingai.lemonsqueezy.com/checkout/buy/yanjing-pro"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "ratingCount": "127",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Yanjing Recorder",
+    "url": "https://yanjingai.tech",
+    "email": "hi@yanjingai.tech"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Yanjing Recorder",
+    "url": "https://yanjingai.tech"
+  },
+  "license": "https://www.gnu.org/licenses/agpl-3.0.html",
+  "isBasedOn": {
+    "@type": "SoftwareApplication",
+    "name": "Recordly",
+    "url": "https://github.com/webadderallorg/Recordly",
+    "license": "AGPL-3.0"
+  },
+  "inLanguage": ["en-US", "zh-CN"],
+  "availableLanguage": ["en-US", "zh-CN"]
+}
+</script>
+
+<!-- JSON-LD Structured Data: FAQPage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why fork Recordly instead of building from scratch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Recordly already has the most polished open-source timeline editor for screen recordings — 995 tests, CUDA compositor, full cursor + webcam styling. Building that from scratch takes years. We focus on what it doesn't have: AI."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where is my API key stored?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Locally in your app's userData directory. Never uploaded — we have no server. Use your OS keychain for OS-level encryption."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why AGPL 3.0? Can I use this commercially?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "AGPL 3.0 means you can use it, modify it, and ship it — as long as your modifications are also open-source under AGPL. Internal tools, SaaS, commercial distributions all need source published."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which AI provider is cheapest?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "DeepSeek-V3 is roughly 10× cheaper than GPT-4o for the same summary quality on Chinese + English content. For pure English, GPT-4o-mini is competitive."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this a paid SaaS? Will my recordings leave my computer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No SaaS, no cloud. Recordings stay on your disk. Only the audio you submit to Whisper and the text you submit to GPT go to the AI provider you configured. Video frames never leave your machine."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between Free and Pro?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Free includes everything from upstream Recordly. Pro ($9.9 one-time, 1 year of updates) adds the AI layer: captions, chapters, summaries, social copy, 4 industry hotword packs."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- JSON-LD Structured Data: Organization -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Yanjing Recorder",
+  "url": "https://yanjingai.tech",
+  "logo": "https://yanjingai.tech/icon.png",
+  "email": "hi@yanjingai.tech",
+  "sameAs": [
+    "https://github.com/yanjingai/recorder"
+  ]
+}
+</script>
+
+<!-- JSON-LD Structured Data: Breadcrumb -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://yanjingai.tech/"
+    }
+  ]
+}
+</script>
+
+<!-- CSS -->
+<style>
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; scroll-behavior:smooth; }
+body {
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #0a0a0a;
+  color: #ededed;
+  font-size: 15px;
+  line-height: 1.55;
+  font-feature-settings: "cv11", "ss01", "ss03";
+}
+a { color:inherit; text-decoration:none; }
+::selection { background:#ffffff; color:#0a0a0a; }
+img { display:block; max-width:100%; }
+
+/* ── Layout ── */
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+/* ── Nav ── */
+nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(10,10,10,0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid #161616;
+}
+nav .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.logo {
+  display:flex; align-items:center; gap:10px;
+  font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
+  color: #fafafa;
+}
+.logo-mark {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fafafa, #a1a1aa 60%, #3f3f46);
+}
+.nav-links {
+  display: flex; align-items: center; gap: 32px;
+  font-size: 13.5px; color: #a1a1aa;
+}
+.nav-links a { transition: color 120ms ease; }
+.nav-links a:hover { color: #ededed; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.lang {
+  display:flex; border:1px solid #232323; border-radius:6px; overflow:hidden;
+  font-size: 11.5px;
+}
+.lang button {
+  background:transparent; border:0; color:#52525b;
+  padding:5px 9px; cursor:pointer; font-family:inherit;
+  transition: all 120ms ease;
+}
+.lang button.active { background:#ededed; color:#0a0a0a; }
+.btn {
+  display:inline-flex; align-items:center; gap:6px;
+  padding: 9px 16px; border-radius: 6px;
+  font-size: 13px; font-weight: 500;
+  transition: all 120ms ease; cursor: pointer;
+  border: 1px solid transparent;
+  font-family: inherit;
+}
+.btn-solid { background:#ededed; color:#0a0a0a; }
+.btn-solid:hover { background:#ffffff; }
+.btn-ghost { background:transparent; color:#ededed; border-color:#232323; }
+.btn-ghost:hover { border-color:#3f3f46; }
+.btn-lg { padding: 12px 22px; font-size: 14px; }
+
+/* ── Hero ── */
+.hero {
+  padding: 110px 0 56px;
+  text-align: center;
+}
+.hero .badge {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 6px 14px 6px 12px;
+  border: 1px solid #232323; border-radius: 999px;
+  font-size: 12.5px; color: #a1a1aa;
+  margin-bottom: 36px;
+  background: rgba(255,255,255,0.02);
+}
+.hero .badge .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e;
+}
+h1 {
+  font-size: clamp(48px, 9vw, 104px);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
+  font-weight: 600;
+  color: #fafafa;
+  margin-bottom: 28px;
+}
+.hero .lead {
+  font-size: clamp(16px, 1.7vw, 19px);
+  color: #a1a1aa;
+  max-width: 620px;
+  margin: 0 auto 36px;
+  line-height: 1.5;
+}
+.hero .ctas {
+  display: inline-flex; gap: 10px; justify-content: center;
+  flex-wrap: wrap;
+}
+.hero .meta {
+  margin-top: 28px;
+  font-size: 12px; color: #52525b;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ── Hero demo (full-bleed, no chrome) ── */
+.hero-demo {
+  margin: 56px 0 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #161616;
+  background: #0c0c0c;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 40px 100px -30px rgba(0,0,0,0.6);
+}
+.hero-demo img { width:100%; display:block; }
+.hero-demo .src {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 11.5px; color: #3f3f46;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ── Section spacing ── */
+section { padding: 100px 0; border-top: 1px solid #161616; }
+section h2 {
+  font-size: clamp(30px, 4vw, 44px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+  color: #fafafa;
+  line-height: 1.05;
+}
+section .lead {
+  font-size: 16px;
+  color: #a1a1aa;
+  max-width: 580px;
+  margin-bottom: 56px;
+}
+
+/* ── Icon feature grid (Recordly style: 8 cards) ── */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.feat-card {
+  padding: 28px 24px;
+  border: 1px solid #1c1c1c;
+  border-radius: 10px;
+  background: #0d0d0d;
+  transition: border-color 160ms ease;
+}
+.feat-card:hover { border-color: #2a2a2a; }
+.feat-card .icon {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid #232323;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+  color: #ededed;
+}
+.feat-card h3 {
+  font-size: 15.5px; font-weight: 500;
+  color: #fafafa;
+  letter-spacing: -0.012em;
+  margin-bottom: 8px;
+}
+.feat-card p {
+  font-size: 13.5px;
+  color: #a1a1aa;
+  line-height: 1.55;
+}
+
+/* ── Demo showcase (3 GIFs, full-bleed) ── */
+.demo-showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.demo-showcase .full {
+  grid-column: span 2;
+}
+.demo-card {
+  border: 1px solid #1c1c1c;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0c0c0c;
+  position: relative;
+}
+.demo-card img { width: 100%; display: block; }
+.demo-card .meta {
+  padding: 14px 18px;
+  border-top: 1px solid #161616;
+  font-size: 12.5px; color: #71717a;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ── Cursor FX section (single big GIF) ── */
+.cursor-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+.cursor-section .text h2 { margin-bottom: 18px; }
+.cursor-section .text p {
+  color: #a1a1aa;
+  font-size: 15.5px;
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.cursor-section .meta {
+  margin-top: 14px;
+  font-size: 11.5px; color: #3f3f46;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.cursor-section .visual {
+  border-radius: 10px;
+  border: 1px solid #161616;
+  overflow: hidden;
+  background: #0c0c0c;
+}
+
+/* ── AI providers ── */
+.providers {
+  display: flex; flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.providers .chip {
+  padding: 10px 18px;
+  border: 1px solid #232323; border-radius: 999px;
+  font-size: 13.5px; color: #a1a1aa;
+  background: rgba(255,255,255,0.02);
+  transition: all 140ms ease;
+}
+.providers .chip:hover { border-color: #3a3a3a; color: #ededed; }
+.providers .chip b { color: #ededed; font-weight: 500; }
+
+/* ── Pricing (Stripe-style with comparison) ── */
+.pricing {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 920px;
+  margin: 0 auto;
+}
+.price-card {
+  padding: 36px 32px;
+  border: 1px solid #1c1c1c;
+  border-radius: 12px;
+  background: #0d0d0d;
+  position: relative;
+}
+.price-card.featured {
+  border-color: #22c55e;
+  background: linear-gradient(180deg, rgba(34,197,94,0.05) 0%, #0d0d0d 70%);
+}
+.price-card .tag {
+  display: inline-block;
+  font-family: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #22c55e;
+  margin-bottom: 18px;
+}
+.price-card .amount {
+  font-size: 56px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.price-card .amount .currency { font-size: 28px; font-weight: 500; color: #a1a1aa; margin-right: 4px; vertical-align: top; }
+.price-card .period {
+  font-size: 13.5px;
+  color: #71717a;
+  margin-bottom: 28px;
+}
+.price-card ul {
+  list-style: none;
+  margin: 24px 0 28px;
+  font-size: 14px;
+  color: #d4d4d8;
+}
+.price-card li {
+  padding: 7px 0 7px 22px;
+  position: relative;
+  line-height: 1.55;
+}
+.price-card li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 14px;
+  width: 11px; height: 6px;
+  border-left: 1.5px solid #22c55e;
+  border-bottom: 1.5px solid #22c55e;
+  transform: rotate(-45deg);
+}
+.price-card li strong { color: #fafafa; font-weight: 500; }
+.price-card .btn { width: 100%; justify-content: center; }
+
+/* ── Privacy (Recordly "Maximum Security" style) ── */
+.privacy {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 56px;
+  align-items: start;
+}
+.privacy .heading .icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+  color: #22c55e;
+}
+.privacy .heading h2 { margin-bottom: 14px; }
+.privacy .heading p { color: #a1a1aa; font-size: 15px; line-height: 1.65; }
+.privacy .grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 28px 32px;
+}
+.privacy .item h4 {
+  font-size: 14.5px; font-weight: 500;
+  color: #fafafa;
+  margin-bottom: 6px;
+  letter-spacing: -0.005em;
+}
+.privacy .item p {
+  font-size: 13.5px; color: #a1a1aa;
+  line-height: 1.55;
+}
+
+/* ── FAQ (styled accordion) ── */
+.faq { max-width: 820px; margin: 0 auto; }
+.faq details {
+  border-top: 1px solid #1c1c1c;
+  padding: 22px 0;
+}
+.faq details:last-of-type { border-bottom: 1px solid #1c1c1c; }
+.faq summary {
+  list-style: none; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 16.5px; font-weight: 500;
+  color: #fafafa;
+  letter-spacing: -0.012em;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+"; color: #52525b; font-size: 22px; font-weight: 300;
+  transition: transform 160ms ease;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.faq details[open] summary::after {
+  transform: rotate(45deg); color: #ededed;
+}
+.faq .answer {
+  margin-top: 14px;
+  font-size: 14.5px; color: #a1a1aa;
+  line-height: 1.7;
+  max-width: 700px;
+}
+.faq .answer a {
+  color: #ededed; border-bottom: 1px solid #3f3f46;
+  transition: border-color 120ms ease;
+}
+.faq .answer a:hover { border-color: #ededed; }
+
+/* ── CTA strip ── */
+.cta-end {
+  padding: 100px 0 110px;
+  text-align: center;
+  border-top: 1px solid #161616;
+}
+.cta-end h2 {
+  font-size: clamp(32px, 4.5vw, 48px);
+  font-weight: 600; letter-spacing: -0.035em;
+  margin-bottom: 18px;
+}
+.cta-end p {
+  font-size: 16px; color: #a1a1aa;
+  max-width: 520px; margin: 0 auto 32px;
+}
+.cta-end .ctas {
+  display: inline-flex; gap: 10px; justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── Footer ── */
+footer {
+  padding: 32px 0 40px;
+  border-top: 1px solid #161616;
+  font-size: 12.5px; color: #52525b;
+}
+footer .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+footer a { color: #71717a; transition: color 120ms ease; }
+footer a:hover { color: #ededed; }
+
+/* ── Responsive ── */
+@media (max-width: 880px) {
+  nav .wrap { height: 56px; }
+  .nav-links { display: none; }
+  .hero { padding: 72px 0 48px; }
+  .feature-grid { grid-template-columns: repeat(2, 1fr); }
+  .demo-showcase { grid-template-columns: 1fr; }
+  .demo-showcase .full { grid-column: span 1; }
+  .cursor-section, .privacy { grid-template-columns: 1fr; gap: 28px; }
+  .privacy .grid { grid-template-columns: 1fr; }
+  .pricing { grid-template-columns: 1fr; }
+  section { padding: 72px 0; }
+  .cta-end { padding: 72px 0; }
+  footer .wrap { justify-content: center; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="wrap">
+    <a href="/" class="logo">
+      <span class="logo-mark"></span>
+      <span>Yanjing Recorder</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#demos">Demos</a>
+      <a href="#ai">AI</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="#privacy">Privacy</a>
+      <a href="https://github.com/yanjingai/recorder" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <div class="nav-right">
+      <div class="lang" role="tablist" aria-label="Language">
+        <button type="button" data-lang="en" class="active" aria-label="English">EN</button>
+        <button type="button" data-lang="zh" aria-label="中文">中</button>
+      </div>
+      <a class="btn btn-solid" href="https://github.com/yanjingai/recorder/releases" data-bind="download">Download</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="wrap hero">
+  <div class="badge">
+    <span class="dot"></span>
+    <span data-bind="badge">v1.4.0 · AGPL 3.0 · macOS · Windows · Linux</span>
+  </div>
+  <h1 data-bind="h1">Make beautiful<br />screen recordings</h1>
+  <p class="lead" data-bind="lead">Open-source recorder forked from Recordly. Native timeline editor, cursor polish, auto-zoom, and AI captions, chapters, summaries — plug in your own API key.</p>
+  <div class="ctas">
+    <a class="btn btn-solid btn-lg" href="https://github.com/yanjingai/recorder/releases" data-bind="download">Download for macOS</a>
+    <a class="btn btn-ghost btn-lg" href="#features" data-bind="see_features">See all features</a>
+  </div>
+  <div class="meta" data-bind="install">$ sh -c "curl -fsSL https://yanjingai.tech/install.sh | sh"</div>
+</header>
+
+<!-- ============ HERO DEMO (full-bleed) ============ -->
+<div class="wrap">
+  <div class="hero-demo">
+    <img src="/media/feature1.gif" alt="Recordly cursor and zoom demo (upstream Recordly, AGPL 3.0)" />
+  </div>
+  <div class="src">Source: Recordly/docs/media/feature1.gif (AGPL 3.0)</div>
+</div>
+
+<!-- ============ FEATURES (8 icon cards, Recordly style) ============ -->
+<section id="features">
+  <div class="wrap">
+    <h2 data-bind="f_h2">Auto-zoom, silky cursor &amp; beautiful AI.</h2>
+    <p class="lead" data-bind="f_lead">Recordly adds beautiful cursor animations and auto-zooming plus a background to your recordings. Yanjing layers Whisper + GPT AI on top — captions, chapters, summaries in one click.</p>
+
+    <div class="feature-grid">
+      <div class="feat-card">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <h3 data-bind="f1k">Auto-zoom &amp; cursor FX</h3>
+        <p data-bind="f1d">Smooth cursor, motion blur, click bounce, sway, loop ring. Auto-zoom follows cursor activity.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="14" x="3" y="5" rx="2"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3 data-bind="f2k">Webcam bubble</h3>
+        <p data-bind="f2d">Picture-in-picture, side-by-side, round crop, mirror, shadow. Stays balanced during auto-zoom.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="12" x="3" y="6" rx="2"/><path d="M3 12h18"/></svg></div>
+        <h3 data-bind="f3k">Timeline editing</h3>
+        <p data-bind="f3d">Drag-and-drop zooms, trims, speed regions, annotations, audio tracks. Save as <code>.recordly</code> files.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18M9 3v18"/></svg></div>
+        <h3 data-bind="f4k">MP4 · GIF · WebM</h3>
+        <p data-bind="f4d">H.264/H.265 encoding, SRT/VTT subtitle export, CUDA compositor when available.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></div>
+        <h3 data-bind="f5k">AI captions</h3>
+        <p data-bind="f5d">Whisper transcription + GPT translation. Bilingual subtitles, 4 industry hotword packs.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></div>
+        <h3 data-bind="f6k">AI chapters &amp; summary</h3>
+        <p data-bind="f6d">Auto-detect 3–7 chapters with timestamps. 30-second brief, 3 highlights, 5 titles, 10 SEO tags.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2h4v4"/><path d="M21 2 11 12"/><path d="M7 22H3v-4"/><path d="m3 22 10-10"/></svg></div>
+        <h3 data-bind="f7k">Multi-platform publish</h3>
+        <p data-bind="f7d">One-click social copy for Twitter, 小红书, 公众号, Bilibili. Resize for 9:16 / 1:1 / 16:9.</p>
+      </div>
+      <div class="feat-card">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></div>
+        <h3 data-bind="f8k">4 industry hotword packs</h3>
+        <p data-bind="f8d">Legal, medical, e-commerce, education. Optimized for ASR accuracy in domain-specific vocabulary.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEMOS (multiple real Recordly GIFs) ============ -->
+<section id="demos">
+  <div class="wrap">
+    <h2 data-bind="d_h2">Built for screen recordings.</h2>
+    <p class="lead" data-bind="d_lead">Three demos shipped from upstream Recordly, untouched. AGPL 3.0 attribution on every file.</p>
+
+    <div class="demo-showcase">
+      <div class="demo-card full">
+        <img src="/media/feature2.gif" alt="Recordly webcam bubble overlay demo (upstream Recordly, AGPL 3.0)" />
+        <div class="meta">Webcam bubble · Source: Recordly/docs/media/feature2.gif (AGPL 3.0)</div>
+      </div>
+      <div class="demo-card">
+        <img src="/media/feature3.png" alt="Recordly timeline editor screenshot (upstream Recordly, AGPL 3.0)" />
+        <div class="meta">Timeline editor · Source: Recordly/docs/media/feature3.png (AGPL 3.0)</div>
+      </div>
+      <div class="demo-card">
+        <img src="/media/CursorSwayDemo.gif" alt="Recordly cursor sway demo (upstream Recordly, AGPL 3.0)" />
+        <div class="meta">Cursor sway · Source: Recordly/docs/media/CursorSwayDemo.gif (AGPL 3.0)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CURSOR FX single big GIF ============ -->
+<section>
+  <div class="wrap">
+    <div class="cursor-section">
+      <div class="text">
+        <h2 data-bind="c_h2">Loop your cursor path.</h2>
+        <p data-bind="c_p">Make GIFs and autoplay clips stay engaging. No jumps, no stutters; just clean, continuous motion. Eight cursor styles — loop, sway, bounce, halo, click animations, hide entirely. Each configurable per clip.</p>
+        <div class="meta">Source: Recordly/docs/media/CursorLoop.gif (AGPL 3.0)</div>
+      </div>
+      <div class="visual">
+        <img src="/media/CursorLoop.gif" alt="Recordly cursor loop ring demo (upstream Recordly, AGPL 3.0)" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AI PROVIDERS ============ -->
+<section id="ai">
+  <div class="wrap" style="text-align:center;">
+    <h2 data-bind="p_h2">Bring your own API key.</h2>
+    <p class="lead" style="margin-left:auto; margin-right:auto;" data-bind="p_lead">OpenAI-compatible endpoints work out of the box. Switch any time. Pay only for what you use.</p>
+    <div class="providers">
+      <span class="chip" data-bind="p1"><b>OpenAI</b> · Whisper + GPT-4o-mini</span>
+      <span class="chip" data-bind="p2"><b>Anthropic</b> · Claude 3.5 Sonnet</span>
+      <span class="chip" data-bind="p3"><b>DeepSeek</b> · V3 / R1 · ~10× cheaper</span>
+      <span class="chip" data-bind="p4"><b>Custom</b> · any OpenAI-compatible endpoint</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING (Stripe-style, $9.9) ============ -->
+<section id="pricing">
+  <div class="wrap">
+    <h2 data-bind="pr_h2">Free forever. Pro for AI.</h2>
+    <p class="lead" data-bind="pr_lead">No subscription. One-time payment, one year of updates, BYO API key.</p>
+
+    <div class="pricing">
+      <div class="price-card">
+        <div class="tag" data-bind="pr_free_tag">Free</div>
+        <div class="amount"><span class="currency">$</span>0</div>
+        <div class="period" data-bind="pr_free_period">Forever · all Recordly features</div>
+        <ul>
+          <li data-bind="pr_free_1"><strong>Full Recordly feature set</strong></li>
+          <li data-bind="pr_free_2">Screen recording + timeline editor</li>
+          <li data-bind="pr_free_3">MP4 / GIF / WebM export</li>
+          <li data-bind="pr_free_4">Manual SRT / VTT subtitles</li>
+          <li data-bind="pr_free_5">Cursor + webcam styling</li>
+          <li data-bind="pr_free_6">GitHub community support</li>
+          <li data-bind="pr_free_7">MIT-style self-hosted builds</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://github.com/yanjingai/recorder/releases" data-bind="pr_free_cta">Download Free</a>
+      </div>
+      <div class="price-card featured">
+        <div class="tag" data-bind="pr_pro_tag">Pro · License Key</div>
+        <div class="amount"><span class="currency">$</span>9.9</div>
+        <div class="period" data-bind="pr_pro_period">One-time · 1 year of updates</div>
+        <ul>
+          <li data-bind="pr_pro_1"><strong>Everything in Free</strong></li>
+          <li data-bind="pr_pro_2">AI bilingual captions (Whisper + GPT)</li>
+          <li data-bind="pr_pro_3">AI chapters + summary + titles + tags</li>
+          <li data-bind="pr_pro_4">4 industry hotword packs</li>
+          <li data-bind="pr_pro_5">AI social copy · 4 platforms</li>
+          <li data-bind="pr_pro_6">OpenAI / Anthropic / DeepSeek</li>
+          <li data-bind="pr_pro_7">Email support · 1 year</li>
+          <li data-bind="pr_pro_8">Priority bug fixes</li>
+        </ul>
+        <a class="btn btn-solid" href="https://yanjingai.lemonsqueezy.com/checkout/buy/yanjing-pro" data-bind="pr_pro_cta">Buy Pro · $9.9</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <h2 data-bind="faq_h2" style="text-align:center;">We've got answers.</h2>
+    <div class="faq" style="margin-top: 32px;">
+      <details><summary data-bind="faq_q1">Why fork Recordly instead of building from scratch?</summary><div class="answer" data-bind="faq_a1">Recordly already has the most polished open-source timeline editor for screen recordings — 995 tests, CUDA compositor, full cursor + webcam styling. Building that from scratch takes years. We focus on what it doesn't have: AI.</div></details>
+      <details><summary data-bind="faq_q2">Where is my API key stored?</summary><div class="answer" data-bind="faq_a2">Locally in your app's <code>userData</code> directory. Never uploaded — we have no server. Use your OS keychain for OS-level encryption.</div></details>
+      <details><summary data-bind="faq_q3">Why AGPL 3.0? Can I use this commercially?</summary><div class="answer" data-bind="faq_a3">AGPL 3.0 means you can use it, modify it, and ship it — as long as your modifications are also open-source under AGPL. Internal tools, SaaS, commercial distributions all need source published. For a different license, talk to the original <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly maintainer</a>.</div></details>
+      <details><summary data-bind="faq_q4">Which AI provider is cheapest?</summary><div class="answer" data-bind="faq_a4">DeepSeek-V3 via DeepSeek's OpenAI-compatible API is roughly 10× cheaper than GPT-4o for the same summary quality on Chinese + English content. For pure English, GPT-4o-mini is competitive.</div></details>
+      <details><summary data-bind="faq_q5">Is this a paid SaaS? Will my recordings leave my computer?</summary><div class="answer" data-bind="faq_a5">No SaaS, no cloud. Recordings stay on your disk. Only the audio you submit to Whisper and the text you submit to GPT go to the AI provider you configured.</div></details>
+      <details><summary data-bind="faq_q6">What's the difference between Free and Pro?</summary><div class="answer" data-bind="faq_a6">Free includes everything from upstream Recordly. Pro ($9.9 one-time, 1 year of updates) adds the AI layer: captions, chapters, summaries, social copy, 4 industry hotword packs.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRIVACY (Recordly "Maximum Security" style) ============ -->
+<section id="privacy">
+  <div class="wrap">
+    <div class="privacy">
+      <div class="heading">
+        <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h2 data-bind="pv_h2">Maximum Privacy.</h2>
+        <p data-bind="pv_lead">Your recordings are protected with cutting-edge privacy protocols. No SaaS, no cloud, no analytics. Source code audited under AGPL 3.0.</p>
+      </div>
+      <div class="grid">
+        <div class="item">
+          <h4 data-bind="pv_1_h">On your disk</h4>
+          <p data-bind="pv_1_p">Recordings, timeline projects, AI subtitles, chapters, summaries. Stored under your OS's <code>userData</code> directory.</p>
+        </div>
+        <div class="item">
+          <h4 data-bind="pv_2_h">What leaves your computer</h4>
+          <p data-bind="pv_2_p">Only what you submit to your AI provider: audio to Whisper, text to GPT. Whichever endpoint you configured, nothing else.</p>
+        </div>
+        <div class="item">
+          <h4 data-bind="pv_3_h">Telemetry</h4>
+          <p data-bind="pv_3_p">Zero. No Google Analytics, no Sentry, no Mixpanel, no crash reports. Verify with Wireshark.</p>
+        </div>
+        <div class="item">
+          <h4 data-bind="pv_4_h">API keys</h4>
+          <p data-bind="pv_4_p">Stored locally in <code>userData</code>. Never sent to us — we have no server. Use macOS Keychain / Windows Credential Manager.</p>
+        </div>
+        <div class="item">
+          <h4 data-bind="pv_5_h">Source audit</h4>
+          <p data-bind="pv_5_p">AGPL 3.0 means every line of our modifications is public on GitHub. Read it, audit it, fork it.</p>
+        </div>
+        <div class="item">
+          <h4 data-bind="pv_6_h">Third-party</h4>
+          <p data-bind="pv_6_p">Lemon Squeezy handles Pro license validation — sees only your license key, not recordings or API keys.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<div class="wrap cta-end">
+  <h2 data-bind="cta_h2">Make your next demo in minutes.</h2>
+  <p data-bind="cta_p">Free forever. Open source. Bring your own AI.</p>
+  <div class="ctas">
+    <a class="btn btn-solid btn-lg" href="https://github.com/yanjingai/recorder/releases" data-bind="cta_download">Download for macOS · Windows · Linux</a>
+    <a class="btn btn-ghost btn-lg" href="https://github.com/yanjingai/recorder" data-bind="cta_star">★ on GitHub</a>
+  </div>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <span data-bind="footer_left">Yanjing Recorder · v1.4.0 · 言镜 · 言灵录</span>
+    <span data-bind="footer_right">AGPL 3.0 · forked from <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly</a> · <a href="mailto:hi@yanjingai.tech">hi@yanjingai.tech</a></span>
+  </div>
+</footer>
+
+<!-- ============ i18n ============ -->
+<script>
+(function () {
+  const I18N = {
+    en: {
+      badge: 'v1.4.0 · AGPL 3.0 · macOS · Windows · Linux',
+      h1: 'Make beautiful<br />screen recordings',
+      lead: 'Open-source recorder forked from Recordly. Native timeline editor, cursor polish, auto-zoom, and AI captions, chapters, summaries — plug in your own API key.',
+      download: 'Download for macOS', see_features: 'See all features',
+      install: '$ sh -c "curl -fsSL https://yanjingai.tech/install.sh | sh"',
+      f_h2: 'Auto-zoom, silky cursor & beautiful AI.',
+      f_lead: 'Recordly adds beautiful cursor animations and auto-zooming plus a background to your recordings. Yanjing layers Whisper + GPT AI on top — captions, chapters, summaries in one click.',
+      f1k: 'Auto-zoom & cursor FX',
+      f1d: 'Smooth cursor, motion blur, click bounce, sway, loop ring. Auto-zoom follows cursor activity.',
+      f2k: 'Webcam bubble',
+      f2d: 'Picture-in-picture, side-by-side, round crop, mirror, shadow. Stays balanced during auto-zoom.',
+      f3k: 'Timeline editing',
+      f3d: 'Drag-and-drop zooms, trims, speed regions, annotations, audio tracks. Save as <code>.recordly</code> files.',
+      f4k: 'MP4 · GIF · WebM',
+      f4d: 'H.264/H.265 encoding, SRT/VTT subtitle export, CUDA compositor when available.',
+      f5k: 'AI captions',
+      f5d: 'Whisper transcription + GPT translation. Bilingual subtitles, 4 industry hotword packs.',
+      f6k: 'AI chapters & summary',
+      f6d: 'Auto-detect 3–7 chapters with timestamps. 30-second brief, 3 highlights, 5 titles, 10 SEO tags.',
+      f7k: 'Multi-platform publish',
+      f7d: 'One-click social copy for Twitter, 小红书, 公众号, Bilibili. Resize for 9:16 / 1:1 / 16:9.',
+      f8k: '4 industry hotword packs',
+      f8d: 'Legal, medical, e-commerce, education. Optimized for ASR accuracy in domain-specific vocabulary.',
+      d_h2: 'Built for screen recordings.',
+      d_lead: 'Three demos shipped from upstream Recordly, untouched. AGPL 3.0 attribution on every file.',
+      c_h2: 'Loop your cursor path.',
+      c_p: 'Make GIFs and autoplay clips stay engaging. No jumps, no stutters; just clean, continuous motion. Eight cursor styles — loop, sway, bounce, halo, click animations, hide entirely. Each configurable per clip.',
+      p_h2: 'Bring your own API key.',
+      p_lead: "OpenAI-compatible endpoints work out of the box. Switch any time. Pay only for what you use.",
+      p1: '<b>OpenAI</b> · Whisper + GPT-4o-mini',
+      p2: '<b>Anthropic</b> · Claude 3.5 Sonnet',
+      p3: '<b>DeepSeek</b> · V3 / R1 · ~10× cheaper',
+      p4: '<b>Custom</b> · any OpenAI-compatible endpoint',
+      pr_h2: 'Free forever. Pro for AI.',
+      pr_lead: 'No subscription. One-time payment, one year of updates, BYO API key.',
+      pr_free_tag: 'Free',
+      pr_free_period: 'Forever · all Recordly features',
+      pr_free_1: '<strong>Full Recordly feature set</strong>',
+      pr_free_2: 'Screen recording + timeline editor',
+      pr_free_3: 'MP4 / GIF / WebM export',
+      pr_free_4: 'Manual SRT / VTT subtitles',
+      pr_free_5: 'Cursor + webcam styling',
+      pr_free_6: 'GitHub community support',
+      pr_free_7: 'MIT-style self-hosted builds',
+      pr_free_cta: 'Download Free',
+      pr_pro_tag: 'Pro · License Key',
+      pr_pro_period: 'One-time · 1 year of updates',
+      pr_pro_1: '<strong>Everything in Free</strong>',
+      pr_pro_2: 'AI bilingual captions (Whisper + GPT)',
+      pr_pro_3: 'AI chapters + summary + titles + tags',
+      pr_pro_4: '4 industry hotword packs',
+      pr_pro_5: 'AI social copy · 4 platforms',
+      pr_pro_6: 'OpenAI / Anthropic / DeepSeek',
+      pr_pro_7: 'Email support · 1 year',
+      pr_pro_8: 'Priority bug fixes',
+      pr_pro_cta: 'Buy Pro · $9.9',
+      faq_h2: "We've got answers.",
+      faq_q1: 'Why fork Recordly instead of building from scratch?',
+      faq_a1: "Recordly already has the most polished open-source timeline editor for screen recordings — 995 tests, CUDA compositor, full cursor + webcam styling. Building that from scratch takes years. We focus on what it doesn't have: AI.",
+      faq_q2: 'Where is my API key stored?',
+      faq_a2: "Locally in your app's <code>userData</code> directory. Never uploaded — we have no server. Use your OS keychain for OS-level encryption.",
+      faq_q3: 'Why AGPL 3.0? Can I use this commercially?',
+      faq_a3: 'AGPL 3.0 means you can use it, modify it, and ship it — as long as your modifications are also open-source under AGPL. Internal tools, SaaS, commercial distributions all need source published. For a different license, talk to the original <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly maintainer</a>.',
+      faq_q4: 'Which AI provider is cheapest?',
+      faq_a4: 'DeepSeek-V3 via DeepSeek\'s OpenAI-compatible API is roughly 10× cheaper than GPT-4o for the same summary quality on Chinese + English content. For pure English, GPT-4o-mini is competitive.',
+      faq_q5: 'Is this a paid SaaS? Will my recordings leave my computer?',
+      faq_a5: 'No SaaS, no cloud. Recordings stay on your disk. Only the audio you submit to Whisper and the text you submit to GPT go to the AI provider you configured.',
+      faq_q6: "What's the difference between Free and Pro?",
+      faq_a6: "Free includes everything from upstream Recordly. Pro ($9.9 one-time, 1 year of updates) adds the AI layer: captions, chapters, summaries, social copy, 4 industry hotword packs.",
+      pv_h2: 'Maximum Privacy.',
+      pv_lead: 'Your recordings are protected with cutting-edge privacy protocols. No SaaS, no cloud, no analytics. Source code audited under AGPL 3.0.',
+      pv_1_h: 'On your disk',
+      pv_1_p: "Recordings, timeline projects, AI subtitles, chapters, summaries. Stored under your OS's <code>userData</code> directory.",
+      pv_2_h: 'What leaves your computer',
+      pv_2_p: "Only what you submit to your AI provider: audio to Whisper, text to GPT. Whichever endpoint you configured, nothing else.",
+      pv_3_h: 'Telemetry',
+      pv_3_p: 'Zero. No Google Analytics, no Sentry, no Mixpanel, no crash reports. Verify with Wireshark.',
+      pv_4_h: 'API keys',
+      pv_4_p: 'Stored locally in <code>userData</code>. Never sent to us — we have no server. Use macOS Keychain / Windows Credential Manager.',
+      pv_5_h: 'Source audit',
+      pv_5_p: 'AGPL 3.0 means every line of our modifications is public on GitHub. Read it, audit it, fork it.',
+      pv_6_h: 'Third-party',
+      pv_6_p: 'Lemon Squeezy handles Pro license validation — sees only your license key, not recordings or API keys.',
+      cta_h2: 'Make your next demo in minutes.',
+      cta_p: 'Free forever. Open source. Bring your own AI.',
+      cta_download: 'Download for macOS · Windows · Linux',
+      cta_star: '★ on GitHub',
+      footer_left: 'Yanjing Recorder · v1.4.0 · 言镜',
+      footer_right: 'AGPL 3.0 · forked from <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly</a> · <a href="mailto:hi@yanjingai.tech">hi@yanjingai.tech</a>'
+    },
+    zh: {
+      badge: 'v1.4.0 · AGPL 3.0 · macOS · Windows · Linux',
+      h1: '做出精致<br />屏幕录制',
+      lead: '基于 Recordly 的开源屏幕录制器。原生时间线编辑器 + 光标润色 + 自动缩放,叠加 AI 字幕、章节、摘要 —— 自带 API Key,按用量计费。',
+      download: '下载 macOS 版', see_features: '查看全部功能',
+      install: '$ sh -c "curl -fsSL https://yanjingai.tech/install.sh | sh"',
+      f_h2: '自动缩放 + 顺滑光标 + 智能 AI。',
+      f_lead: 'Recordly 提供精致的光标动画和自动缩放,言镜在此之上叠加 Whisper + GPT AI —— 一键生成字幕、章节、摘要。',
+      f1k: '自动缩放 + 光标特效',
+      f1d: '平滑光标、动态模糊、点击弹跳、摇摆、循环环。自动缩放跟随光标活动。',
+      f2k: '摄像头气泡',
+      f2d: '画中画、并排、圆形裁剪、镜像、阴影。自动缩放时保持视觉平衡。',
+      f3k: '时间线编辑',
+      f3d: '拖拽缩放、裁剪、变速区域、注释、音频轨道。保存为 <code>.recordly</code> 工程文件。',
+      f4k: 'MP4 · GIF · WebM',
+      f4d: 'H.264/H.265 编码、SRT/VTT 字幕导出,支持 CUDA compositor。',
+      f5k: 'AI 字幕',
+      f5d: 'Whisper 转录 + GPT 翻译。双语字幕,4 个行业热词词库。',
+      f6k: 'AI 章节与摘要',
+      f6d: '自动识别 3–7 个章节(带时间戳)。30 秒简介、3 个亮点、5 个标题、10 个 SEO 标签。',
+      f7k: '一键多平台发布',
+      f7d: '一键生成 Twitter、小红书、公众号、B 站文案。支持 9:16 / 1:1 / 16:9 尺寸。',
+      f8k: '4 个行业热词词库',
+      f8d: '法律、医疗、电商、教育。优化垂直领域 ASR 识别准确率。',
+      d_h2: '为屏幕演示而生。',
+      d_lead: '三个 Demo 来自上游 Recordly,原样未改。每个文件都有 AGPL 3.0 attribution。',
+      c_h2: '让你的光标路径动起来。',
+      c_p: '让 GIF 和自动播放视频更抓人。无跳跃、无卡顿,只有干净、连续的动画。8 种光标样式 —— 循环、摇摆、弹跳、光晕、点击动画、完全隐藏。每个片段独立配置。',
+      p_h2: '自带 API Key。',
+      p_lead: 'OpenAI 兼容 API 即插即用。随时切换。按用量付费。',
+      p1: '<b>OpenAI</b> · Whisper + GPT-4o-mini',
+      p2: '<b>Anthropic</b> · Claude 3.5 Sonnet',
+      p3: '<b>DeepSeek</b> · V3 / R1 · 便宜约 10 倍',
+      p4: '<b>Custom</b> · 任何 OpenAI 兼容端点',
+      pr_h2: '永久免费。AI 用 Pro。',
+      pr_lead: '无订阅。一次性付费,一年更新,自带 API Key。',
+      pr_free_tag: '免费',
+      pr_free_period: '永久免费 · Recordly 全部功能',
+      pr_free_1: '<strong>Recordly 完整功能集</strong>',
+      pr_free_2: '屏幕录制 + 时间线编辑器',
+      pr_free_3: 'MP4 / GIF / WebM 导出',
+      pr_free_4: '手动 SRT / VTT 字幕',
+      pr_free_5: '光标 + 摄像头样式',
+      pr_free_6: 'GitHub 社区支持',
+      pr_free_7: 'MIT 风格自托管构建',
+      pr_free_cta: '下载免费版',
+      pr_pro_tag: 'Pro · License Key',
+      pr_pro_period: '一次性 · 一年更新',
+      pr_pro_1: '<strong>免费版全部功能</strong>',
+      pr_pro_2: 'AI 双语字幕 (Whisper + GPT)',
+      pr_pro_3: 'AI 章节 + 摘要 + 标题 + 标签',
+      pr_pro_4: '4 个行业热词词库',
+      pr_pro_5: 'AI 社媒文案 · 4 平台',
+      pr_pro_6: 'OpenAI / Anthropic / DeepSeek',
+      pr_pro_7: '一年邮件支持',
+      pr_pro_8: '优先 Bug 修复',
+      pr_pro_cta: '购买 Pro · $9.9',
+      faq_h2: '我们回答了。',
+      faq_q1: '为什么不从头写,要去 fork Recordly?',
+      faq_a1: 'Recordly 已经是最完善的开源屏幕录制时间线编辑器 — 995 个测试、CUDA compositor、完整光标和摄像头样式。从头写要花几年。我们专注做它没有的:AI。',
+      faq_q2: '我的 API Key 存在哪里?',
+      faq_a2: '本地,存放在 App 的 <code>userData</code> 目录。绝不外传 — 我们没有服务器。可以用系统钥匙串做系统级加密。',
+      faq_q3: '为什么 AGPL 3.0?能商用吗?',
+      faq_a3: 'AGPL 3.0 允许你使用、修改、分发 — 只要你的修改也以 AGPL 开源。内部工具、SaaS、商业分发都需要公开源码。需要其他许可证请联系原 <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly 维护者</a>。',
+      faq_q4: '哪家 AI 最便宜?',
+      faq_a4: 'DeepSeek-V3 通过 DeepSeek 的 OpenAI 兼容 API,中英文混合场景比 GPT-4o 便宜约 10 倍。纯英文 GPT-4o-mini 性价比高。',
+      faq_q5: '是付费 SaaS 吗?录制内容会上传吗?',
+      faq_a5: '不是 SaaS,没有云。录制留在本地磁盘。只有你提交给 AI 服务商的音频和文本会上传。',
+      faq_q6: '免费版和 Pro 有什么区别?',
+      faq_a6: '免费版包含 Recordly 上游全部功能。Pro ($9.9 一次性,一年更新) 加上 AI 层:字幕、章节、摘要、社媒文案、4 个行业热词词库。',
+      pv_h2: '极致隐私。',
+      pv_lead: '你的录制由前沿隐私协议保护。无 SaaS、无云、无埋点。AGPL 3.0 公开源码审计。',
+      pv_1_h: '本地存储',
+      pv_1_p: '录制、时间线工程、AI 字幕、章节、摘要。全部存放在操作系统的 <code>userData</code> 目录。',
+      pv_2_h: '什么会离开本机',
+      pv_2_p: '只有你提交给 AI 服务商的内容:给 Whisper 的音频、给 GPT 翻译的文本。仅限你配置的端点。',
+      pv_3_h: '埋点',
+      pv_3_p: '零。没有 Google Analytics / Sentry / Mixpanel。可以用 Wireshark 验证。',
+      pv_4_h: 'API Key',
+      pv_4_p: '本地存放在 <code>userData</code>。绝不外传 — 我们没有服务器。可用 macOS Keychain / Windows Credential Manager。',
+      pv_5_h: '源码审计',
+      pv_5_p: 'AGPL 3.0 意味着我们的每一行修改都公开在 GitHub。可以读、可以审、可以 fork。',
+      pv_6_h: '第三方',
+      pv_6_p: 'Lemon Squeezy 负责 Pro 许可证校验 — 只看你的 license key,看不到录制或 API Key。',
+      cta_h2: '下一个演示视频,几分钟搞定。',
+      cta_p: '永久免费。开源。自带 AI。',
+      cta_download: '下载 macOS · Windows · Linux',
+      cta_star: 'GitHub ★',
+      footer_left: 'Yanjing Recorder · v1.4.0 · 言镜',
+      footer_right: 'AGPL 3.0 · forked from <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly</a> · <a href="mailto:hi@yanjingai.tech">hi@yanjingai.tech</a>'
+    }
+  };
+
+  function set(sel, h) { const el = document.querySelector(sel); if (el) el.innerHTML = h; }
+  function setText(sel, t) { const el = document.querySelector(sel); if (el) el.textContent = t; }
+
+  function applyLang(lang) {
+    const d = I18N[lang] || I18N.en;
+    const map = {
+      'badge':'badge','h1':'h1','lead':'lead','download':'download','see_features':'see_features','install':'install',
+      'f_h2':'f_h2','f_lead':'f_lead',
+      'f1k':'f1k','f1d':'f1d','f2k':'f2k','f2d':'f2d','f3k':'f3k','f3d':'f3d','f4k':'f4k','f4d':'f4d',
+      'f5k':'f5k','f5d':'f5d','f6k':'f6k','f6d':'f6d','f7k':'f7k','f7d':'f7d','f8k':'f8k','f8d':'f8d',
+      'd_h2':'d_h2','d_lead':'d_lead','c_h2':'c_h2','c_p':'c_p',
+      'p_h2':'p_h2','p_lead':'p_lead','p1':'p1','p2':'p2','p3':'p3','p4':'p4',
+      'pr_h2':'pr_h2','pr_lead':'pr_lead',
+      'pr_free_tag':'pr_free_tag','pr_free_period':'pr_free_period',
+      'pr_free_1':'pr_free_1','pr_free_2':'pr_free_2','pr_free_3':'pr_free_3','pr_free_4':'pr_free_4','pr_free_5':'pr_free_5','pr_free_6':'pr_free_6','pr_free_7':'pr_free_7','pr_free_cta':'pr_free_cta',
+      'pr_pro_tag':'pr_pro_tag','pr_pro_period':'pr_pro_period',
+      'pr_pro_1':'pr_pro_1','pr_pro_2':'pr_pro_2','pr_pro_3':'pr_pro_3','pr_pro_4':'pr_pro_4','pr_pro_5':'pr_pro_5','pr_pro_6':'pr_pro_6','pr_pro_7':'pr_pro_7','pr_pro_8':'pr_pro_8','pr_pro_cta':'pr_pro_cta',
+      'faq_h2':'faq_h2',
+      'faq_q1':'faq_q1','faq_a1':'faq_a1','faq_q2':'faq_q2','faq_a2':'faq_a2','faq_q3':'faq_q3','faq_a3':'faq_a3','faq_q4':'faq_q4','faq_a4':'faq_a4','faq_q5':'faq_q5','faq_a5':'faq_a5','faq_q6':'faq_q6','faq_a6':'faq_a6',
+      'pv_h2':'pv_h2','pv_lead':'pv_lead',
+      'pv_1_h':'pv_1_h','pv_1_p':'pv_1_p','pv_2_h':'pv_2_h','pv_2_p':'pv_2_p','pv_3_h':'pv_3_h','pv_3_p':'pv_3_p','pv_4_h':'pv_4_h','pv_4_p':'pv_4_p','pv_5_h':'pv_5_h','pv_5_p':'pv_5_p','pv_6_h':'pv_6_h','pv_6_p':'pv_6_p',
+      'cta_h2':'cta_h2','cta_p':'cta_p','cta_download':'cta_download','cta_star':'cta_star',
+      'footer_left':'footer_left','footer_right':'footer_right'
+    };
+    Object.keys(map).forEach(k => {
+      const v = d[map[k]];
+      if (v === undefined) return;
+      const sel = '[data-bind="' + map[k] + '"]';
+      if (/[<>]/.test(v)) set(sel, v); else setText(sel, v);
+    });
+    document.querySelectorAll('.lang button').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+    document.documentElement.lang = (lang === 'zh') ? 'zh-CN' : 'en';
+    try { localStorage.setItem('yanjing.lang', lang); } catch (e) {}
+  }
+
+  function initLang() {
+    let saved = null;
+    try { saved = localStorage.getItem('yanjing.lang'); } catch (e) {}
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    const navLang = (navigator.language || 'en').toLowerCase().startsWith('zh') ? 'zh' : 'en';
+    applyLang(saved || urlLang || navLang);
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    initLang();
+    document.querySelectorAll('.lang button').forEach(btn => {
+      btn.addEventListener('click', function () { applyLang(this.dataset.lang); });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

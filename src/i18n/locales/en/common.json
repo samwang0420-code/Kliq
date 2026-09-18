@@ -1,0 +1,140 @@
+{
+	"app": {
+		"name": "Yanjing Recorder",
+		"editorTitle": "Yanjing Recorder Editor",
+		"subtitle": "Screen recording and editing",
+		"language": "Language",
+		"manageRecordings": "Open recordings folder"
+	},
+	"actions": {
+		"cancel": "Cancel",
+		"close": "Close",
+		"export": "Export",
+		"load": "Load",
+		"redo": "Redo",
+		"reset": "Reset",
+		"save": "Save",
+		"undo": "Undo",
+		"delete": "Delete",
+		"done": "Done"
+	},
+	"errors": {
+		"invalidFileType": "Invalid file type",
+		"failedToUploadImage": "Failed to upload image",
+		"fileReadError": "There was an error reading the file."
+	},
+	"yanjing": {
+		"app": {
+			"tagline": "AI-powered open-source screen recorder",
+			"version": "v1.4.0-yanjing"
+		},
+		"ai": {
+			"section": "AI Enhancement",
+			"configure": "Configure AI",
+			"noProvider": "No AI provider configured",
+			"configurePrompt": "Configure your OpenAI / Anthropic API key to enable AI bilingual captions, smart chapters and summaries.",
+			"configureNow": "Configure now",
+			"configureLater": "Later",
+			"providers": {
+				"openai": {
+					"name": "OpenAI",
+					"description": "Whisper transcription + GPT-4 translation and summarization",
+					"apiKeyLabel": "OpenAI API Key",
+					"apiKeyPlaceholder": "sk-...",
+					"modelLabel": "Model",
+					"models": {
+						"gpt-4o-mini": "GPT-4o Mini (recommended)",
+						"gpt-4o": "GPT-4o",
+						"gpt-4-turbo": "GPT-4 Turbo",
+						"gpt-3.5-turbo": "GPT-3.5 Turbo"
+					}
+				},
+				"anthropic": {
+					"name": "Anthropic Claude",
+					"description": "Claude 3.5 Sonnet for translation and summarization",
+					"apiKeyLabel": "Anthropic API Key",
+					"apiKeyPlaceholder": "sk-ant-...",
+					"modelLabel": "Model",
+					"models": {
+						"claude-3-5-sonnet-20241022": "Claude 3.5 Sonnet",
+						"claude-3-5-haiku-20241022": "Claude 3.5 Haiku"
+					}
+				},
+				"custom": {
+					"name": "Custom (OpenAI-compatible)",
+					"description": "Any OpenAI-compatible API (Azure / Ollama / OpenRouter etc.)",
+					"baseUrlLabel": "Base URL",
+					"baseUrlPlaceholder": "https://api.openai.com/v1",
+					"apiKeyLabel": "API Key",
+					"modelLabel": "Model"
+				}
+			},
+			"captions": {
+				"title": "AI Bilingual Captions",
+				"transcribe": "Transcribe audio",
+				"translate": "Translate captions",
+				"burn": "Burn into video",
+				"export": "Export SRT/VTT",
+				"languages": {
+					"auto": "Auto-detect",
+					"en": "English",
+					"zh-CN": "Chinese (Simplified)",
+					"zh-TW": "Chinese (Traditional)",
+					"ja": "Japanese",
+					"ko": "Korean",
+					"es": "Spanish",
+					"fr": "French",
+					"de": "German"
+				}
+			},
+			"chapters": {
+				"title": "AI Smart Chapters",
+				"generate": "Generate chapters",
+				"regenerate": "Regenerate",
+				"noChapters": "No chapters generated yet"
+			},
+			"summary": {
+				"title": "AI Summary",
+				"generate": "Generate summary",
+				"regenerate": "Regenerate",
+				"noSummary": "No summary generated yet",
+				"socialCopy": "Social media copy",
+				"copyTwitter": "Copy Twitter copy",
+				"copyXiaohongshu": "Copy Xiaohongshu copy",
+				"copyWechat": "Copy Wechat copy",
+				"copyBilibili": "Copy Bilibili copy"
+			},
+			"hotwords": {
+				"title": "Industry Hotwords",
+				"general": "General",
+				"legal": "Legal",
+				"medical": "Medical",
+				"ecommerce": "E-commerce",
+				"education": "Education",
+				"description": "Choose an industry domain to improve specialized terminology recognition accuracy"
+			}
+		},
+		"license": {
+			"section": "License",
+			"free": "Free Edition",
+			"pro": "Pro Edition",
+			"activated": "Activated",
+			"notActivated": "Not activated",
+			"activatePrompt": "Activate Pro Edition to unlock all AI features",
+			"buyPro": "Buy Pro",
+			"enterLicenseKey": "Enter license key",
+			"activate": "Activate",
+			"deactivate": "Deactivate",
+			"activatedSuccess": "Activation successful!",
+			"invalidKey": "Invalid license key",
+			"expiresAt": "Expires at: {{date}}",
+			"subscriptionManagement": "Manage subscription"
+		},
+		"settings": {
+			"title": "Yanjing Settings",
+			"save": "Save",
+			"saved": "Saved",
+			"reset": "Reset to default"
+		}
+	}
+}

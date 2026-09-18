@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "domains": ["general", "legal", "medical", "ecommerce", "education", "finance", "gaming", "tech", "marketing"],
+  "default_domain": "general",
+  "description": "言镜 行业热词词库。9 个领域, 全部开源或自建。"
+}

@@ -1,0 +1,140 @@
+{
+	"app": {
+		"name": "言镜",
+		"editorTitle": "言镜 編輯器",
+		"subtitle": "屏幕錄制与編輯",
+		"language": "語言",
+		"manageRecordings": "打開錄制文件夹"
+	},
+	"actions": {
+		"cancel": "取消",
+		"close": "關閉",
+		"export": "導出",
+		"load": "加載",
+		"redo": "重做",
+		"reset": "重置",
+		"save": "保存",
+		"undo": "撤銷",
+		"delete": "刪除",
+		"done": "完成"
+	},
+	"errors": {
+		"invalidFileType": "無效的文件類型",
+		"failedToUploadImage": "上传圖片失敗",
+		"fileReadError": "讀取文件時出錯。"
+	},
+	"yanjing": {
+		"app": {
+			"tagline": "AI 增強的開源屏幕錄制器",
+			"version": "v1.4.0-yanjing"
+		},
+		"ai": {
+			"section": "AI 增強",
+			"configure": "配置 AI",
+			"noProvider": "尚未配置 AI 提供商",
+			"configurePrompt": "配置 OpenAI / Anthropic API key 以啟用 AI 雙語字幕、智能章節与摘要。",
+			"configureNow": "立即配置",
+			"configureLater": "稍後",
+			"providers": {
+				"openai": {
+					"name": "OpenAI",
+					"description": "Whisper 轉錄 + GPT-4 翻译与摘要",
+					"apiKeyLabel": "OpenAI API Key",
+					"apiKeyPlaceholder": "sk-...",
+					"modelLabel": "模型",
+					"models": {
+						"gpt-4o-mini": "GPT-4o Mini (推荐)",
+						"gpt-4o": "GPT-4o",
+						"gpt-4-turbo": "GPT-4 Turbo",
+						"gpt-3.5-turbo": "GPT-3.5 Turbo"
+					}
+				},
+				"anthropic": {
+					"name": "Anthropic Claude",
+					"description": "Claude 3.5 Sonnet 翻译与摘要",
+					"apiKeyLabel": "Anthropic API Key",
+					"apiKeyPlaceholder": "sk-ant-...",
+					"modelLabel": "模型",
+					"models": {
+						"claude-3-5-sonnet-20241022": "Claude 3.5 Sonnet",
+						"claude-3-5-haiku-20241022": "Claude 3.5 Haiku"
+					}
+				},
+				"custom": {
+					"name": "自定義 (OpenAI 兼容)",
+					"description": "任何 OpenAI 兼容 API (Azure / Ollama / OpenRouter 等)",
+					"baseUrlLabel": "Base URL",
+					"baseUrlPlaceholder": "https://api.openai.com/v1",
+					"apiKeyLabel": "API Key",
+					"modelLabel": "模型"
+				}
+			},
+			"captions": {
+				"title": "AI 雙語字幕",
+				"transcribe": "轉錄音頻",
+				"translate": "翻译字幕",
+				"burn": "烧錄到視頻",
+				"export": "導出 SRT/VTT",
+				"languages": {
+					"auto": "自动检测",
+					"en": "英語",
+					"zh-CN": "中文(简體)",
+					"zh-TW": "中文(繁體)",
+					"ja": "日語",
+					"ko": "韩語",
+					"es": "西班牙語",
+					"fr": "法語",
+					"de": "德語"
+				}
+			},
+			"chapters": {
+				"title": "AI 智能章節",
+				"generate": "生成章節",
+				"regenerate": "重新生成",
+				"noChapters": "尚未生成章節"
+			},
+			"summary": {
+				"title": "AI 摘要",
+				"generate": "生成摘要",
+				"regenerate": "重新生成",
+				"noSummary": "尚未生成摘要",
+				"socialCopy": "社媒文案",
+				"copyTwitter": "复制 Twitter 文案",
+				"copyXiaohongshu": "复制小紅書文案",
+				"copyWechat": "复制公众號文案",
+				"copyBilibili": "复制 B 站文案"
+			},
+			"hotwords": {
+				"title": "行业热词",
+				"general": "通用",
+				"legal": "法律",
+				"medical": "医疗",
+				"ecommerce": "电商",
+				"education": "教育",
+				"description": "選择行业域以提升专业術語识别准确率"
+			}
+		},
+		"license": {
+			"section": "许可证",
+			"free": "免费版",
+			"pro": "Pro 版",
+			"activated": "已激活",
+			"notActivated": "未激活",
+			"activatePrompt": "激活 Pro 版解锁全部 AI 功能",
+			"buyPro": "购买 Pro 版",
+			"enterLicenseKey": "输入许可证密鑰",
+			"activate": "激活",
+			"deactivate": "停用",
+			"activatedSuccess": "激活成功!",
+			"invalidKey": "無效的许可证密鑰",
+			"expiresAt": "到期時间:{{date}}",
+			"subscriptionManagement": "管理訂閱"
+		},
+		"settings": {
+			"title": "言镜 設置",
+			"save": "保存",
+			"saved": "已保存",
+			"reset": "重置默认"
+		}
+	}
+}
