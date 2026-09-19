@@ -70,6 +70,8 @@ function LaunchWindowContent() {
 		setMicrophoneEnabled,
 		microphoneDeviceId,
 		setMicrophoneDeviceId,
+		noiseSuppressionMode,
+		setNoiseSuppressionMode,
 		systemAudioEnabled,
 		setSystemAudioEnabled,
 		webcamEnabled,
@@ -276,6 +278,8 @@ function LaunchWindowContent() {
 				devices={devices}
 				microphoneDeviceId={microphoneDeviceId}
 				selectedDeviceId={selectedDeviceId}
+				noiseSuppressionMode={noiseSuppressionMode}
+				onSelectNoiseSuppressionMode={setNoiseSuppressionMode}
 				onSelectDevice={(deviceId) => {
 					setMicrophoneEnabled(true);
 					setSelectedDeviceId(deviceId);

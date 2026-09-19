@@ -929,6 +929,7 @@ interface Window {
 			success: boolean;
 			microphoneEnabled: boolean;
 			microphoneDeviceId?: string;
+			noiseSuppressionMode?: string;
 			systemAudioEnabled: boolean;
 			webcamEnabled: boolean;
 			webcamDeviceId?: string;
@@ -940,6 +941,7 @@ interface Window {
 		setRecordingPreferences: (prefs: {
 			microphoneEnabled?: boolean;
 			microphoneDeviceId?: string;
+			noiseSuppressionMode?: string;
 			systemAudioEnabled?: boolean;
 			webcamEnabled?: boolean;
 			webcamDeviceId?: string;

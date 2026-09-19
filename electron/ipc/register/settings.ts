@@ -130,6 +130,10 @@ export function registerSettingsHandlers() {
 					typeof parsed.microphoneDeviceId === "string"
 						? parsed.microphoneDeviceId
 						: undefined,
+				noiseSuppressionMode:
+					typeof parsed.noiseSuppressionMode === "string"
+						? parsed.noiseSuppressionMode
+						: "rnnoise",
 				systemAudioEnabled: parsed.systemAudioEnabled === true,
 				webcamEnabled: parsed.webcamEnabled === true,
 				webcamDeviceId:
@@ -140,6 +144,7 @@ export function registerSettingsHandlers() {
 				success: true,
 				microphoneEnabled: false,
 				microphoneDeviceId: undefined,
+				noiseSuppressionMode: "rnnoise",
 				systemAudioEnabled: false,
 				webcamEnabled: false,
 				webcamDeviceId: undefined,
@@ -160,6 +165,38 @@ export function registerSettingsHandlers() {
 			return { success: false, error: String(error) };
 		}
 	});
+	ipcMain.handle(
+		"set-recording-preferences",
+		async (
+			_,
+			prefs: {
+				microphoneEnabled?: boolean;
+				microphoneDeviceId?: string;
+				noiseSuppressionMode?: string;
+				systemAudioEnabled?: boolean;
+			},
+		) => {
+			try {
+				let existing: Record<string, unknown> = {};
+				try {
+					const content = await fs.readFile(RECORDINGS_SETTINGS_FILE, "utf-8");
+					existing = parseJsonWithByteOrderMark<Record<string, unknown>>(content);
+				} catch {
+					// file doesn't exist yet
+				}
+				const merged = { ...existing, ...prefs };
+				await fs.writeFile(
+					RECORDINGS_SETTINGS_FILE,
+					JSON.stringify(merged, null, 2),
+					"utf-8",
+				);
+				return { success: true };
+			} catch (error) {
+				console.error("Failed to save recording preferences:", error);
+				return { success: false, error: String(error) };
+			}
+		},
+	);
 
 	ipcMain.handle("get-countdown-delay", async () => {
 		try {

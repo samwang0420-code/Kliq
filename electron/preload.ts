@@ -1024,6 +1024,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	setRecordingPreferences: (prefs: {
 		microphoneEnabled?: boolean;
 		microphoneDeviceId?: string;
+		noiseSuppressionMode?: string;
 		systemAudioEnabled?: boolean;
 		webcamEnabled?: boolean;
 		webcamDeviceId?: string;
