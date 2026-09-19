@@ -6,6 +6,7 @@ import { registerExportHandlers } from "./register/export";
 import { registerPermissionHandlers } from "./register/permissions";
 import { registerProjectHandlers } from "./register/project";
 import { registerRecordingHandlers } from "./register/recording";
+import { registerRecordingShortcutHandlers } from "./register/recordingShortcuts";
 import { registerSettingsHandlers } from "./register/settings";
 import { registerAIHandlers } from "./register/ai";
 import { registerSourceHandlers } from "./register/sources";
@@ -65,6 +66,7 @@ export function registerIpcHandlers(
 		getSourceSelectorWindow,
 	});
 	registerRecordingHandlers(onRecordingStateChange);
+	registerRecordingShortcutHandlers();
 	registerPermissionHandlers();
 	registerAnnouncementHandlers();
 	registerAssetHandlers();
