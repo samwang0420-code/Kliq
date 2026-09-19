@@ -14,6 +14,13 @@ import {
 	type I18nNamespace,
 	SUPPORTED_LOCALES,
 } from "@/i18n/config";
+import deCommon from "@/i18n/locales/de/common.json";
+import deDialogs from "@/i18n/locales/de/dialogs.json";
+import deEditor from "@/i18n/locales/de/editor.json";
+import deLaunch from "@/i18n/locales/de/launch.json";
+import deSettings from "@/i18n/locales/de/settings.json";
+import deShortcuts from "@/i18n/locales/de/shortcuts.json";
+import deTimeline from "@/i18n/locales/de/timeline.json";
 import enCommon from "@/i18n/locales/en/common.json";
 import enDialogs from "@/i18n/locales/en/dialogs.json";
 import enEditor from "@/i18n/locales/en/editor.json";
@@ -35,13 +42,6 @@ import frLaunch from "@/i18n/locales/fr/launch.json";
 import frSettings from "@/i18n/locales/fr/settings.json";
 import frShortcuts from "@/i18n/locales/fr/shortcuts.json";
 import frTimeline from "@/i18n/locales/fr/timeline.json";
-import deCommon from "@/i18n/locales/de/common.json";
-import deDialogs from "@/i18n/locales/de/dialogs.json";
-import deEditor from "@/i18n/locales/de/editor.json";
-import deLaunch from "@/i18n/locales/de/launch.json";
-import deSettings from "@/i18n/locales/de/settings.json";
-import deShortcuts from "@/i18n/locales/de/shortcuts.json";
-import deTimeline from "@/i18n/locales/de/timeline.json";
 import itCommon from "@/i18n/locales/it/common.json";
 import itDialogs from "@/i18n/locales/it/dialogs.json";
 import itEditor from "@/i18n/locales/it/editor.json";
@@ -85,7 +85,7 @@ import zhTWSettings from "@/i18n/locales/zh-TW/settings.json";
 import zhTWShortcuts from "@/i18n/locales/zh-TW/shortcuts.json";
 import zhTWTimeline from "@/i18n/locales/zh-TW/timeline.json";
 
-const LOCALE_STORAGE_KEY = "recordly.locale";
+const LOCALE_STORAGE_KEY = "yanjing.locale";
 
 type LocaleBundle = Record<I18nNamespace, Record<string, unknown>>;
 
