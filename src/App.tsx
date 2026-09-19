@@ -24,7 +24,7 @@ export default function App() {
 		() => new URLSearchParams(window.location.search).get("windowType") || "",
 	);
 	const { t } = useI18n();
-	const appIconSrc = "/app-icons/recordly-128.png";
+	const appIconSrc = "/app-icons/yanjing-128.png";
 
 	useEffect(() => {
 		document.documentElement.dataset.windowType = windowType;
