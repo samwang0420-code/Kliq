@@ -59,7 +59,7 @@ function getDetail(payload: UpdateToastPayload, t: Translate) {
 	if (payload.phase === "available" && payload.isExperimental) {
 		return t(
 			"launch.updateToast.experimentalDescription",
-			"You've opted into experimental updates so you have the choice to test the latest update of Recordly before it's widely available.",
+			"You've opted into experimental updates so you have the choice to test the latest update of Yanjing before it's widely available.",
 		);
 	}
 
@@ -150,7 +150,7 @@ export function UpdateToastWindow() {
 
 	return (
 		<div className={`${styles.window} launch-theme`}>
-			<section className={styles.card} aria-live="polite" aria-label="Recordly update">
+			<section className={styles.card} aria-live="polite" aria-label="Yanjing update">
 				<div
 					className={`${styles.icon} ${payload.phase === "error" ? styles.iconError : ""}`}
 				>

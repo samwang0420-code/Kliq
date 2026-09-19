@@ -557,8 +557,8 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 			await window.electronAPI.openScreenRecordingPreferences();
 			alert(
 				options.startup
-					? "Recordly needs Screen Recording permission before you start. System Settings has been opened. After enabling it, quit and reopen Recordly."
-					: "Screen Recording permission is still missing. System Settings has been opened again. Enable it, then quit and reopen Recordly before recording.",
+					? "Yanjing needs Screen Recording permission before you start. System Settings has been opened. After enabling it, quit and reopen Yanjing."
+					: "Screen Recording permission is still missing. System Settings has been opened again. Enable it, then quit and reopen Yanjing before recording.",
 			);
 			return false;
 		}
@@ -580,8 +580,8 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 		await window.electronAPI.openAccessibilityPreferences();
 		alert(
 			options.startup
-				? "Recordly also needs Accessibility permission for cursor tracking. System Settings has been opened. After enabling it, quit and reopen Recordly."
-				: "Accessibility permission is still missing. System Settings has been opened again. Enable it, then quit and reopen Recordly before recording.",
+				? "Yanjing also needs Accessibility permission for cursor tracking. System Settings has been opened. After enabling it, quit and reopen Yanjing."
+				: "Accessibility permission is still missing. System Settings has been opened again. Enable it, then quit and reopen Yanjing before recording.",
 		);
 
 		return false;

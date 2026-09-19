@@ -9,6 +9,7 @@ import {
 	XLogo as Twitter,
 } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -22,12 +23,11 @@ import { useScopedT } from "@/contexts/I18nContext";
 import { useShortcuts } from "@/contexts/ShortcutsContext";
 import { formatBinding, SHORTCUT_ACTIONS, SHORTCUT_LABELS } from "@/lib/shortcuts";
 import { formatShortcut } from "@/utils/platformUtils";
-import { toast } from "sonner";
 
-export const RECORDLY_ISSUES_URL = "https://github.com/webadderallorg/Recordly/issues";
-const RECORDLY_DISCORD_URL = "https://discord.gg/sdv2FBVNgE";
-const RECORDLY_X_URL = "https://x.com/webadderall";
-const CONTACT_EMAIL = "youngchen3442@gmail.com";
+export const YANJING_ISSUES_URL = "https://github.com/samwang0420-code/Recordly/issues";
+const YANJING_DISCORD_URL = "https://discord.gg/yanjingai";
+const YANJING_X_URL = "https://x.com/yanjingai";
+const CONTACT_EMAIL = "hi@yanjingai.tech";
 export const APP_HEADER_ACTION_BUTTON_CLASS =
 	"h-7 px-2 text-xs text-muted-foreground hover:bg-foreground/10 hover:text-foreground transition-all gap-1.5";
 export const APP_HEADER_ICON_BUTTON_CLASS =
@@ -67,7 +67,7 @@ export function DiscordLinkButton() {
 			size="sm"
 			onClick={() =>
 				void openExternalLink(
-					RECORDLY_DISCORD_URL,
+					YANJING_DISCORD_URL,
 					t("feedback.openFailed", "Failed to open link."),
 				)
 			}
@@ -140,7 +140,7 @@ export function FeedbackDialog() {
 									{t("feedback.xLabel", "X")}
 								</p>
 								<p className="mt-1 text-sm font-medium text-foreground">
-									@webadderall
+									@yanjingai
 								</p>
 							</div>
 							<Button
@@ -148,7 +148,7 @@ export function FeedbackDialog() {
 								variant="outline"
 								onClick={() =>
 									void openExternalLink(
-										RECORDLY_X_URL,
+										YANJING_X_URL,
 										t("feedback.openFailed", "Failed to open link."),
 									)
 								}
@@ -163,7 +163,7 @@ export function FeedbackDialog() {
 						variant="outline"
 						onClick={() =>
 							void openExternalLink(
-								RECORDLY_ISSUES_URL,
+								YANJING_ISSUES_URL,
 								t("feedback.openFailed", "Failed to open link."),
 							)
 						}

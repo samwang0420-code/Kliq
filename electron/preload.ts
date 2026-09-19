@@ -1020,8 +1020,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		return () => ipcRenderer.removeListener("countdown-tick", listener);
 	},
 
-
-	// P0/P1 AI 接入 (Recordly 上游没有, 我们新增)
+	// P0/P1 AI 接入 (Yanjing 上游没有, 我们新增)
 	aiReadFileAsBuffer: (filePath: string) =>
 		ipcRenderer.invoke("ai-read-file-as-buffer", filePath) as Promise<
 			{ ok: true; buffer: number[]; mimeType: string } | { ok: false; error: string }

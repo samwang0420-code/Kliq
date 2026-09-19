@@ -65,7 +65,7 @@ export function useAIAudioFile() {
 		setState({ file: null, filePath: null, mimeType: "", error: null });
 	}, []);
 
-	/** 调 Recordly 上游的视频选择对话框 */
+	/** 调 Yanjing 上游的视频选择对话框 */
 	const pickVideo = useCallback(async () => {
 		const api = getElectronAI();
 		if (!api?.openVideoFilePicker) {

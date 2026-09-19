@@ -1069,7 +1069,7 @@ export class ModernVideoExporter {
 
 		if (isVideoDecodeFailure) {
 			guidance.add(
-				"The input video decoder failed before Recordly could finish rendering the source frames.",
+				"The input video decoder failed before Yanjing could finish rendering the source frames.",
 			);
 			guidance.add(
 				"If only this recording fails, remux or convert it to a standard H.264 MP4; the source may contain a damaged or unsupported frame.",
@@ -1144,7 +1144,7 @@ export class ModernVideoExporter {
 		];
 
 		if (this.runtimeDiagnostics.appVersion) {
-			lines.push(`Recordly version: ${this.runtimeDiagnostics.appVersion}`);
+			lines.push(`Yanjing version: ${this.runtimeDiagnostics.appVersion}`);
 		}
 		if (this.runtimeDiagnostics.userAgent) {
 			lines.push(`Runtime: ${this.runtimeDiagnostics.userAgent}`);

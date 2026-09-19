@@ -141,7 +141,7 @@ function applyExperimentalUpdatesPreference() {
 	const { channel, allowPrerelease, allowDowngrade } = getUpdateChannelConfiguration(enabled);
 	autoUpdater.channel = channel;
 	autoUpdater.allowPrerelease = allowPrerelease;
-	// Changing channels enables downgrades inside electron-updater. Recordly never
+	// Changing channels enables downgrades inside electron-updater. Yanjing never
 	// needs that behaviour: opting out waits for the next stable version instead.
 	autoUpdater.allowDowngrade = allowDowngrade;
 	writeUpdaterLog(
@@ -264,7 +264,7 @@ function createDownloadingUpdateToastPayload(
 				? "Finishing the update download. 言镜 will restart as soon as the installer is ready."
 				: remainingMb !== null
 					? `${remainingMb.toFixed(1)} MB left before 言镜 restarts.`
-					: "Downloading the update now. Recordly will restart when it finishes.",
+					: "Downloading the update now. Yanjing will restart when it finishes.",
 		delayMs: UPDATE_REMINDER_DELAY_MS,
 		isExperimental,
 		progressPercent: normalizedProgress,
@@ -782,7 +782,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "available",
 			availableVersion: info.version,
-			detail: `Recordly ${info.version} is available.`,
+			detail: `Yanjing ${info.version} is available.`,
 		});
 		if (skippedVersion === info.version) {
 			manualCheckRequested = false;
@@ -810,7 +810,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "up-to-date",
 			availableVersion: null,
-			detail: `Recordly ${app.getVersion()} is up to date.`,
+			detail: `Yanjing ${app.getVersion()} is up to date.`,
 		});
 		clearVisibleUpdateToast(sendToRenderer);
 		manualCheckRequested = false;
@@ -884,7 +884,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "ready",
 			availableVersion: info.version,
-			detail: `Recordly ${info.version} is ready to install.`,
+			detail: `Yanjing ${info.version} is ready to install.`,
 		});
 		clearDeferredReminderTimer();
 

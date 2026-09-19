@@ -31,7 +31,7 @@ async function executeWhisper(whisperExecutablePath: string, args: string[]) {
 	} catch (error) {
 		if (isMissingWindowsWhisperRuntimeDependency(error)) {
 			throw new Error(
-				"Whisper could not start because the Microsoft Visual C++ x64 Redistributable is missing. Install it from https://aka.ms/vc14/vc_redist.x64.exe, then restart Recordly.",
+				"Whisper could not start because the Microsoft Visual C++ x64 Redistributable is missing. Install it from https://aka.ms/vc14/vc_redist.x64.exe, then restart Yanjing.",
 			);
 		}
 		throw error;
@@ -98,7 +98,7 @@ export async function resolveWhisperExecutablePath(preferredPath?: string | null
 
 	throw new Error(
 		`No Whisper runtime was found for ${process.platform}/${process.arch}. ` +
-			"This Recordly build is missing its bundled caption runtime. Reinstall or update Recordly, or select a whisper-cli executable in Caption settings.",
+			"This Yanjing build is missing its bundled caption runtime. Reinstall or update Yanjing, or select a whisper-cli executable in Caption settings.",
 	);
 }
 
