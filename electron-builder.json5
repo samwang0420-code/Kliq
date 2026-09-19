@@ -62,9 +62,9 @@
     "icon": "icons/icons/mac/icon.icns",
     "artifactName": "言镜-${version}-${arch}.${ext}",
     "extendInfo": {
-      "NSAudioCaptureUsageDescription": "Recordly needs audio capture permission to record system audio.",
-      "NSCameraUsageDescription": "Recordly needs camera access to record webcam video.",
-      "NSMicrophoneUsageDescription": "Recordly needs microphone access to record voice audio.",
+      "NSAudioCaptureUsageDescription": "言镜 needs audio capture permission to record system audio.",
+      "NSCameraUsageDescription": "言镜 needs camera access to record webcam video.",
+      "NSMicrophoneUsageDescription": "言镜 needs microphone access to record voice audio.",
       "NSCameraUseContinuityCameraDeviceType": true,
       "com.apple.security.device.audio-input": true,
       "CFBundleDocumentTypes": [

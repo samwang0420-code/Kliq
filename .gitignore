@@ -6,3 +6,4 @@ dist/
 dist-electron/
 index-*.js
 *.tsbuildinfo
+icons/icons.bak/
