@@ -43,7 +43,11 @@ describe("normalizeProjectEditor", () => {
 		};
 		const normalized = normalizeProjectEditor(savedEditor);
 		expect(normalized.zoomMotionBlur).toBe(0.6);
-		for (const field of ["zoomTemporalMotionBlur", "zoomMotionBlurSampleCount", "zoomMotionBlurShutterFraction"]) {
+		for (const field of [
+			"zoomTemporalMotionBlur",
+			"zoomMotionBlurSampleCount",
+			"zoomMotionBlurShutterFraction",
+		]) {
 			expect(normalized).not.toHaveProperty(field);
 		}
 	});

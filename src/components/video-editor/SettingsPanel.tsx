@@ -521,6 +521,8 @@ interface SettingsPanelProps {
 	onZoomModeChange?: (mode: ZoomMode) => void;
 	onZoomDelete?: (id: string) => void;
 	onZoomDuplicate?: () => boolean | void;
+	onClearAllZooms?: () => void;
+	hasZoomRegions?: boolean;
 	selectedClipId?: string | null;
 	selectedClipSpeed?: number | null;
 	selectedClipMuted?: boolean | null;
@@ -988,6 +990,8 @@ export function SettingsPanel({
 	onZoomModeChange,
 	onZoomDelete,
 	onZoomDuplicate,
+	onClearAllZooms,
+	hasZoomRegions = false,
 	selectedClipId,
 	selectedClipSpeed,
 	selectedClipMuted,
@@ -3858,6 +3862,17 @@ export function SettingsPanel({
 						</Button>
 					</>
 				)}
+				{activeEffectSection === "zoom" && hasZoomRegions && (
+					<Button
+						onClick={() => onClearAllZooms?.()}
+						variant="destructive"
+						size="sm"
+						className="h-8 w-full gap-2 border border-red-500/20 bg-red-500/10 text-xs text-red-400 transition-all hover:border-red-500/30 hover:bg-red-500/20"
+					>
+						<Trash2 className="h-3 w-3" />
+						{tSettings("zoom.clearAllZooms", "Clear All Zooms")}
+					</Button>
+				)}
 				{activeEffectSection === "audio" && selectedAudioId && (
 					<>
 						<Button
@@ -3877,7 +3892,8 @@ export function SettingsPanel({
 						</Button>
 						<Button
 							onClick={() => {
-								if (selectedAudioId && onAudioDelete) onAudioDelete(selectedAudioId);
+								if (selectedAudioId && onAudioDelete)
+									onAudioDelete(selectedAudioId);
 							}}
 							variant="destructive"
 							size="sm"

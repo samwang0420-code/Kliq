@@ -82,6 +82,7 @@ export function EditorTimelinePanel(props: Props) {
 						Math.round(projection.timelineDuration * 1000),
 					)
 				}
+				onClearAllZooms={zoomCommands.handleClearAllZooms}
 				selectedZoomId={timeline.selectedZoomId}
 				onSelectZoom={zoomCommands.handleSelectZoom}
 				trimRegions={timeline.trimRegions}

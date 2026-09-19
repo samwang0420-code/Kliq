@@ -78,10 +78,15 @@ export function createClipPlayback({
 				const targetMs = atEnd
 					? Math.max(getClipSourceStartMs(clip), sourceMs - 0.001)
 					: sourceMs;
-				const target = Math.max(0, Math.min(
-					Number.isFinite(video.duration) ? Math.max(0, video.duration - 0.000001) : Infinity,
-					targetMs / 1000,
-				));
+				const target = Math.max(
+					0,
+					Math.min(
+						Number.isFinite(video.duration)
+							? Math.max(0, video.duration - 0.000001)
+							: Infinity,
+						targetMs / 1000,
+					),
+				);
 				// Assigning currentTime even to its current value starts another
 				// asynchronous seek in Chromium (especially disruptive at zero).
 				if (Math.abs(video.currentTime - target) > 1e-8) video.currentTime = target;

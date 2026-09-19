@@ -187,7 +187,9 @@ describe("clip timeline playback", () => {
 	it("does not restart decoder seeks when repeatedly selecting the start", () => {
 		const { playback, video } = setup();
 		let currentTime = 0;
-		const setTime = vi.fn((value: number) => { currentTime = value; });
+		const setTime = vi.fn((value: number) => {
+			currentTime = value;
+		});
 		Object.defineProperty(video, "currentTime", {
 			get: () => currentTime,
 			set: setTime,

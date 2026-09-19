@@ -96,6 +96,8 @@ export function useEditorSettingsPanelProps(input: Input): ComponentProps<typeof
 		onZoomDuplicate: timeline.selectedZoomId
 			? () => zoomCommands.handleZoomDuplicate(timeline.selectedZoomId!, timelineDurationMs)
 			: undefined,
+		onClearAllZooms: zoomCommands.handleClearAllZooms,
+		hasZoomRegions: timeline.zoomRegions.length > 0,
 		selectedClipId: timeline.selectedClipId,
 		selectedClipSpeed: selectedClip?.speed ?? (timeline.selectedClipId ? 1 : null),
 		selectedClipMuted: selectedClip?.muted ?? (timeline.selectedClipId ? false : null),

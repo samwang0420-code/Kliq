@@ -46,6 +46,7 @@ export interface TimelineEditorProps {
 	onZoomSpanChange: (id: string, span: Span) => void;
 	onZoomDelete: (id: string) => void;
 	onZoomDuplicate?: (id: string) => boolean;
+	onClearAllZooms?: () => void;
 	selectedZoomId: string | null;
 	onSelectZoom: (id: string | null) => void;
 	trimRegions?: TrimRegion[];
@@ -109,6 +110,7 @@ function extractLocalPathFromMediaServerUrl(input: string | null | undefined): s
 export interface TimelineEditorHandle {
 	addZoom: () => void;
 	suggestZooms: () => void;
+	clearAllZooms: () => void;
 	splitClip: () => void;
 	addAnnotation: (trackIndex?: number) => void;
 	addAudio: (trackIndex?: number) => Promise<void>;
@@ -132,6 +134,7 @@ const TimelineEditor = forwardRef<TimelineEditorHandle, TimelineEditorProps>(
 			onZoomSpanChange,
 			onZoomDelete,
 			onZoomDuplicate,
+			onClearAllZooms,
 			selectedZoomId,
 			onSelectZoom,
 			trimRegions = [],
@@ -374,6 +377,7 @@ const TimelineEditor = forwardRef<TimelineEditorHandle, TimelineEditorProps>(
 			onZoomSpanChange,
 			onZoomDelete,
 			onZoomDuplicate,
+			onClearAllZooms,
 			selectedZoomId,
 			onSelectZoom,
 			trimRegions,

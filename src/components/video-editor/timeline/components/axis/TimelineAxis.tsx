@@ -1,5 +1,5 @@
 import { useTimelineContext } from "dnd-timeline";
-import { useMemo, type CSSProperties } from "react";
+import { type CSSProperties, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { calculateAxisScale, formatTimeLabel } from "../../core/time";
 

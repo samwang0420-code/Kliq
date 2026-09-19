@@ -1,10 +1,10 @@
 import { DownloadSimple as Download, FilmSlate as Film, Image } from "@phosphor-icons/react";
 import { LayoutGroup, motion } from "motion/react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { useCallback, useState } from "react";
-import { useScopedT } from "@/contexts/I18nContext";
 import { AIToolbar } from "@/components/video-editor/AIToolbar";
+import { useScopedT } from "@/contexts/I18nContext";
 import { useAIActions } from "@/hooks/useAIActions";
 import { useAIAudioFile } from "@/hooks/useAIAudioFile";
 import type {
@@ -75,22 +75,45 @@ export function ExportSettingsMenu({
 	className,
 }: ExportSettingsMenuProps) {
 	const tSettings = useScopedT("settings");
-	const [aiHotwordDomain, setAiHotwordDomain] = useState<"general" | "legal" | "medical" | "ecommerce" | "education" | "finance" | "gaming" | "tech" | "marketing">("general");
-	const { file: audioFile, filePath: audioFilePath, pickVideo, clearFile, isElectron } = useAIAudioFile();
-	const { busy, error: aiError, runAction } = useAIActions({ hotwordDomain: aiHotwordDomain, language: "zh" });
+	const [aiHotwordDomain, setAiHotwordDomain] = useState<
+		| "general"
+		| "legal"
+		| "medical"
+		| "ecommerce"
+		| "education"
+		| "finance"
+		| "gaming"
+		| "tech"
+		| "marketing"
+	>("general");
+	const {
+		file: audioFile,
+		filePath: audioFilePath,
+		pickVideo,
+		clearFile,
+		isElectron,
+	} = useAIAudioFile();
+	const {
+		busy,
+		error: aiError,
+		runAction,
+	} = useAIActions({ hotwordDomain: aiHotwordDomain, language: "zh" });
 
-	const handleAIAction = useCallback(async (action: import("@/components/video-editor/AIToolbar").AIAction) => {
-		if (!audioFile) {
-			console.warn("[AI] 需要先选择视频/音频文件");
-			return;
-		}
-		try {
-			await runAction(action, { file: audioFile });
-			console.log(`[AI] ${action} 完成`);
-		} catch (err) {
-			console.error(`[AI] ${action} 失败:`, err);
-		}
-	}, [audioFile, runAction]);
+	const handleAIAction = useCallback(
+		async (action: import("@/components/video-editor/AIToolbar").AIAction) => {
+			if (!audioFile) {
+				console.warn("[AI] 需要先选择视频/音频文件");
+				return;
+			}
+			try {
+				await runAction(action, { file: audioFile });
+				console.log(`[AI] ${action} 完成`);
+			} catch (err) {
+				console.error(`[AI] ${action} 失败:`, err);
+			}
+		},
+		[audioFile, runAction],
+	);
 
 	const isLegacyModel = exportPipelineModel === "legacy";
 
@@ -473,7 +496,17 @@ export function ExportSettingsMenu({
 			<AIToolbar
 				selectedDomain={aiHotwordDomain}
 				onDomainChange={setAiHotwordDomain}
-				availableDomains={["general", "legal", "medical", "ecommerce", "education", "finance", "gaming", "tech", "marketing"]}
+				availableDomains={[
+					"general",
+					"legal",
+					"medical",
+					"ecommerce",
+					"education",
+					"finance",
+					"gaming",
+					"tech",
+					"marketing",
+				]}
 				onAction={handleAIAction}
 				busy={busy}
 				disabled={!audioFile}
@@ -498,7 +531,13 @@ export function ExportSettingsMenu({
 					<button
 						type="button"
 						onClick={clearFile}
-						style={{ fontSize: 12, padding: "4px 8px", border: "1px solid #e5e5e5", borderRadius: 4, background: "white" }}
+						style={{
+							fontSize: 12,
+							padding: "4px 8px",
+							border: "1px solid #e5e5e5",
+							borderRadius: 4,
+							background: "white",
+						}}
 					>
 						✕
 					</button>
