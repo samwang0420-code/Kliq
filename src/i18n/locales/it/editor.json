@@ -45,6 +45,7 @@
 		"solidColor": "Colore pieno (Censura)",
 		"borderRadius": "Raggio bordo"
 	},
+
 	"fontStyles": {
 		"classic": "Classico",
 		"editor": "Editor",
@@ -122,10 +123,7 @@
 		"experimentalBuilds": "Suggerimento: Attiva l’accesso alle build sperimentali nelle impostazioni",
 		"cursorAppearance": "Suggerimento: Puoi personalizzare l’aspetto del cursore"
 	},
-	"account": {
-		"title": "Account",
-		"comingSoon": "Account in arrivo"
-	},
+	"account": { "title": "Account", "comingSoon": "Account in arrivo" },
 	"nativeCaptureUnavailable": {
 		"title": "Niente è rotto, ma non sarà possibile renderizzare un overlay del cursore animato.",
 		"description": "Il tuo dispositivo non supporta la cattura nativa. Le cause possono essere varie e non ancora identificate. Yanjing funziona comunque, ma non è possibile applicare lo smoothing del cursore.",
@@ -151,25 +149,5 @@
 		"expand": "Espandi timeline",
 		"collapse": "Comprimi timeline"
 	},
-	"openRecordingsFolder": "Apri cartella registrazioni",
-	"yanjing": {
-		"ai": {
-			"highlightReels": {
-				"title": "AI Highlight Reels",
-				"subtitle": "Find the most engaging moments automatically (visual + audio, fully on-device).",
-				"run": "Run Analysis",
-				"loading": "Loading video...",
-				"analyzing": "Analyzing visual energy + audio peaks...",
-				"error": "Failed to analyze video",
-				"retry": "Retry",
-				"empty": "No highlights detected (video may be too static). Try adjusting options.",
-				"exportReel": "Export Reel",
-				"rowTitle": "Highlight #{{id}}",
-				"idlePrompt": "Click run to analyze {duration}s of video."
-			},
-			"actions": {
-				"highlightReels": "AI Highlight Reels"
-			}
-		}
-	}
+	"openRecordingsFolder": "Apri cartella registrazioni"
 }

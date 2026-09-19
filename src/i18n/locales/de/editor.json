@@ -122,10 +122,7 @@
 		"experimentalBuilds": "Tipp: Aktiviere den Zugriff auf experimentelle Builds in den Einstellungen",
 		"cursorAppearance": "Tipp: Du kannst das Aussehen deines Cursors anpassen"
 	},
-	"account": {
-		"title": "Konto",
-		"comingSoon": "Konto demnächst verfügbar"
-	},
+	"account": { "title": "Konto", "comingSoon": "Konto demnächst verfügbar" },
 	"nativeCaptureUnavailable": {
 		"title": "Es ist nichts kaputt, aber wir können kein animiertes Cursor-Overlay rendern.",
 		"description": "Ihr Gerät unterstützt keine native Erfassung. Dies kann verschiedene Gründe haben, die wir noch nicht ermittelt haben. Yanjing funktioniert weiterhin, aber eine Cursor-Glättung ist nicht möglich.",
@@ -151,25 +148,5 @@
 		"expand": "Zeitleiste erweitern",
 		"collapse": "Zeitleiste reduzieren"
 	},
-	"openRecordingsFolder": "Aufnahmeordner öffnen",
-	"yanjing": {
-		"ai": {
-			"highlightReels": {
-				"title": "AI Highlight Reels",
-				"subtitle": "Find the most engaging moments automatically (visual + audio, fully on-device).",
-				"run": "Run Analysis",
-				"loading": "Loading video...",
-				"analyzing": "Analyzing visual energy + audio peaks...",
-				"error": "Failed to analyze video",
-				"retry": "Retry",
-				"empty": "No highlights detected (video may be too static). Try adjusting options.",
-				"exportReel": "Export Reel",
-				"rowTitle": "Highlight #{{id}}",
-				"idlePrompt": "Click run to analyze {duration}s of video."
-			},
-			"actions": {
-				"highlightReels": "AI Highlight Reels"
-			}
-		}
-	}
+	"openRecordingsFolder": "Aufnahmeordner öffnen"
 }

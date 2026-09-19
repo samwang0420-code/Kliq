@@ -45,6 +45,7 @@
 		"solidColor": "Сплошной цвет (цензура)",
 		"borderRadius": "Скругление углов"
 	},
+
 	"fontStyles": {
 		"classic": "Классический",
 		"editor": "Базовый",
@@ -122,10 +123,7 @@
 		"experimentalBuilds": "Совет: Включите доступ к экспериментальным сборкам в настройках",
 		"cursorAppearance": "Совет: Внешний вид курсора можно настроить"
 	},
-	"account": {
-		"title": "Учётная запись",
-		"comingSoon": "Учётная запись скоро появится"
-	},
+	"account": { "title": "Учётная запись", "comingSoon": "Учётная запись скоро появится" },
 	"nativeCaptureUnavailable": {
 		"title": "Всё в порядке, но мы не можем отобразить анимированное наложение курсора.",
 		"description": "Устройство не поддерживает нативный захват изображения. Запись продолжится, но без сглаживания курсора.",
@@ -151,25 +149,5 @@
 		"expand": "Развернуть таймлайн",
 		"collapse": "Свернуть таймлайн"
 	},
-	"openRecordingsFolder": "Открыть папку с записями",
-	"yanjing": {
-		"ai": {
-			"highlightReels": {
-				"title": "AI Highlight Reels",
-				"subtitle": "Find the most engaging moments automatically (visual + audio, fully on-device).",
-				"run": "Run Analysis",
-				"loading": "Loading video...",
-				"analyzing": "Analyzing visual energy + audio peaks...",
-				"error": "Failed to analyze video",
-				"retry": "Retry",
-				"empty": "No highlights detected (video may be too static). Try adjusting options.",
-				"exportReel": "Export Reel",
-				"rowTitle": "Highlight #{{id}}",
-				"idlePrompt": "Click run to analyze {duration}s of video."
-			},
-			"actions": {
-				"highlightReels": "AI Highlight Reels"
-			}
-		}
-	}
+	"openRecordingsFolder": "Открыть папку с записями"
 }

@@ -15,6 +15,7 @@
 		"arrow": "Pijl",
 		"blur": "Vervagen",
 		"textContent": "Tekstinhoud",
+
 		"textPlaceholder": "Voer je tekst in...",
 		"fontStyle": "Lettertype",
 		"selectStyle": "Selecteer stijl",
@@ -45,6 +46,7 @@
 		"solidColor": "Effen Kleur (Censuur)",
 		"borderRadius": "Hoekradius"
 	},
+
 	"fontStyles": {
 		"classic": "Klassiek",
 		"editor": "Editor",
@@ -122,10 +124,7 @@
 		"experimentalBuilds": "Tip: Schakel toegang tot experimentele builds in via de instellingen",
 		"cursorAppearance": "Tip: Je kunt het uiterlijk van je cursor aanpassen"
 	},
-	"account": {
-		"title": "Account",
-		"comingSoon": "Account binnenkort beschikbaar"
-	},
+	"account": { "title": "Account", "comingSoon": "Account binnenkort beschikbaar" },
 	"nativeCaptureUnavailable": {
 		"title": "Er is niets kapot, maar we kunnen geen geanimeerde cursor-overlay renderen.",
 		"description": "Je apparaat ondersteunt geen native capture. Dit kan verschillende oorzaken hebben die we nog niet hebben achterhaald. Yanjing blijft werken, maar cursor smoothing is dan niet mogelijk.",
@@ -151,25 +150,5 @@
 		"expand": "Tijdlijn uitvouwen",
 		"collapse": "Tijdlijn samenvouwen"
 	},
-	"openRecordingsFolder": "Opnamemap openen",
-	"yanjing": {
-		"ai": {
-			"highlightReels": {
-				"title": "AI Highlight Reels",
-				"subtitle": "Find the most engaging moments automatically (visual + audio, fully on-device).",
-				"run": "Run Analysis",
-				"loading": "Loading video...",
-				"analyzing": "Analyzing visual energy + audio peaks...",
-				"error": "Failed to analyze video",
-				"retry": "Retry",
-				"empty": "No highlights detected (video may be too static). Try adjusting options.",
-				"exportReel": "Export Reel",
-				"rowTitle": "Highlight #{{id}}",
-				"idlePrompt": "Click run to analyze {duration}s of video."
-			},
-			"actions": {
-				"highlightReels": "AI Highlight Reels"
-			}
-		}
-	}
+	"openRecordingsFolder": "Opnamemap openen"
 }

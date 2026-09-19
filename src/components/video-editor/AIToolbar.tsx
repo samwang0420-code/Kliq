@@ -24,8 +24,7 @@ export type AIAction =
 	| "ai-translate-multi" // B4 多语言字幕
 	| "ai-proofread" // B5 字幕 AI 校对
 	| "ai-semantic-search" // D1 语义搜索
-	| "ai-ui-polish" // G4 UI 润色
-	| "ai-highlight-reels"; // P2 §18 真新功能: 自动高光时刻识别
+	| "ai-ui-polish"; // G4 UI 润色
 
 export type AIProvider = "openai" | "anthropic" | "deepseek";
 
@@ -37,8 +36,6 @@ export type AIActionDef = {
 	icon: string; // emoji 占位
 	requiresFile?: boolean;
 	requiresTranscript?: boolean;
-	/** true = this action runs entirely on-device (no LLM API call required) */
-	localOnly?: boolean;
 };
 
 export const AI_ACTIONS: AIActionDef[] = [
@@ -171,16 +168,6 @@ export const AI_ACTIONS: AIActionDef[] = [
 		labelFallback: "UI Polish",
 		group: "search",
 		icon: "✨",
-	},
-	{
-		id: "ai-highlight-reels",
-		labelKey: "yanjing.ai.actions.highlightReels",
-		labelFallback: "AI Highlight Reels",
-		group: "search",
-		icon: "🌟",
-		requiresFile: true,
-		// 关键差异点: 不需要 LLM / API key — 100% 本地算法
-		localOnly: true,
 	},
 ];
 
