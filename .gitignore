@@ -1,73 +1,8 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-electron
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-release/**
-*.kiro/
-# npx electron-builder --mac --win
-.tmp/
-.history/
-extension-sources/
+outputs/
+work/
+yanjing-recorder-v1.4.0-yanjing.tar.gz
+deploy-tmp/
+dist/
+dist-electron/
+index-*.js
 *.tsbuildinfo
-vite.config.js
-vite.config.d.ts
-
-# Native capture build artifacts
-electron/native/wgc-capture/build/
-electron/native/cursor-monitor/build/
-electron/native/gpu-export-probe/build/
-electron/native/nvidia-cuda-compositor/build/
-electron/native/bin/*/whisper-*
-electron/native/bin/*/whisper-runtime.json
-
-# Local debug helpers
-tmp-*.ps1
-.tmp-*.ps1
-gpu-export-probe.mp4
-
-# === 言镜 (Yanjing Recorder) ===
-
-# 环境变量 (本地 API key)
-.env
-.env.local
-.env.development
-.env.production
-
-# Lemon Squeezy / Stripe 缓存
-.lemonsqueezy-cache/
-.stripe-cache/
-
-# 用户偏好 / 录制缓存
-user-data/
-recordings/
-.cache/
-
-# Build 输出 (electron-builder)
-release/
-
-# wrangler Pages / Workers 缓存
-.wrangler/
-.dev.vars
-
-# AGPL 合规: 保留所有源码, 仅忽略构建产物 + 本地配置
