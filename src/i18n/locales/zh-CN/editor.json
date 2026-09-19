@@ -174,7 +174,8 @@
 				"tags": "AI 标签",
 				"social": "AI 社媒文案",
 				"search": "AI 语义搜索",
-				"uiPolish": "UI 润色"
+				"uiPolish": "UI 润色",
+				"highlightReels": "AI 高光时刻"
 			},
 			"groups": {
 				"transcribe": "转录",
@@ -193,6 +194,19 @@
 				"gaming": "游戏",
 				"tech": "技术",
 				"marketing": "营销"
+			},
+			"highlightReels": {
+				"title": "AI 高光时刻",
+				"subtitle": "自动找出视频中最有看点的片段(画面 + 音频, 全程本地计算)。",
+				"run": "开始分析",
+				"loading": "加载视频中...",
+				"analyzing": "分析画面活跃度 + 音频响度...",
+				"error": "分析失败",
+				"retry": "重试",
+				"empty": "未识别到高光时刻(视频可能太静态)。请尝试调整参数。",
+				"exportReel": "导出短视频",
+				"rowTitle": "高光 #{id}",
+				"idlePrompt": "点击开始,分析 {duration} 秒视频。"
 			}
 		}
 	}

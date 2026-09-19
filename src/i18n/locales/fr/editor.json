@@ -45,7 +45,6 @@
 		"solidColor": "Couleur unie (censure)",
 		"borderRadius": "Rayon de bordure"
 	},
-
 	"fontStyles": {
 		"classic": "Classique",
 		"editor": "Éditeur",
@@ -123,7 +122,10 @@
 		"experimentalBuilds": "Astuce : Activez l’accès aux versions expérimentales dans les paramètres",
 		"cursorAppearance": "Astuce : Vous pouvez personnaliser l’apparence du curseur"
 	},
-	"account": { "title": "Compte", "comingSoon": "Compte bientôt disponible" },
+	"account": {
+		"title": "Compte",
+		"comingSoon": "Compte bientôt disponible"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "Rien n'est cassé, mais nous ne pourrons pas afficher une superposition animée du curseur.",
 		"description": "Votre appareil ne prend pas en charge la capture native. Cela peut arriver pour plusieurs raisons que nous n'avons pas encore identifiées. Yanjing continuera de fonctionner, mais le lissage du curseur sera impossible.",
@@ -149,5 +151,25 @@
 		"expand": "Développer la timeline",
 		"collapse": "Réduire la timeline"
 	},
-	"openRecordingsFolder": "Ouvrir le dossier des enregistrements"
+	"openRecordingsFolder": "Ouvrir le dossier des enregistrements",
+	"yanjing": {
+		"ai": {
+			"highlightReels": {
+				"title": "AI Highlight Reels",
+				"subtitle": "Find the most engaging moments automatically (visual + audio, fully on-device).",
+				"run": "Run Analysis",
+				"loading": "Loading video...",
+				"analyzing": "Analyzing visual energy + audio peaks...",
+				"error": "Failed to analyze video",
+				"retry": "Retry",
+				"empty": "No highlights detected (video may be too static). Try adjusting options.",
+				"exportReel": "Export Reel",
+				"rowTitle": "Highlight #{{id}}",
+				"idlePrompt": "Click run to analyze {duration}s of video."
+			},
+			"actions": {
+				"highlightReels": "AI Highlight Reels"
+			}
+		}
+	}
 }

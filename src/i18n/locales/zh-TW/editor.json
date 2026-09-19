@@ -45,7 +45,6 @@
 		"solidColor": "純色 (審查)",
 		"borderRadius": "邊框半徑"
 	},
-
 	"fontStyles": {
 		"classic": "經典",
 		"editor": "編輯器",
@@ -123,7 +122,10 @@
 		"experimentalBuilds": "提示：可在設定中開啟實驗版本存取權",
 		"cursorAppearance": "提示：你可以自訂游標外觀"
 	},
-	"account": { "title": "帳號", "comingSoon": "帳號功能即將推出" },
+	"account": {
+		"title": "帳號",
+		"comingSoon": "帳號功能即將推出"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "沒有出錯，但我們無法轉譯動畫游標覆蓋層。",
 		"description": "你的裝置不支援原生擷取。這可能是由我們尚未釐清的多種原因造成的。Yanjing 仍可繼續運作，但無法進行游標平滑處理。",
@@ -149,5 +151,25 @@
 		"expand": "展開時間軸",
 		"collapse": "摺疊時間軸"
 	},
-	"openRecordingsFolder": "打開錄製資料夾"
+	"openRecordingsFolder": "打開錄製資料夾",
+	"yanjing": {
+		"ai": {
+			"highlightReels": {
+				"title": "AI 高光时刻",
+				"subtitle": "自动找出视频中最有看点的片段(画面 + 音频, 全程本地计算)。",
+				"run": "开始分析",
+				"loading": "加载视频中...",
+				"analyzing": "分析画面活跃度 + 音频响度...",
+				"error": "分析失败",
+				"retry": "重试",
+				"empty": "未识别到高光时刻(视频可能太静态)。请尝试调整参数。",
+				"exportReel": "导出短视频",
+				"rowTitle": "高光 #{id}",
+				"idlePrompt": "点击开始,分析 {duration} 秒视频。"
+			},
+			"actions": {
+				"highlightReels": "AI 高光时刻"
+			}
+		}
+	}
 }
