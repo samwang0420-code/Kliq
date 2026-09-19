@@ -45,7 +45,6 @@
 		"solidColor": "纯色 (审查)",
 		"borderRadius": "边框半径"
 	},
-
 	"fontStyles": {
 		"classic": "经典",
 		"editor": "编辑器",
@@ -123,7 +122,10 @@
 		"experimentalBuilds": "提示：可在设置中开启实验版本访问权限",
 		"cursorAppearance": "提示：你可以自定义光标外观"
 	},
-	"account": { "title": "账户", "comingSoon": "账户功能即将推出" },
+	"account": {
+		"title": "账户",
+		"comingSoon": "账户功能即将推出"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "没有出错，但我们无法渲染动画光标叠加层。",
 		"description": "你的设备不支持原生捕获。这可能是由我们尚未确定的多种原因造成的。言镜 仍可继续运行，但无法进行光标平滑处理。",
@@ -149,5 +151,49 @@
 		"expand": "展开时间轴",
 		"collapse": "折叠时间轴"
 	},
-	"openRecordingsFolder": "打开录制文件夹"
+	"openRecordingsFolder": "打开录制文件夹",
+	"yanjing": {
+		"ai": {
+			"toolbarTitle": "AI 增强",
+			"toolbarHotwords": "热词:",
+			"toolbarExpand": "展开",
+			"toolbarCollapse": "收起",
+			"actions": {
+				"transcribe": "AI 转录",
+				"bilingual": "AI 双语字幕",
+				"translateMulti": "AI 多语言字幕",
+				"proofread": "AI 字幕校对",
+				"silence": "AI 去静音",
+				"fillers": "AI 去填充词",
+				"speed": "AI 智能加速",
+				"zoom": "AI 自动取景",
+				"oneclick": "AI 一键剪辑",
+				"chapters": "AI 章节",
+				"summary": "AI 摘要",
+				"titles": "AI 标题",
+				"tags": "AI 标签",
+				"social": "AI 社媒文案",
+				"search": "AI 语义搜索",
+				"uiPolish": "UI 润色"
+			},
+			"groups": {
+				"transcribe": "转录",
+				"edit": "剪辑",
+				"generate": "生成",
+				"translate": "翻译",
+				"search": "搜索"
+			},
+			"domains": {
+				"general": "通用",
+				"legal": "法律",
+				"medical": "医疗",
+				"ecommerce": "电商",
+				"education": "教育",
+				"finance": "金融",
+				"gaming": "游戏",
+				"tech": "技术",
+				"marketing": "营销"
+			}
+		}
+	}
 }
