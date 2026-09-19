@@ -58,6 +58,10 @@
 			"pauseResume": "Pause / Resume",
 			"stop": "Stop"
 		},
+		"enableFocusMode": "Enable focus mode",
+		"disableFocusMode": "Disable focus mode",
+		"focusModeUnavailable": "Focus mode unavailable on this platform",
+		"focusModeError": "Failed to change focus mode",
 		"update": {
 			"update": "Update",
 			"updated": "Updated",

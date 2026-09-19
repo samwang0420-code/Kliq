@@ -1047,4 +1047,22 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		>,
 	aiInferMimeType: (filePath: string) =>
 		ipcRenderer.invoke("ai-infer-mime-type", filePath) as Promise<string>,
+	// Focus mode — in-app notification suppression
+	getFocusModeStatus: () => ipcRenderer.invoke("get-focus-mode-status"),
+	setFocusMode: (enabled: boolean) => ipcRenderer.invoke("set-focus-mode", enabled),
+	onFocusModeChanged: (
+		callback: (result: {
+			success: boolean;
+			enabled: boolean;
+			supported: boolean;
+			error?: string;
+		}) => void,
+	) => {
+		const listener = (
+			_event: Electron.IpcRendererEvent,
+			payload: { success: boolean; enabled: boolean; supported: boolean; error?: string },
+		) => callback(payload);
+		ipcRenderer.on("focus-mode-changed", listener);
+		return () => ipcRenderer.removeListener("focus-mode-changed", listener);
+	},
 });
