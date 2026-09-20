@@ -214,7 +214,20 @@
 		"bottom": "Unten",
 		"left": "Links",
 		"right": "Rechts",
-		"openEditor": "Zuschneide-Editor öffnen"
+		"openEditor": "Zuschneide-Editor öffnen",
+		"cursorFollow": {
+			"trackCursor": "Cursor folgen",
+			"textZoom": "Text-Zoom",
+			"textZoomHint": "Zoomt den Eingabebereich während der Eingabe heran",
+			"outputSize": "Ausgabegröße",
+			"safeZone": "Sicherheitszone",
+			"smoothness": "Glättung",
+			"textCursorFocus": "Textcursor-Fokus",
+			"textCursorFocusHint": "Fixiert den Eingabebereich; folgt der Maus bei Bewegung",
+			"preview": "Vorschau",
+			"previewSource": "Quelle",
+			"previewOutput": "Ausgabe"
+		}
 	},
 	"background": {
 		"title": "Hintergrund",

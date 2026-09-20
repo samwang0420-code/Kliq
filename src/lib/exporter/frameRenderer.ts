@@ -7,6 +7,7 @@ import type {
 	CaptionCue,
 	CropRegion,
 	CursorClickEffectStyle,
+	CursorFollowCropSettings,
 	CursorStyle,
 	CursorTelemetryPoint,
 	Padding,
@@ -26,6 +27,16 @@ import {
 	type CursorFollowCameraState,
 	createCursorFollowCameraState,
 } from "@/components/video-editor/videoPlayback/cursorFollowCamera";
+import {
+	type CursorFollowCropState,
+	computeCursorFollowCrop,
+	createCursorFollowCropState,
+} from "@/components/video-editor/videoPlayback/cursorFollowCrop";
+import {
+	type CursorTextZoomState,
+	computeCursorTextZoom,
+	createCursorTextZoomState,
+} from "@/components/video-editor/videoPlayback/cursorTextZoom";
 import {
 	DEFAULT_CURSOR_CONFIG,
 	PixiCursorOverlay,
@@ -104,6 +115,7 @@ interface FrameRenderConfig {
 	borderRadius?: number;
 	padding?: Padding | number;
 	cropRegion: CropRegion;
+	cursorFollowCrop?: CursorFollowCropSettings;
 	webcam?: WebcamOverlaySettings;
 	webcamUrl?: string | null;
 	videoWidth: number;
@@ -257,6 +269,8 @@ export class FrameRenderer {
 	private springX: SpringState;
 	private springY: SpringState;
 	private cursorFollowCamera: CursorFollowCameraState;
+	private cursorFollowCropState: CursorFollowCropState = createCursorFollowCropState();
+	private cursorTextZoomState: CursorTextZoomState = createCursorTextZoomState();
 	private lastContentTimeMs: number | null = null;
 	private cursorOverlay: PixiCursorOverlay | null = null;
 	private webcamForwardFrameSource: ForwardFrameSource | null = null;
@@ -1426,6 +1440,8 @@ export class FrameRenderer {
 			: timestamp / 1000;
 		const cursorTimeMs = cursorTimestamp / 1000;
 
+		this.applyCursorFollowCrop(timeMs, layoutCache);
+
 		if (this.cursorOverlay) {
 			this.cursorOverlay.update(
 				this.config.cursorTelemetry ?? [],
@@ -1524,6 +1540,46 @@ export class FrameRenderer {
 		}
 	}
 
+	private applyCursorFollowCrop(timeMs: number, layoutCache: LayoutCache): void {
+		const settings = this.config.cursorFollowCrop;
+		const baseCrop = this.config.cropRegion;
+		const sprite = this.videoSprite;
+		const baseOffset = layoutCache.baseOffset;
+		// The frame-sequencing tests drive this renderer with a partial layout
+		// cache, so every access below is guarded instead of assuming a fully
+		// composed Pixi scene. When tracking is off the sprite simply returns home.
+		if (!settings?.enabled) {
+			if (sprite?.position && baseOffset) {
+				sprite.position.set(baseOffset.x, baseOffset.y);
+			}
+			if (layoutCache.maskRect) {
+				layoutCache.maskRect.sourceCrop = baseCrop;
+			}
+			return;
+		}
+		if (!sprite?.position || !baseCrop || !baseOffset) {
+			if (layoutCache.maskRect) {
+				layoutCache.maskRect.sourceCrop = baseCrop;
+			}
+			return;
+		}
+		const effectiveCrop = computeCursorFollowCrop(
+			this.cursorFollowCropState,
+			this.config.cursorTelemetry ?? [],
+			timeMs,
+			baseCrop,
+			settings,
+		);
+		const fullVideoDisplayWidth = this.config.videoWidth * layoutCache.baseScale;
+		const fullVideoDisplayHeight = this.config.videoHeight * layoutCache.baseScale;
+		const dx = (effectiveCrop.x - baseCrop.x) * fullVideoDisplayWidth;
+		const dy = (effectiveCrop.y - baseCrop.y) * fullVideoDisplayHeight;
+		sprite.position.set(baseOffset.x - dx, baseOffset.y - dy);
+		if (layoutCache.maskRect) {
+			layoutCache.maskRect.sourceCrop = effectiveCrop;
+		}
+	}
+
 	private updateLayout(): void {
 		if (!this.app || !this.videoSprite || !this.maskGraphics || !this.videoContainer) return;
 
@@ -1602,6 +1658,30 @@ export class FrameRenderer {
 			cursorTelemetry: this.config.cursorTelemetry,
 			cursorFollowCamera: this.cursorFollowCamera,
 		});
+
+		// Text-zoom layer (independent of crop pan and explicit zoom regions;
+		// explicit zooms win). The zoom spring below eases it in and out.
+		const explicitZoomActive = target.progress > 0;
+		if (
+			this.config.cursorFollowCrop?.textZoomEnabled &&
+			!explicitZoomActive &&
+			this.config.cursorTelemetry &&
+			this.config.cursorTelemetry.length > 0
+		) {
+			const textZoom = computeCursorTextZoom(
+				this.cursorTextZoomState,
+				this.config.cursorTelemetry,
+				timeMs,
+				this.config.cursorFollowCrop,
+			);
+			if (textZoom.active) {
+				target.scale = textZoom.scale;
+				target.focus = textZoom.focus;
+				target.progress = 1;
+			}
+		} else if (!this.config.cursorFollowCrop?.textZoomEnabled) {
+			this.cursorTextZoomState = createCursorTextZoomState();
+		}
 
 		const state = this.animationState;
 

@@ -100,6 +100,18 @@ import {
 	createCursorFollowCameraState,
 } from "./videoPlayback/cursorFollowCamera";
 import {
+	type CursorFollowCropState,
+	computeCursorFollowCrop,
+	createCursorFollowCropState,
+	resetCursorFollowCropState,
+} from "./videoPlayback/cursorFollowCrop";
+import {
+	type CursorTextZoomState,
+	computeCursorTextZoom,
+	createCursorTextZoomState,
+	resetCursorTextZoomState,
+} from "./videoPlayback/cursorTextZoom";
+import {
 	DEFAULT_CURSOR_CONFIG,
 	PixiCursorOverlay,
 	preloadCursorAssets,
@@ -253,6 +265,7 @@ interface VideoPlaybackProps {
 	borderRadius?: number;
 	padding?: Padding | number;
 	cropRegion?: import("./types").CropRegion;
+	cursorFollowCrop?: import("./types").CursorFollowCropSettings;
 	webcam?: WebcamOverlaySettings;
 	webcamVideoPath?: string | null;
 	aspectRatio: AspectRatio;
@@ -338,6 +351,7 @@ const VideoPlayback = forwardRef<VideoPlaybackRef, VideoPlaybackProps>(
 			borderRadius = 0,
 			padding = DEFAULT_PADDING,
 			cropRegion,
+			cursorFollowCrop,
 			webcam,
 			webcamVideoPath,
 			aspectRatio,
@@ -532,6 +546,14 @@ const VideoPlayback = forwardRef<VideoPlaybackRef, VideoPlaybackProps>(
 		const cursorFollowCameraRef = useRef<CursorFollowCameraState>(
 			createCursorFollowCameraState(),
 		);
+		const cursorFollowCropRef = useRef(cursorFollowCrop);
+		const cursorFollowCropStateRef = useRef<CursorFollowCropState>(
+			createCursorFollowCropState(),
+		);
+		const cursorTextZoomStateRef = useRef<CursorTextZoomState>(
+			createCursorTextZoomState(),
+		);
+		const baseCropRegionRef = useRef(cropRegion);
 		/** Requests one exact composition after an output-affecting edit while paused. */
 		const requestPausedFrameRefresh = useCallback(() => {
 			if (!isPlayingRef.current) {
@@ -1434,6 +1456,22 @@ const VideoPlayback = forwardRef<VideoPlaybackRef, VideoPlaybackProps>(
 		}, [cursorTelemetry, requestPausedFrameRefresh]);
 
 		useEffect(() => {
+			cursorFollowCropRef.current = cursorFollowCrop;
+			resetCursorFollowCropState(cursorFollowCropStateRef.current);
+			resetCursorTextZoomState(cursorTextZoomStateRef.current);
+			requestPausedFrameRefresh();
+		}, [
+			cursorFollowCrop,
+			requestPausedFrameRefresh,
+		]);
+
+		useEffect(() => {
+			baseCropRegionRef.current = cropRegion ?? { x: 0, y: 0, width: 1, height: 1 };
+			resetCursorFollowCropState(cursorFollowCropStateRef.current);
+			requestPausedFrameRefresh();
+		}, [cropRegion, requestPausedFrameRefresh]);
+
+		useEffect(() => {
 			showCursorRef.current = showCursor;
 			requestPausedFrameRefresh();
 		}, [showCursor, requestPausedFrameRefresh]);
@@ -2083,6 +2121,46 @@ const VideoPlayback = forwardRef<VideoPlaybackRef, VideoPlaybackProps>(
 				}
 				lastRenderedContentTimeRef.current = contentTimeMs;
 
+				// Cursor-follow crop: per-frame viewport pan within the source video.
+				// When enabled, recompute the effective crop top-left from cursor
+				// telemetry and shift the video sprite to keep the cursor framed.
+				const followSettings = cursorFollowCropRef.current;
+				const baseCrop = baseCropRegionRef.current;
+				const sprite = videoSpriteRef.current;
+				const lockedDims = lockedVideoDimensionsRef.current;
+				if (followSettings?.enabled && sprite && lockedDims && baseCrop) {
+					const effectiveCrop = computeCursorFollowCrop(
+						cursorFollowCropStateRef.current,
+						cursorTelemetryRef.current,
+						currentTimeRef.current,
+						baseCrop,
+						followSettings,
+					);
+					const fullVideoDisplayWidth = lockedDims.width * baseScaleRef.current;
+					const fullVideoDisplayHeight = lockedDims.height * baseScaleRef.current;
+					const dx = (effectiveCrop.x - baseCrop.x) * fullVideoDisplayWidth;
+					const dy = (effectiveCrop.y - baseCrop.y) * fullVideoDisplayHeight;
+					sprite.position.set(
+						baseOffsetRef.current.x - dx,
+						baseOffsetRef.current.y - dy,
+					);
+					cropBoundsRef.current = {
+						startX: effectiveCrop.x * lockedDims.width,
+						endX:
+							effectiveCrop.x * lockedDims.width +
+							effectiveCrop.width * lockedDims.width,
+						startY: effectiveCrop.y * lockedDims.height,
+						endY:
+							effectiveCrop.y * lockedDims.height +
+							effectiveCrop.height * lockedDims.height,
+					};
+					if (baseMaskRef.current.sourceCrop) {
+						baseMaskRef.current.sourceCrop = { ...effectiveCrop };
+					}
+				} else if (sprite) {
+					sprite.position.set(baseOffsetRef.current.x, baseOffsetRef.current.y);
+				}
+
 				const target = resolveSceneZoomTarget({
 					zoomRegions: zoomRegionsRef.current,
 					timeMs: timelineTimeRef.current * 1000,
@@ -2094,6 +2172,31 @@ const VideoPlayback = forwardRef<VideoPlaybackRef, VideoPlaybackProps>(
 					cursorTelemetry: cursorTelemetryRef.current,
 					cursorFollowCamera: cursorFollowCameraRef.current,
 				});
+
+				// Text-zoom layer: an independent punch-in on the typing spot, applied
+				// only when no explicit zoom region is driving the camera (explicit
+				// zooms always win). The shared zoom spring below eases the
+				// scale/position in and out, so we only emit a stable target.
+				const explicitZoomActive = target.progress > 0;
+				if (
+					cursorFollowCropRef.current?.textZoomEnabled &&
+					!explicitZoomActive &&
+					cursorTelemetryRef.current.length > 0
+				) {
+					const textZoom = computeCursorTextZoom(
+						cursorTextZoomStateRef.current,
+						cursorTelemetryRef.current,
+						currentTimeRef.current,
+						cursorFollowCropRef.current,
+					);
+					if (textZoom.active) {
+						target.scale = textZoom.scale;
+						target.focus = textZoom.focus;
+						target.progress = 1;
+					}
+				} else if (!cursorFollowCropRef.current?.textZoomEnabled) {
+					resetCursorTextZoomState(cursorTextZoomStateRef.current);
+				}
 
 				const state = animationStateRef.current;
 

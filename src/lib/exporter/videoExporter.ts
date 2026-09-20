@@ -6,6 +6,7 @@ import type {
 	CaptionCue,
 	ClipRegion,
 	CropRegion,
+	CursorFollowCropSettings,
 	CursorStyle,
 	CursorTelemetryPoint,
 	Padding,
@@ -68,6 +69,7 @@ interface VideoExporterConfig extends ExportConfig {
 	padding?: Padding | number;
 	videoPadding?: number;
 	cropRegion: CropRegion;
+	cursorFollowCrop?: CursorFollowCropSettings;
 	webcam?: WebcamOverlaySettings;
 	webcamUrl?: string | null;
 	annotationRegions?: AnnotationRegion[];
@@ -238,6 +240,7 @@ export class VideoExporter {
 				borderRadius: this.config.borderRadius,
 				padding: this.config.padding,
 				cropRegion: this.config.cropRegion,
+				cursorFollowCrop: this.config.cursorFollowCrop,
 				webcam: this.config.webcam,
 				webcamUrl: this.config.webcamUrl,
 				videoWidth: videoInfo.width,

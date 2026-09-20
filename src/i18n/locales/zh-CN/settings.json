@@ -214,7 +214,20 @@
 		"bottom": "下",
 		"left": "左",
 		"right": "右",
-		"openEditor": "打开裁剪编辑器"
+		"openEditor": "打开裁剪编辑器",
+		"cursorFollow": {
+			"trackCursor": "跟随光标",
+			"textZoom": "文字缩放",
+			"textZoomHint": "输入文字时自动放大输入区域",
+			"outputSize": "输出尺寸",
+			"safeZone": "安全区",
+			"smoothness": "平滑度",
+			"textCursorFocus": "文字光标聚焦",
+			"textCursorFocusHint": "锁定输入区域；鼠标移动时跟随",
+			"preview": "预览",
+			"previewSource": "源画面",
+			"previewOutput": "输出画面"
+		}
 	},
 	"background": {
 		"title": "背景",

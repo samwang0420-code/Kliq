@@ -5,6 +5,7 @@ import type {
 	CaptionCue,
 	CursorClickEffectStyle,
 	CropRegion,
+	CursorFollowCropSettings,
 	CursorStyle,
 	CursorTelemetryPoint,
 	Padding,
@@ -59,6 +60,7 @@ interface GifExporterConfig {
 	padding?: Padding | number;
 	videoPadding?: Padding | number;
 	cropRegion: CropRegion;
+	cursorFollowCrop?: CursorFollowCropSettings;
 	webcam?: WebcamOverlaySettings;
 	webcamUrl?: string | null;
 	annotationRegions?: AnnotationRegion[];
@@ -159,6 +161,7 @@ export function buildGifFrameRendererConfig(
 		borderRadius: config.borderRadius,
 		padding: config.padding,
 		cropRegion: config.cropRegion,
+		cursorFollowCrop: config.cursorFollowCrop,
 		webcam: config.webcam,
 		webcamUrl: config.webcamUrl,
 		videoWidth: videoInfo.width,

@@ -214,7 +214,20 @@
 		"bottom": "Низ",
 		"left": "Левый край",
 		"right": "Правый край",
-		"openEditor": "Открыть редактор"
+		"openEditor": "Открыть редактор",
+		"cursorFollow": {
+			"trackCursor": "Следовать за курсором",
+			"textZoom": "Текстовый зум",
+			"textZoomHint": "Приближает область ввода во время печати",
+			"outputSize": "Размер вывода",
+			"safeZone": "Безопасная зона",
+			"smoothness": "Сглаживание",
+			"textCursorFocus": "Фокус текстового курсора",
+			"textCursorFocusHint": "Фиксирует область ввода; следит за мышью при движении",
+			"preview": "Предпросмотр",
+			"previewSource": "Источник",
+			"previewOutput": "Вывод"
+		}
 	},
 	"background": {
 		"title": "Фон",

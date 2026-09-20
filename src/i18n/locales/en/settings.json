@@ -220,7 +220,20 @@
 		"bottom": "Bottom",
 		"left": "Left",
 		"right": "Right",
-		"openEditor": "Open Crop Editor"
+		"openEditor": "Open Crop Editor",
+		"cursorFollow": {
+			"trackCursor": "Track cursor",
+			"textZoom": "Text zoom",
+			"textZoomHint": "Zooms in on the typing area while you type",
+			"outputSize": "Output size",
+			"safeZone": "Safe zone",
+			"smoothness": "Smoothness",
+			"textCursorFocus": "Text cursor focus",
+			"textCursorFocusHint": "Locks on typing area; follows mouse when moving",
+			"preview": "Preview",
+			"previewSource": "Source",
+			"previewOutput": "Output"
+		}
 	},
 	"background": {
 		"title": "Background",

@@ -214,7 +214,20 @@
 		"bottom": "Basso",
 		"left": "Sinistra",
 		"right": "Destra",
-		"openEditor": "Apri editor di ritaglio"
+		"openEditor": "Apri editor di ritaglio",
+		"cursorFollow": {
+			"trackCursor": "Segui cursore",
+			"textZoom": "Zoom testo",
+			"textZoomHint": "Ingrandisce l'area di digitazione mentre scrivi",
+			"outputSize": "Dimensione output",
+			"safeZone": "Zona sicura",
+			"smoothness": "Levigatezza",
+			"textCursorFocus": "Focus cursore di testo",
+			"textCursorFocusHint": "Blocca l'area di digitazione; segue il mouse quando si muove",
+			"preview": "Anteprima",
+			"previewSource": "Sorgente",
+			"previewOutput": "Output"
+		}
 	},
 	"background": {
 		"title": "Sfondo",

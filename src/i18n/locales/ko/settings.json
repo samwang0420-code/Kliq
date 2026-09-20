@@ -214,7 +214,20 @@
 		"bottom": "하단",
 		"left": "왼쪽",
 		"right": "오른쪽",
-		"openEditor": "자르기 편집기 열기"
+		"openEditor": "자르기 편집기 열기",
+		"cursorFollow": {
+			"trackCursor": "커서 따라가기",
+			"textZoom": "텍스트 확대",
+			"textZoomHint": "입력하는 동안 입력 영역을 확대합니다",
+			"outputSize": "출력 크기",
+			"safeZone": "안전 영역",
+			"smoothness": "부드러움",
+			"textCursorFocus": "텍스트 커서 포커스",
+			"textCursorFocusHint": "입력 영역을 고정하고 마우스 이동 시 따라갑니다",
+			"preview": "미리보기",
+			"previewSource": "원본",
+			"previewOutput": "출력"
+		}
 	},
 	"background": {
 		"title": "배경",

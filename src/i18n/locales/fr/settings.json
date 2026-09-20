@@ -214,7 +214,20 @@
 		"bottom": "Bas",
 		"left": "Gauche",
 		"right": "Droite",
-		"openEditor": "Ouvrir l’éditeur de recadrage"
+		"openEditor": "Ouvrir l’éditeur de recadrage",
+		"cursorFollow": {
+			"trackCursor": "Suivre le curseur",
+			"textZoom": "Zoom texte",
+			"textZoomHint": "Zoome sur la zone de saisie pendant la frappe",
+			"outputSize": "Taille de sortie",
+			"safeZone": "Zone de sécurité",
+			"smoothness": "Lissage",
+			"textCursorFocus": "Focus du curseur de texte",
+			"textCursorFocusHint": "Verrouille la zone de saisie ; suit la souris au déplacement",
+			"preview": "Aperçu",
+			"previewSource": "Source",
+			"previewOutput": "Sortie"
+		}
 	},
 	"background": {
 		"title": "Arrière-plan",

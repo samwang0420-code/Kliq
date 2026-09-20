@@ -56,6 +56,7 @@ export function buildExportRenderOptions({
 		borderRadius: appearance.borderRadius,
 		padding: appearance.padding,
 		cropRegion: appearance.cropRegion,
+		cursorFollowCrop: appearance.cursorFollowCrop,
 		webcam: appearance.webcam,
 		webcamUrl:
 			appearance.resolvedWebcamVideoUrl ??

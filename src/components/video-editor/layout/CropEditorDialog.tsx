@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import type { useI18n } from "@/contexts/I18nContext";
 import type { AspectRatio } from "@/utils/aspectRatioUtils";
 import { CropControl } from "../CropControl";
-import type { CropRegion } from "../types";
+import type { CursorFollowCropSettings, CursorTelemetryPoint, CropRegion } from "../types";
 
 type Props = {
 	open: boolean;
@@ -13,6 +13,10 @@ type Props = {
 	cropRegion: CropRegion;
 	setCropRegion: Dispatch<SetStateAction<CropRegion>>;
 	aspectRatio: AspectRatio;
+	cursorFollowCrop: CursorFollowCropSettings;
+	setCursorFollowCrop: Dispatch<SetStateAction<CursorFollowCropSettings>>;
+	cursorTelemetry: CursorTelemetryPoint[];
+	currentTimeMs: number;
 	onCancel: () => void;
 	onDone: () => void;
 };
@@ -24,6 +28,10 @@ export function CropEditorDialog({
 	cropRegion,
 	setCropRegion,
 	aspectRatio,
+	cursorFollowCrop,
+	setCursorFollowCrop,
+	cursorTelemetry,
+	currentTimeMs,
 	onCancel,
 	onDone,
 }: Props) {
@@ -45,6 +53,11 @@ export function CropEditorDialog({
 					cropRegion={cropRegion}
 					onCropChange={setCropRegion}
 					aspectRatio={aspectRatio}
+					t={t}
+					cursorFollow={cursorFollowCrop}
+					onCursorFollowChange={setCursorFollowCrop}
+					cursorTelemetry={cursorTelemetry}
+					currentTimeMs={currentTimeMs}
 				/>
 				<div className="mt-6 flex justify-end">
 					<Button

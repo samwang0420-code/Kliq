@@ -214,7 +214,20 @@
 		"bottom": "Inferior",
 		"left": "Izquierda",
 		"right": "Derecha",
-		"openEditor": "Abrir editor de recorte"
+		"openEditor": "Abrir editor de recorte",
+		"cursorFollow": {
+			"trackCursor": "Seguir cursor",
+			"textZoom": "Zoom de texto",
+			"textZoomHint": "Amplía el área de escritura mientras escribes",
+			"outputSize": "Tamaño de salida",
+			"safeZone": "Zona segura",
+			"smoothness": "Suavizado",
+			"textCursorFocus": "Enfoque del cursor de texto",
+			"textCursorFocusHint": "Fija el área de escritura; sigue al ratón al moverlo",
+			"preview": "Vista previa",
+			"previewSource": "Origen",
+			"previewOutput": "Salida"
+		}
 	},
 	"background": {
 		"title": "Fondo",

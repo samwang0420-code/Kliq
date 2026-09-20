@@ -25,6 +25,8 @@ import {
 	type ClipRegion,
 	type CropRegion,
 	type CursorClickEffectStyle,
+	type CursorFollowCropPreviewMode,
+	type CursorFollowCropSettings,
 	type CursorStyle,
 	DEFAULT_ANNOTATION_POSITION,
 	DEFAULT_ANNOTATION_SIZE,
@@ -39,6 +41,7 @@ import {
 	DEFAULT_CURSOR_CLICK_EFFECT_DURATION_MS,
 	DEFAULT_CURSOR_CLICK_EFFECT_OPACITY,
 	DEFAULT_CURSOR_CLICK_EFFECT_SCALE,
+	DEFAULT_CURSOR_FOLLOW_CROP,
 	DEFAULT_CURSOR_MOTION_BLUR,
 	DEFAULT_CURSOR_STYLE,
 	DEFAULT_CURSOR_SWAY,
@@ -134,6 +137,7 @@ export interface ProjectEditorState {
 	borderRadius: number;
 	padding: Padding;
 	cropRegion: CropRegion;
+	cursorFollowCrop: CursorFollowCropSettings;
 	zoomRegions: ZoomRegion[];
 	trimRegions: TrimRegion[];
 	clipRegions: ClipRegion[];
@@ -804,6 +808,34 @@ export function normalizeProjectEditor(editor: Partial<ProjectEditorState>): Pro
 	const cropWidth = clamp(rawCropWidth, 0.01, 1 - cropX);
 	const cropHeight = clamp(rawCropHeight, 0.01, 1 - cropY);
 
+	const rawCursorFollowCrop = (editor as Partial<ProjectEditorState>).cursorFollowCrop;
+	const cursorFollowCropPreviewMode: CursorFollowCropPreviewMode =
+		rawCursorFollowCrop?.previewMode === "output" ? "output" : "source";
+	const normalizedCursorFollowCrop: CursorFollowCropSettings = {
+		enabled:
+			typeof rawCursorFollowCrop?.enabled === "boolean"
+				? rawCursorFollowCrop.enabled
+				: DEFAULT_CURSOR_FOLLOW_CROP.enabled,
+		safeZoneRatio: isFiniteNumber(rawCursorFollowCrop?.safeZoneRatio)
+			? clamp(rawCursorFollowCrop.safeZoneRatio, 0, 0.49)
+			: DEFAULT_CURSOR_FOLLOW_CROP.safeZoneRatio,
+		smoothness: isFiniteNumber(rawCursorFollowCrop?.smoothness)
+			? clamp(rawCursorFollowCrop.smoothness, 0, 1)
+			: DEFAULT_CURSOR_FOLLOW_CROP.smoothness,
+		previewMode: cursorFollowCropPreviewMode,
+		trackTextCursor:
+			typeof rawCursorFollowCrop?.trackTextCursor === "boolean"
+				? rawCursorFollowCrop.trackTextCursor
+				: DEFAULT_CURSOR_FOLLOW_CROP.trackTextCursor,
+		textZoomEnabled:
+			typeof rawCursorFollowCrop?.textZoomEnabled === "boolean"
+				? rawCursorFollowCrop.textZoomEnabled
+				: (DEFAULT_CURSOR_FOLLOW_CROP.textZoomEnabled ?? false),
+		...(isFiniteNumber(rawCursorFollowCrop?.textZoomDepth)
+			? { textZoomDepth: clamp(rawCursorFollowCrop.textZoomDepth, 1, 4) }
+			: {}),
+	};
+
 	const webcam: Partial<WebcamOverlaySettings> =
 		editor.webcam && typeof editor.webcam === "object" ? editor.webcam : {};
 	const webcamSourcePath = typeof webcam.sourcePath === "string" ? webcam.sourcePath : null;
@@ -963,6 +995,7 @@ export function normalizeProjectEditor(editor: Partial<ProjectEditorState>): Pro
 			width: cropWidth,
 			height: cropHeight,
 		},
+		cursorFollowCrop: normalizedCursorFollowCrop,
 		zoomRegions: normalizedZoomRegions,
 		trimRegions: normalizedTrimRegions,
 		clipRegions: normalizedClipRegions,

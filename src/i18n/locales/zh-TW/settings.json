@@ -214,7 +214,20 @@
 		"bottom": "下",
 		"left": "左",
 		"right": "右",
-		"openEditor": "開啟裁切編輯器"
+		"openEditor": "開啟裁切編輯器",
+		"cursorFollow": {
+			"trackCursor": "跟隨游標",
+			"textZoom": "文字縮放",
+			"textZoomHint": "輸入文字時自動放大輸入區域",
+			"outputSize": "輸出尺寸",
+			"safeZone": "安全區",
+			"smoothness": "平滑度",
+			"textCursorFocus": "文字游標聚焦",
+			"textCursorFocusHint": "鎖定輸入區域；滑鼠移動時跟隨",
+			"preview": "預覽",
+			"previewSource": "來源畫面",
+			"previewOutput": "輸出畫面"
+		}
 	},
 	"background": {
 		"title": "背景",

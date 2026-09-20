@@ -3,6 +3,7 @@ import type { EditorPreferences } from "../editorPreferences";
 import type {
 	CropRegion,
 	CursorClickEffectStyle,
+	CursorFollowCropSettings,
 	CursorStyle,
 	WebcamOverlaySettings,
 	ZoomMotionBlurTuning,
@@ -13,6 +14,7 @@ import {
 	DEFAULT_CONNECTED_ZOOM_EASING,
 	DEFAULT_CONNECTED_ZOOM_GAP_MS,
 	DEFAULT_CROP_REGION,
+	DEFAULT_CURSOR_FOLLOW_CROP,
 	DEFAULT_CURSOR_STYLE,
 	DEFAULT_WEBCAM_OVERLAY,
 	DEFAULT_ZOOM_IN_DURATION_MS,
@@ -110,6 +112,9 @@ export function useAppearanceState(preferences: EditorPreferences) {
 	const [borderRadius, setBorderRadius] = useState(preferences.borderRadius);
 	const [padding, setPadding] = useState(preferences.padding);
 	const [cropRegion, setCropRegion] = useState<CropRegion>(DEFAULT_CROP_REGION);
+	const [cursorFollowCrop, setCursorFollowCrop] = useState<CursorFollowCropSettings>(
+		DEFAULT_CURSOR_FOLLOW_CROP,
+	);
 	const [webcam, setWebcam] = useState<WebcamOverlaySettings>(
 		preferences.webcam ?? DEFAULT_WEBCAM_OVERLAY,
 	);
@@ -196,6 +201,8 @@ export function useAppearanceState(preferences: EditorPreferences) {
 		setPadding,
 		cropRegion,
 		setCropRegion,
+		cursorFollowCrop,
+		setCursorFollowCrop,
 		webcam,
 		setWebcam,
 		resolvedWebcamVideoUrl,

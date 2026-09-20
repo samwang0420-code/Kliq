@@ -94,6 +94,7 @@ export function EditorVideoPreview({
 			borderRadius={appearance.borderRadius}
 			padding={appearance.padding}
 			cropRegion={appearance.cropRegion}
+			cursorFollowCrop={appearance.cursorFollowCrop}
 			webcam={appearance.webcam}
 			webcamVideoPath={
 				appearance.webcam.sourcePath ? appearance.resolvedWebcamVideoUrl : null

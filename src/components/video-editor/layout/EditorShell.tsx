@@ -251,6 +251,10 @@ export function EditorShell(props: Props) {
 				cropRegion={appearance.cropRegion}
 				setCropRegion={appearance.setCropRegion}
 				aspectRatio={ui.aspectRatio}
+				cursorFollowCrop={appearance.cursorFollowCrop}
+				setCursorFollowCrop={appearance.setCursorFollowCrop}
+				cursorTelemetry={timeline.cursorTelemetry}
+				currentTimeMs={ui.currentTime * 1000}
 				onCancel={ui.handleCancelCropEditor}
 				onDone={ui.handleCloseCropEditor}
 			/>

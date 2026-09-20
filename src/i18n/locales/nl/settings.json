@@ -214,7 +214,20 @@
 		"bottom": "Onder",
 		"left": "Links",
 		"right": "Rechts",
-		"openEditor": "Bijsnijdeditor openen"
+		"openEditor": "Bijsnijdeditor openen",
+		"cursorFollow": {
+			"trackCursor": "Cursor volgen",
+			"textZoom": "Tekstzoom",
+			"textZoomHint": "Zoomt in op het invoergebied terwijl je typt",
+			"outputSize": "Uitvoergrootte",
+			"safeZone": "Veilige zone",
+			"smoothness": "Vloeiendheid",
+			"textCursorFocus": "Tekstcursor-focus",
+			"textCursorFocusHint": "Vergrendelt het invoergebied; volgt de muis bij beweging",
+			"preview": "Voorbeeld",
+			"previewSource": "Bron",
+			"previewOutput": "Uitvoer"
+		}
 	},
 	"background": {
 		"title": "Achtergrond",

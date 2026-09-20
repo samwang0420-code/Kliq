@@ -214,7 +214,20 @@
 		"bottom": "Base",
 		"left": "Esquerda",
 		"right": "Direita",
-		"openEditor": "Abrir editor de corte"
+		"openEditor": "Abrir editor de corte",
+		"cursorFollow": {
+			"trackCursor": "Seguir cursor",
+			"textZoom": "Zoom de texto",
+			"textZoomHint": "Amplia a área de digitação enquanto você digita",
+			"outputSize": "Tamanho de saída",
+			"safeZone": "Zona segura",
+			"smoothness": "Suavidade",
+			"textCursorFocus": "Foco do cursor de texto",
+			"textCursorFocusHint": "Trava a área de digitação; segue o mouse ao mover",
+			"preview": "Pré-visualização",
+			"previewSource": "Origem",
+			"previewOutput": "Saída"
+		}
 	},
 	"background": {
 		"title": "Fundo",
