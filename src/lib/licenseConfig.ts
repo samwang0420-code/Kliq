@@ -48,8 +48,16 @@ export const KLQ_PRO_CHECKOUT_URL = normalizeUrl(rawEnv.VITE_KLQ_CHECKOUT_URL);
 /** 退款政策页（可选） */
 export const KLQ_REFUND_POLICY_URL = KLQ_SITE_URL ? `${KLQ_SITE_URL}/refund` : "";
 
-/** 源码仓库（AGPL 3.0 要求可获取源码；沿用现有 fork 地址直到域名迁移完成） */
-export const KLQ_REPO_URL = "https://github.com/yanjingai/recorder";
+/**
+ * 源码仓库（AGPL 3.0 第 13 条要求：通过网络交互的用户必须能获取对应源码）。
+ *
+ * ⚠️ 这里曾误写为 `https://github.com/yanjingai/recorder` —— 那是个**不存在的仓库**，
+ * 个人中心的「仓库」按钮点开必 404。全仓仓库地址以此处为**唯一真源**，其余位置一律派生。
+ */
+export const KLQ_REPO_URL = "https://github.com/samwang0420-code/Kliq";
+
+/** Issue / 反馈入口（由仓库地址派生，避免出现第二个真源） */
+export const KLQ_ISSUES_URL = `${KLQ_REPO_URL}/issues`;
 
 export function isLicenseServiceConfigured(): boolean {
 	return KLQ_LICENSE_VALIDATE_URL.length > 0;

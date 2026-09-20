@@ -32,10 +32,12 @@ const LOCALE_LABELS: Record<string, string> = {
 	en: "English",
 	es: "Español",
 	fr: "Français",
+	de: "Deutsch",
 	it: "Italiano",
 	nl: "Nederlands",
 	ko: "한국어",
 	"pt-BR": "Português",
+	ru: "Русский",
 	"zh-CN": "简体中文",
 	"zh-TW": "繁體中文",
 };

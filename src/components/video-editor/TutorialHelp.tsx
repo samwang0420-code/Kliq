@@ -21,12 +21,22 @@ import {
 } from "@/components/ui/dialog";
 import { useScopedT } from "@/contexts/I18nContext";
 import { useShortcuts } from "@/contexts/ShortcutsContext";
+import { KLQ_ISSUES_URL } from "@/lib/licenseConfig";
 import { formatBinding, SHORTCUT_ACTIONS, SHORTCUT_LABELS } from "@/lib/shortcuts";
 import { formatShortcut } from "@/utils/platformUtils";
 
-export const KLIQ_ISSUES_URL = "https://github.com/samwang0420-code/Recordly/issues";
-const KLIQ_DISCORD_URL = "https://discord.gg/yanjingai";
-const KLIQ_X_URL = "https://x.com/yanjingai";
+/**
+ * 反馈渠道。
+ *
+ * 仓库 / Issue 地址的唯一真源在 `@/lib/licenseConfig`（`KLQ_REPO_URL`），此处只引用不再硬编码 ——
+ * 此前正是「两处各写一份」导致仓库改名后两边地址打架（一处对、一处 404）。
+ *
+ * Discord 与 X 目前没有 Kliq 自有账号，**留空即隐藏对应入口**（宁可不显示，也不给死链）。
+ * 拿到真实渠道后把地址填回来，UI 会自动出现。
+ */
+const KLIQ_DISCORD_URL = "";
+const KLIQ_X_URL = "";
+const KLIQ_X_HANDLE = "";
 const CONTACT_EMAIL = "hi@yanjingai.tech";
 export const APP_HEADER_ACTION_BUTTON_CLASS =
 	"h-7 px-2 text-xs text-muted-foreground hover:bg-foreground/10 hover:text-foreground transition-all gap-1.5";
@@ -59,6 +69,9 @@ export async function openExternalLink(url: string, errorMessage: string) {
 
 export function DiscordLinkButton() {
 	const t = useScopedT("editor");
+
+	// 没有配置真实 Discord 邀请时直接不渲染，避免给出失效链接
+	if (!KLIQ_DISCORD_URL) return null;
 
 	return (
 		<Button
@@ -134,36 +147,38 @@ export function FeedbackDialog() {
 								<ExternalLink className="h-3.5 w-3.5" />
 							</Button>
 						</div>
-						<div className="flex items-center justify-between gap-3 rounded-lg border border-foreground/5 bg-foreground/5 px-3 py-3">
-							<div>
-								<p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground/70">
-									{t("feedback.xLabel", "X")}
-								</p>
-								<p className="mt-1 text-sm font-medium text-foreground">
-									@yanjingai
-								</p>
+						{KLIQ_X_URL ? (
+							<div className="flex items-center justify-between gap-3 rounded-lg border border-foreground/5 bg-foreground/5 px-3 py-3">
+								<div>
+									<p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground/70">
+										{t("feedback.xLabel", "X")}
+									</p>
+									<p className="mt-1 text-sm font-medium text-foreground">
+										{KLIQ_X_HANDLE}
+									</p>
+								</div>
+								<Button
+									type="button"
+									variant="outline"
+									onClick={() =>
+										void openExternalLink(
+											KLIQ_X_URL,
+											t("feedback.openFailed", "Failed to open link."),
+										)
+									}
+									className="border-foreground/10 bg-foreground/5 text-foreground hover:bg-foreground/10 hover:text-foreground"
+								>
+									<Twitter className="h-3.5 w-3.5" />
+								</Button>
 							</div>
-							<Button
-								type="button"
-								variant="outline"
-								onClick={() =>
-									void openExternalLink(
-										KLIQ_X_URL,
-										t("feedback.openFailed", "Failed to open link."),
-									)
-								}
-								className="border-foreground/10 bg-foreground/5 text-foreground hover:bg-foreground/10 hover:text-foreground"
-							>
-								<Twitter className="h-3.5 w-3.5" />
-							</Button>
-						</div>
+						) : null}
 					</div>
 					<Button
 						type="button"
 						variant="outline"
 						onClick={() =>
 							void openExternalLink(
-								KLIQ_ISSUES_URL,
+								KLQ_ISSUES_URL,
 								t("feedback.openFailed", "Failed to open link."),
 							)
 						}

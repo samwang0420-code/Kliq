@@ -6,10 +6,51 @@
 
 | remote | 地址 | 权限 |
 |---|---|---|
-| `origin` | `https://github.com/samwang0420-code/Recordly.git` | 读写（自己的仓库） |
+| `origin` | `https://github.com/samwang0420-code/Kliq.git` | 读写（自己的仓库） |
 | `upstream` | `https://github.com/webadderallorg/Recordly.git` | 只读（上游素材源） |
 
 凭据由 macOS Keychain 的 `osxkeychain` helper 提供，仓库内**不存任何 token**。
+
+### 1.1 仓库改名记录（2026-09-20）
+
+`origin` 由 `samwang0420-code/Recordly` 改名为 `samwang0420-code/Kliq`。
+品牌已经叫 Kliq，仓库名还留着 Recordly，会让「源码」入口与品牌脱节。
+GitHub 对旧地址保留 **301 重定向**（按仓库 ID 维系），旧链接不会失效。
+
+同批修正的仓库元信息：
+
+| 字段 | 改前 | 改后 |
+|---|---|---|
+| `description` | 上游原文 *Create polished demo videos…* | Kliq 自己的话术 |
+| `homepage` | `https://recordly.dev`（**上游官网**） | 清空，待填 Kliq 站点 |
+| `topics` | 空 | 8 个（screen-recorder / video-editor / electron …） |
+
+> `homepage` 原值指向上游站点，等于「点进自己仓库却跳去上游」。
+> 待 `VITE_KLQ_SITE_URL` 定下来后一起填。
+
+改名后必须同步的两处（已做）：
+
+```bash
+git remote set-url origin https://github.com/samwang0420-code/Kliq.git
+```
+
+- 代码内仓库地址常量 `KLQ_REPO_URL`（`src/lib/licenseConfig.ts`）—— 这是**唯一真源**，
+  `KLQ_ISSUES_URL` 由它派生。此前 `licenseConfig.ts` 与 `TutorialHelp.tsx` 各写一份，
+  导致改名后「一处地址对、一处 404」。
+
+### 1.2 提交身份
+
+本仓库使用**仓库级**身份（不动全局，避免影响其它项目）：
+
+```
+user.name  = Kliq
+user.email = 242939827+samwang0420-code@users.noreply.github.com
+```
+
+用 GitHub noreply 地址而不是真实邮箱，避免邮箱被写进公开提交历史。
+历史提交的作者仍是 `YanJingAI <hi@yanjingai.tech>`，**刻意不改** ——
+改写作者要再动一次全部 commit SHA，代价与收益不成比例。
+
 
 ## 2. 分支：只保留两个
 
