@@ -11,7 +11,7 @@
 </p>
 
 ### 无需额外剪辑，也能做出精致的屏幕录制。
-**Kliq (Kliq)** 是一款基于 [Recordly](https://github.com/webadderallorg/Recordly) 的开源屏幕录制器,加入了 **AI 双语字幕、智能剪辑、行业热词、AI 章节摘要**。  
+**Kliq** 是一款基于 [Recordly](https://github.com/webadderallorg/Recordly) 的开源屏幕录制器,加入了 **AI 双语字幕、智能剪辑、行业热词、AI 章节摘要**。  
 **欢迎提交 PR。** [yanjingai.tech](https://yanjingai.tech) · [hi@yanjingai.tech](mailto:hi@yanjingai.tech) · [ATTRIBUTION](./ATTRIBUTION.md)
 
 > 本软件是基于 Recordly 修改而来的衍生作品 (AGPL 3.0)。感谢 [@webadderall](https://github.com/webadderall) 的开源贡献。
@@ -200,7 +200,7 @@ Recordly 拥有一个社区驱动的扩展系统。任何人都可以构建和�
 
 预构建发布版本请见：
 
-https://github.com/webadderallorg/Recordly/releases
+https://github.com/samwang0420-code/Kliq/releases
 
 ---
 
@@ -233,7 +233,7 @@ sudo apt install build-essential cmake libx11-dev libxtst-dev libxrandr-dev libx
 ### 步骤
 
 ```bash
-git clone https://github.com/webadderallorg/Recordly.git recordly
+git clone https://github.com/samwang0420-code/Kliq.git kliq
 cd recordly
 npm install
 npm run dev
@@ -390,29 +390,14 @@ Recordly 将平台相关的捕获层与基于渲染器的编辑、导出流程�
 
 问题反馈和功能建议：
 
-https://github.com/webadderallorg/Recordly/issues
+https://github.com/samwang0420-code/Kliq/issues
 
 欢迎提交 Pull Request。
 
 ---
 
-# 支持者名单
-
-[![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/webadderall)
-
-- Tadees
-- buildwithfur
-- Tobias
-- Anonymous Supporter
-- Tandava Appadoo
-- Digitalfastmind
-- Roberto Marcelino
-- Rajan RK
-- Francesco
-- Erwan
-- Anonymous supporter
-
 ---
+
 
 # 许可证
 

@@ -6,7 +6,7 @@
 	"homepage": "https://yanjingai.tech",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/yanjingai/recorder.git"
+		"url": "https://github.com/samwang0420-code/Kliq.git"
 	},
 	"bugs": {
 		"url": "https://yanjingai.tech/support"
@@ -42,6 +42,7 @@
 		"smoke:webcam-segmentation-assets": "node scripts/smoke-webcam-segmentation-assets.mjs",
 		"verify:export-audio": "node scripts/verify-export-audio.mjs",
 		"verify:site": "node scripts/verify-site.mjs",
+		"render": "node scripts/render-cli.mjs",
 		"smoke:verify-site": "node scripts/verify-site.mjs --self-test",
 		"smoke:verify-export-audio": "node scripts/smoke-verify-export-audio.mjs",
 		"verify:macos-distribution": "node scripts/verify-macos-distribution.mjs",
