@@ -6,6 +6,9 @@ import {
 	activateLicense,
 	canUseFeature,
 	deactivateLicense,
+	FREE_AI_ACTIONS,
+	FREE_FEATURES,
+	isFreeAction,
 	getLicenseStatus,
 	isPro,
 	maskLicenseKey,
@@ -162,6 +165,38 @@ describe("pro gating", () => {
 		for (const action of ["ai-silence", "ai-fillers", "ai-speed", "ai-zoom"]) {
 			expect(actionRequiresPro(action)).toBe(false);
 			expect(() => requirePro(action)).not.toThrow();
+		}
+	});
+
+	it("classifies every AI action as exactly one of free or Pro — no silent gap", async () => {
+		// 这条是「能力声明了却没归类」的护栏：新增一个工具栏动作时，如果
+		// 既没进 ACTION_TO_PRO_FEATURE、也没进 FREE_AI_ACTIONS，这里会红。
+		// 上一轮审查抓到的 9 个不可达动作，本质就是这类「声明了但没接线」。
+		const { AI_ACTION_IDS } = await import("./ai/action-inputs");
+		const free = new Set<string>(FREE_AI_ACTIONS);
+		const pro = new Set(Object.keys(ACTION_TO_PRO_FEATURE));
+
+		expect(AI_ACTION_IDS.filter((id) => !free.has(id) && !pro.has(id))).toEqual([]);
+		expect(AI_ACTION_IDS.filter((id) => free.has(id) && pro.has(id))).toEqual([]);
+		expect([...free, ...pro].filter((id) => !AI_ACTION_IDS.includes(id))).toEqual([]);
+		expect(free.size + pro.size).toBe(AI_ACTION_IDS.length);
+	});
+
+	it("exposes the free/Pro split through both helpers consistently", () => {
+		for (const action of FREE_AI_ACTIONS) {
+			expect(isFreeAction(action)).toBe(true);
+			expect(actionRequiresPro(action)).toBe(false);
+		}
+		for (const action of Object.keys(ACTION_TO_PRO_FEATURE)) {
+			expect(isFreeAction(action)).toBe(false);
+			expect(actionRequiresPro(action)).toBe(true);
+		}
+	});
+
+	it("keeps the free feature groups non-empty and disjoint from the Pro groups", () => {
+		expect(FREE_FEATURES.length).toBeGreaterThan(0);
+		for (const feature of FREE_FEATURES) {
+			expect(PRO_FEATURES).not.toContain(feature);
 		}
 	});
 

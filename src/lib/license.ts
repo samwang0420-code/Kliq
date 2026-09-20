@@ -70,6 +70,35 @@ export type ProFeature = (typeof PRO_FEATURES)[number];
 const PRO_FEATURE_SET = new Set<string>(PRO_FEATURES);
 
 /**
+ * 免费能力分组（个人中心「Free / Pro 对照表」的左栏）。
+ *
+ * 为什么要有它：此前个人中心只列 Pro 有什么，用户没法判断值不值得买 ——
+ * 而这恰恰是「怎么收费」最核心的一句话。左栏必须来自代码里的**事实**，
+ * 不是营销文案：这些能力确实无一调用付费 API。
+ */
+export const FREE_FEATURES = [
+	"recording",
+	"editing",
+	"localCleanup",
+	"annotate",
+	"exporting",
+	"privacy",
+] as const;
+
+export type FreeFeature = (typeof FREE_FEATURES)[number];
+
+/**
+ * 保持免费的 AI 动作：全部在本地跑启发式算法（静音检测 / 填充词识别 /
+ * 语速分析 / 人脸跟随），不产生任何 API 成本，因此没有收费理由。
+ */
+export const FREE_AI_ACTIONS = ["ai-silence", "ai-fillers", "ai-speed", "ai-zoom"] as const;
+
+/** 该动作是否免费（与 actionRequiresPro 互斥、互补） */
+export function isFreeAction(actionId: string): boolean {
+	return !actionRequiresPro(actionId);
+}
+
+/**
  * AI 工具栏动作 → Pro 权益分组。
  * 未列出的动作（去静音 / 去填充词 / 智能加速 / 自动取景）保持免费：
  * 它们在本地启发式完成，不产生 API 成本，作为免费版的可感知价值。

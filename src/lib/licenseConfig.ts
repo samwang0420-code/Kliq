@@ -59,6 +59,104 @@ export const KLQ_REPO_URL = "https://github.com/samwang0420-code/Kliq";
 /** Issue / 反馈入口（由仓库地址派生，避免出现第二个真源） */
 export const KLQ_ISSUES_URL = `${KLQ_REPO_URL}/issues`;
 
+/**
+ * Lemon Squeezy 顾客订单页。
+ *
+ * 「我怎么再拿到我的 License key」这个问题此前**没有任何答案**：key 只在购买时
+ * 发一次邮件，丢了就没了，而个人中心里也没有取回入口。
+ *
+ * 这个地址来自 Lemon Squeezy 官方文档（docs.lemonsqueezy.com/help/online-store/my-orders）：
+ * 顾客只需填写下单邮箱，LS 会发一封魔法链接邮件把他登进去，然后能看到全部订单、
+ * 附件与 License key。它是**跨店铺的全局账号**，所以不依赖我们的 store 子域。
+ *
+ * 这正是本仓 `KLQ_REPO_URL` 注释里记过的坑（写过一个不存在的仓库地址，按钮
+ * 点开必 404）—— 所以这条地址有官方文档出处，不是编出来的。
+ */
+export const KLQ_STORE_ORDERS_URL = "https://app.lemonsqueezy.com/my-orders";
+
+/**
+ * 许可 / 购买相关的人工联系邮箱。
+ *
+ * ⚠️ 这是**渠道一致性问题**，不只是多一个常量：
+ * 官网定价卡上的「购买 Pro」与「取回密钥」指向的就是这个地址
+ * （见 `cloudflare/pages/index.html` 里的 `KLQ_SALES_EMAIL`），
+ * 而个人中心此前**只**给 Lemon Squeezy 订单页。在店铺尚未开通、
+ * 用户其实是靠邮件买到 key 的阶段，"去 Lemon Squeezy 找你的订单"
+ * 只会让他看到「没有任何订单」—— 两边指的必须是同一个渠道。
+ */
+export const KLQ_LICENSE_REQUEST_EMAIL = "sam.wang01@icloud.com";
+
+/**
+ * 构造许可相关的人工联系链接。
+ *
+ * 主题固定为英文：mailto 的主题在部分客户端上对非 ASCII 的转义处理不一致，
+ * 而这两个主题是给**我们自己**看的收件箱分类标记；正文由用户自己写。
+ */
+export function buildLicenseRequestMailto(kind: "purchase" | "recover"): string {
+	const subject = kind === "purchase" ? "Kliq Pro license request" : "Kliq Pro license recover";
+	return `mailto:${KLQ_LICENSE_REQUEST_EMAIL}?subject=${encodeURIComponent(subject)}`;
+}
+
+/**
+ * 商业化配置自检项。
+ *
+ * 此前「购买入口未配置」只给一句「构建时注入 VITE_KLQ_CHECKOUT_URL 后启用」，
+ * 没说全，也没说另外三个变量——而它们决定了「用户付了钱能不能激活成功」。
+ * 把清单摊开，是为了让「卖不出去」这件事**可被定位到具体哪个变量没配**。
+ */
+export type CommercialConfigItem = {
+	/** 环境变量名（原样展示，便于直接复制） */
+	key: string;
+	/** 从哪里配：构建期 env（应用内可见） / Cloudflare Pages 环境变量（服务端） */
+	scope: "build" | "pages";
+	/** 缺失时用户会看到什么 */
+	effect: string;
+	/** 仅 scope === "build" 可在应用内检测；pages 变量渲染进程读不到 */
+	set: boolean | null;
+};
+
+export function getCommercialConfigStatus(): CommercialConfigItem[] {
+	return [
+		{
+			key: "VITE_KLQ_SITE_URL",
+			scope: "build",
+			effect: "官网与许可证校验服务的根地址",
+			set: KLQ_SITE_URL.length > 0,
+		},
+		{
+			key: "VITE_KLQ_CHECKOUT_URL",
+			scope: "build",
+			effect: "购买按钮被禁用，用户无法付款",
+			set: KLQ_PRO_CHECKOUT_URL.length > 0,
+		},
+		{
+			key: "LEMON_SQUEEZY_API_KEY",
+			scope: "pages",
+			effect: "在线校验必失败，用户只能离线激活",
+			set: null,
+		},
+		{
+			key: "LEMON_SQUEEZY_STORE",
+			scope: "pages",
+			effect: "校验时无法把 key 限定到本店铺",
+			set: null,
+		},
+		{
+			key: "LEMON_SQUEEZY_PRODUCT_ID",
+			scope: "pages",
+			effect: "校验时无法把 key 限定到本产品",
+			set: null,
+		},
+	];
+}
+
+/** 构建期变量里仍然缺失的那些（用于界面诊断） */
+export function getMissingBuildConfigKeys(): string[] {
+	return getCommercialConfigStatus()
+		.filter((item) => item.scope === "build" && item.set === false)
+		.map((item) => item.key);
+}
+
 export function isLicenseServiceConfigured(): boolean {
 	return KLQ_LICENSE_VALIDATE_URL.length > 0;
 }
