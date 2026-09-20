@@ -47,7 +47,7 @@ import {
 	DEFAULT_WALLPAPER_RELATIVE_PATH,
 	isVideoWallpaperSource,
 } from "@/lib/wallpapers";
-import { AudioProcessor, isAacAudioEncodingSupported } from "./audioEncoder";
+import { AudioProcessor, isAacAudioEncodingSupported, isWavAudioPath } from "./audioEncoder";
 import {
 	normalizeLightningRuntimePlatform,
 	shouldPreferNativeAutoBackend,
@@ -1504,6 +1504,9 @@ export class ModernVideoExporter {
 			return { audioMode: "none" };
 		}
 
+		const hasWavCompanionAudio = sourceAudioFallbackPaths.some((audioPath) =>
+			isWavAudioPath(audioPath),
+		);
 		if (
 			requiresClipTimelineRendering(this.config.clipRegions) ||
 			speedRegions.length > 0 ||
@@ -1511,6 +1514,7 @@ export class ModernVideoExporter {
 			sourceAudioFallbackPaths.length > 1 ||
 			hasTimedSourceAudioFallback ||
 			hasNonDefaultSourceTrackSettings(this.config.sourceAudioTrackSettings) ||
+			hasWavCompanionAudio ||
 			(this.config.clipRegions ?? []).some((clip) => Boolean(clip.muted))
 		) {
 			const sourceDurationMs = Math.max(
