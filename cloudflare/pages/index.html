@@ -118,14 +118,7 @@
     "priceValidUntil": "2027-12-31",
     "availability": "https://schema.org/InStock",
     "category": "one-time-purchase",
-    "url": "mailto:sam.wang01@icloud.com?subject=Kliq%20Pro%20license%20request"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "127",
-    "bestRating": "5",
-    "worstRating": "1"
+    "url": "https://yanjingai.tech/#pricing"
   },
   "author": {
     "@type": "Organization",
@@ -863,7 +856,10 @@ footer a:hover { color: #ededed; }
           <li data-bind="pr_pro_7">One-click smart edit + 9 industry hotword packs</li>
           <li data-bind="pr_pro_8">Your own API key (OpenAI / DeepSeek) · email support</li>
         </ul>
-        <a class="btn btn-solid" href="mailto:sam.wang01@icloud.com?subject=Kliq%20Pro%20license%20request" data-bind="pr_pro_cta">Buy Pro · $9.9</a>
+        <a class="btn btn-solid" href="mailto:sam.wang01@icloud.com?subject=Kliq%20Pro%20license%20request" data-bind="pr_pro_cta" data-purchase-cta>Buy Pro · $9.9</a>
+        <p style="margin-top:12px;text-align:center;font-size:12px;opacity:.75;">
+          <a data-bind="pr_recover" href="mailto:sam.wang01@icloud.com?subject=Kliq%20Pro%20license%20recover">Already bought? Recover your license key</a>
+        </p>
       </div>
     </div>
   </div>
@@ -930,6 +926,7 @@ footer a:hover { color: #ededed; }
   <div class="ctas">
     <a class="btn btn-solid btn-lg" href="https://github.com/samwang0420-code/Kliq/releases" data-bind="cta_download">Download for macOS · Windows · Linux</a>
     <a class="btn btn-ghost btn-lg" href="https://github.com/samwang0420-code/Kliq" data-bind="cta_star">★ on GitHub</a>
+    <a class="btn btn-solid btn-lg" href="mailto:sam.wang01@icloud.com?subject=Kliq%20Pro%20license%20request" data-bind="cta_buy" data-purchase-cta>Buy Pro · $9.9</a>
   </div>
 </div>
 
@@ -944,6 +941,25 @@ footer a:hover { color: #ededed; }
 <!-- ============ i18n ============ -->
 <script>
 (function () {
+  /*
+   * ===================== 商业化链接：唯一真源 =====================
+   * 官网是纯静态 HTML，读不到构建期环境变量，所以「购买」与「找回密钥」
+   * 这两个地址只能在这里改一处。留空 = 走邮件下单（当前状态）；
+   * 填上 Lemon Squeezy 的地址 = 全站按钮自动改指过去，无需再动 HTML。
+   *
+   *   KLQ_CHECKOUT_URL  形如 https://<store>.lemonsqueezy.com/checkout/buy/<uuid>
+   *   KLQ_RECOVER_URL   形如 https://app.lemonsqueezy.com/my-orders
+   *
+   * ⚠️ 这两个地址必须与 App 侧的 VITE_KLQ_CHECKOUT_URL / KLQ_STORE_ORDERS_URL
+   *    指向同一个渠道，否则用户会在官网说的渠道和 App 说的渠道之间迷路。
+   */
+  const KLQ_CHECKOUT_URL = '';
+  const KLQ_RECOVER_URL = '';
+  const KLQ_SALES_EMAIL = 'sam.wang01@icloud.com';
+
+  const CHECKOUT_MAILTO = 'mailto:' + KLQ_SALES_EMAIL + '?subject=' + encodeURIComponent('Kliq Pro license request');
+  const RECOVER_MAILTO = 'mailto:' + KLQ_SALES_EMAIL + '?subject=' + encodeURIComponent('Kliq Pro license recover');
+
   const I18N = {
     en: {
       badge: 'v1.4.0 · AGPL 3.0 · macOS · Windows · Linux',
@@ -1002,6 +1018,7 @@ footer a:hover { color: #ededed; }
       pr_pro_7: 'One-click smart edit + 9 industry hotword packs',
       pr_pro_8: 'Your own API key (OpenAI / DeepSeek) · email support',
       pr_pro_cta: 'Buy Pro · $9.9',
+      pr_recover: 'Already bought? Recover your license key',
       faq_h2: "We've got answers.",
       faq_q1: 'Why fork Recordly instead of building from scratch?',
       faq_a1: "Recordly already has the most polished open-source timeline editor for screen recordings — 995 tests, CUDA compositor, full cursor + webcam styling. Building that from scratch takes years. We focus on what it doesn't have: AI.",
@@ -1033,6 +1050,7 @@ footer a:hover { color: #ededed; }
       cta_p: 'Free forever. Open source. Bring your own AI.',
       cta_download: 'Download for macOS · Windows · Linux',
       cta_star: '★ on GitHub',
+      cta_buy: 'Buy Pro · $9.9',
       footer_left: 'Kliq · v1.4.0 · Kliq',
       footer_right: 'AGPL 3.0 · forked from <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly</a> · <a href="/refund">Refund policy</a> · <a href="mailto:hi@yanjingai.tech">hi@yanjingai.tech</a>'
     },
@@ -1093,6 +1111,7 @@ footer a:hover { color: #ededed; }
       pr_pro_7: '一键智能剪辑 + 9 个行业热词词库',
       pr_pro_8: '自带 API Key（OpenAI / DeepSeek）· 邮件支持',
       pr_pro_cta: '购买 Pro · $9.9',
+      pr_recover: '已购买？取回 License Key',
       faq_h2: '我们回答了。',
       faq_q1: '为什么不从头写,要去 fork Recordly?',
       faq_a1: 'Recordly 已经是最完善的开源屏幕录制时间线编辑器 — 995 个测试、CUDA compositor、完整光标和摄像头样式。从头写要花几年。我们专注做它没有的:AI。',
@@ -1124,6 +1143,7 @@ footer a:hover { color: #ededed; }
       cta_p: '永久免费。开源。自带 AI。',
       cta_download: '下载 macOS · Windows · Linux',
       cta_star: 'GitHub ★',
+      cta_buy: '购买 Pro · $9.9',
       footer_left: 'Kliq · v1.4.0 · Kliq',
       footer_right: 'AGPL 3.0 · forked from <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly</a> · <a href="/refund">退款政策</a> · <a href="mailto:hi@yanjingai.tech">hi@yanjingai.tech</a>'
     }
@@ -1145,12 +1165,12 @@ footer a:hover { color: #ededed; }
       'pr_free_tag':'pr_free_tag','pr_free_period':'pr_free_period',
       'pr_free_1':'pr_free_1','pr_free_2':'pr_free_2','pr_free_3':'pr_free_3','pr_free_4':'pr_free_4','pr_free_5':'pr_free_5','pr_free_6':'pr_free_6','pr_free_7':'pr_free_7','pr_free_cta':'pr_free_cta',
       'pr_pro_tag':'pr_pro_tag','pr_pro_period':'pr_pro_period',
-      'pr_pro_1':'pr_pro_1','pr_pro_2':'pr_pro_2','pr_pro_3':'pr_pro_3','pr_pro_4':'pr_pro_4','pr_pro_5':'pr_pro_5','pr_pro_6':'pr_pro_6','pr_pro_7':'pr_pro_7','pr_pro_8':'pr_pro_8','pr_pro_cta':'pr_pro_cta',
+      'pr_pro_1':'pr_pro_1','pr_pro_2':'pr_pro_2','pr_pro_3':'pr_pro_3','pr_pro_4':'pr_pro_4','pr_pro_5':'pr_pro_5','pr_pro_6':'pr_pro_6','pr_pro_7':'pr_pro_7','pr_pro_8':'pr_pro_8','pr_pro_cta':'pr_pro_cta','pr_recover':'pr_recover',
       'faq_h2':'faq_h2',
       'faq_q1':'faq_q1','faq_a1':'faq_a1','faq_q2':'faq_q2','faq_a2':'faq_a2','faq_q3':'faq_q3','faq_a3':'faq_a3','faq_q4':'faq_q4','faq_a4':'faq_a4','faq_q5':'faq_q5','faq_a5':'faq_a5','faq_q6':'faq_q6','faq_a6':'faq_a6',
       'pv_h2':'pv_h2','pv_lead':'pv_lead',
       'pv_1_h':'pv_1_h','pv_1_p':'pv_1_p','pv_2_h':'pv_2_h','pv_2_p':'pv_2_p','pv_3_h':'pv_3_h','pv_3_p':'pv_3_p','pv_4_h':'pv_4_h','pv_4_p':'pv_4_p','pv_5_h':'pv_5_h','pv_5_p':'pv_5_p','pv_6_h':'pv_6_h','pv_6_p':'pv_6_p',
-      'cta_h2':'cta_h2','cta_p':'cta_p','cta_download':'cta_download','cta_star':'cta_star',
+      'cta_h2':'cta_h2','cta_p':'cta_p','cta_download':'cta_download','cta_star':'cta_star','cta_buy':'cta_buy',
       'footer_left':'footer_left','footer_right':'footer_right'
     };
     Object.keys(map).forEach(k => {
@@ -1166,6 +1186,35 @@ footer a:hover { color: #ededed; }
     try { localStorage.setItem('yanjing.lang', lang); } catch { /* storage may be blocked (private mode) */ }
   }
 
+  /*
+   * 把「购买」「取回密钥」两个入口指向当前生效的渠道。
+   *
+   * 未配置结算页时**降级为邮件下单**，而不是留一个点不动的死按钮 ——
+   * 前者当下就能收到钱，后者等于页面上没有购买入口。
+   */
+  function applyPurchaseLinks() {
+    document.querySelectorAll('[data-purchase-cta]').forEach(function (el) {
+      el.setAttribute('href', KLQ_CHECKOUT_URL || CHECKOUT_MAILTO);
+      if (KLQ_CHECKOUT_URL) {
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener');
+      } else {
+        el.removeAttribute('target');
+        el.removeAttribute('rel');
+      }
+    });
+    document.querySelectorAll('[data-bind="pr_recover"]').forEach(function (el) {
+      el.setAttribute('href', KLQ_RECOVER_URL || RECOVER_MAILTO);
+      if (KLQ_RECOVER_URL) {
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener');
+      } else {
+        el.removeAttribute('target');
+        el.removeAttribute('rel');
+      }
+    });
+  }
+
   function initLang() {
     let saved = null;
     try { saved = localStorage.getItem('yanjing.lang'); } catch { /* storage may be blocked (private mode) */ }
@@ -1176,6 +1225,7 @@ footer a:hover { color: #ededed; }
 
   document.addEventListener('DOMContentLoaded', function () {
     initLang();
+    applyPurchaseLinks();
     document.querySelectorAll('.lang button').forEach(btn => {
       btn.addEventListener('click', function () { applyLang(this.dataset.lang); });
     });
