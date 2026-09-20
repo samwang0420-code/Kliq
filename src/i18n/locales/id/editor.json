@@ -1,0 +1,243 @@
+{
+	"playback": {
+		"play": "Putar",
+		"pause": "Jeda",
+		"skipBack": "Mundur",
+		"skipForward": "Maju",
+		"muteUnmute": "Bisukan/Bunyikan",
+		"volume": "Volume pratinjau"
+	},
+	"annotations": {
+		"settings": "Pengaturan Anotasi",
+		"active": "Aktif",
+		"text": "Teks",
+		"image": "Gambar",
+		"arrow": "Panah",
+		"blur": "Blur",
+		"textContent": "Isi Teks",
+		"textPlaceholder": "Tulis teks Anda...",
+		"fontStyle": "Gaya Huruf",
+		"selectStyle": "Pilih gaya",
+		"size": "Ukuran",
+		"toggleBold": "Tebal",
+		"toggleItalic": "Miring",
+		"toggleUnderline": "Garis bawah",
+		"alignLeft": "Rata kiri",
+		"alignCenter": "Rata tengah",
+		"alignRight": "Rata kanan",
+		"textColor": "Warna Teks",
+		"background": "Latar Belakang",
+		"none": "Tanpa",
+		"clearBackground": "Hapus Latar Belakang",
+		"uploadImage": "Unggah Gambar",
+		"supportedFormats": "Format yang didukung: JPG, PNG, GIF, WebP",
+		"arrowDirection": "Arah Panah",
+		"strokeWidth": "Tebal Garis: {{width}}px",
+		"arrowColor": "Warna Panah",
+		"deleteAnnotation": "Hapus Anotasi",
+		"shortcutsAndTips": "Pintasan & Tips",
+		"tipSelectAnnotation": "Pindahkan playhead ke bagian anotasi yang tumpang tindih lalu pilih itemnya.",
+		"tipCycleForward": "Gunakan Tab untuk berpindah antar item yang tumpang tindih.",
+		"tipCycleBackward": "Gunakan Shift+Tab untuk berpindah mundur.",
+		"imageUploadSuccess": "Gambar berhasil diunggah!",
+		"imageUploadError": "Silakan unggah berkas gambar JPG, PNG, GIF, atau WebP.",
+		"blurStrength": "Kekuatan Blur: {{strength}}",
+		"solidColor": "Warna Solid (Sensor)",
+		"borderRadius": "Radius Sudut",
+		"spotlight": "Sorotan",
+		"spotlightOpacity": "Opasitas sorotan: {{opacity}}%",
+		"resetSpotlightOpacity": "Atur ulang",
+		"applySpotlightOpacityToAll": "Terapkan ke semua sorotan",
+		"focusSpotlightStart": "Lompat ke awal sorotan",
+		"disableSpotlight": "Nonaktifkan",
+		"disableSpotlightDescription": "Saat nonaktif, sorotan tidak dirender tetapi tetap ada di lini masa."
+	},
+	"fontStyles": {
+		"classic": "Klasik",
+		"editor": "Editor",
+		"strong": "Tegas",
+		"typewriter": "Mesin Ketik",
+		"deco": "Deko",
+		"simple": "Sederhana",
+		"modern": "Modern",
+		"clean": "Bersih"
+	},
+	"format": {
+		"mp4Video": "Video MP4",
+		"mp4Description": "Berkas video berkualitas tinggi",
+		"gifAnimation": "Animasi GIF",
+		"gifDescription": "Gambar bergerak untuk dibagikan"
+	},
+	"gifOptions": {
+		"frameRate": "Frame Rate",
+		"outputSize": "Ukuran Keluaran",
+		"outputDimensions": "Keluaran: {{width}} × {{height}}px",
+		"loopAnimation": "Animasi Berulang",
+		"loopDescription": "GIF akan diputar terus-menerus"
+	},
+	"tutorial": {
+		"howTrimmingWorks": "Cara kerja pemotongan",
+		"title": "Cara Kerja Pemotongan",
+		"understanding": "Memahami cara membuang bagian video yang tidak diinginkan.",
+		"descriptionP1": "Alat Potong bekerja dengan menentukan segmen yang ingin Anda",
+		"descriptionRemove": "buang",
+		"descriptionP2": "dari video Anda.",
+		"descriptionP3": "Bagian lini masa yang tertutup segmen potong merah akan dibuang saat ekspor.",
+		"visualExample": "Contoh Visual",
+		"removed": "DIBUANG",
+		"kept": "Disimpan",
+		"finalVideo": "Video Akhir",
+		"part": "Bagian {{number}}",
+		"addTrimStep": "1. Tambah Potongan",
+		"addTrimDesc": "Tekan T atau klik ikon gunting untuk menandai bagian yang akan dibuang.",
+		"adjustStep": "2. Sesuaikan",
+		"adjustDesc": "Seret tepi wilayah merah agar tepat menutupi bagian yang ingin dibuang."
+	},
+	"feedback": {
+		"trigger": "Masukan",
+		"title": "Masukan & kontak",
+		"description": "Hubungi kami langsung atau buka issue jika ada yang rusak atau kurang.",
+		"emailLabel": "Email",
+		"xLabel": "X",
+		"reportIssue": "Laporkan masalah / kirim masukan",
+		"openFailed": "Gagal membuka tautan."
+	},
+	"keyboardShortcuts": {
+		"trigger": "Pintasan",
+		"title": "Pintasan Papan Ketik",
+		"description": "Referensi cepat untuk lini masa dan kontrol editor.",
+		"customizeTooltip": "Sesuaikan pintasan",
+		"customize": "Sesuaikan",
+		"panTimeline": "Geser Lini Masa",
+		"zoomTimeline": "Zum Lini Masa",
+		"cycleAnnotations": "Berpindah Anotasi",
+		"tab": "Tab"
+	},
+	"actions": {
+		"saveAgain": "Simpan Lagi",
+		"showInFolder": "Tampilkan di Folder"
+	},
+	"project": {
+		"untitled": "Tanpa Judul",
+		"unsavedChangesTitle": "Perubahan belum disimpan",
+		"unsavedChangesDescription": "Simpan proyek Anda sebelum {{action}}?",
+		"discardChanges": "Buang perubahan",
+		"saveProject": "Simpan proyek"
+	},
+	"exportTips": {
+		"autoZooms": "Tips: Matikan zum otomatis di pengaturan",
+		"experimentalBuilds": "Tips: Coba build eksperimental dengan mengaktifkan akses di pengaturan",
+		"cursorAppearance": "Tips: Anda bisa menyesuaikan tampilan kursor"
+	},
+	"account": {
+		"title": "Akun",
+		"comingSoon": "Akun segera hadir"
+	},
+	"nativeCaptureUnavailable": {
+		"title": "Tidak ada yang rusak, tetapi kami tidak bisa merender overlay kursor animasi.",
+		"description": "Perangkat Anda tidak mendukung perekaman native. Bisa karena berbagai alasan yang belum kami temukan. Ini tidak merusak Kliq, tetapi membuat penghalusan kursor mustahil.",
+		"confirm": "Oke"
+	},
+	"exportStatus": {
+		"exporting": "Mengekspor",
+		"renderingFile": "Merender berkas Anda.",
+		"preparing": "Menyiapkan ekspor...",
+		"completePercent": "{{percent}}% selesai",
+		"issue": "Masalah ekspor",
+		"complete": "Ekspor selesai",
+		"savedSuccessfully": "Berkas Anda berhasil disimpan."
+	},
+	"export": {
+		"processingAudioEdits": "Memproses audio dengan suntingan kecepatan/overlay"
+	},
+	"toolbar": {
+		"addLayer": "Tambah Lapisan",
+		"splitClip": "Belah Klip (C)"
+	},
+	"timeline": {
+		"expand": "Perluas Lini Masa",
+		"collapse": "Ciutkan Lini Masa"
+	},
+	"openRecordingsFolder": "Buka folder rekaman",
+	"yanjing": {
+		"ai": {
+			"toolbarTitle": "Peningkatan AI",
+			"toolbarHotwords": "Kata kunci:",
+			"toolbarExpand": "Perluas",
+			"toolbarCollapse": "Ciutkan",
+			"actions": {
+				"transcribe": "Transkripsi AI",
+				"bilingual": "Takarir Dua Bahasa AI",
+				"translateMulti": "Takarir Multi-bahasa AI",
+				"proofread": "Proofreading Takarir AI",
+				"silence": "Penghapusan Hening AI",
+				"fillers": "Penghapusan Kata Pengisi AI",
+				"speed": "Kecepatan Pintar AI",
+				"zoom": "Zum Otomatis AI",
+				"oneclick": "Sunting Sekali Klik AI",
+				"chapters": "Bab AI",
+				"summary": "Ringkasan AI",
+				"titles": "Judul AI",
+				"tags": "Tag AI",
+				"social": "Teks Media Sosial AI",
+				"search": "Pencarian Semantik AI",
+				"uiPolish": "Polesan Teks"
+			},
+			"groups": {
+				"transcribe": "Transkripsi",
+				"edit": "Sunting",
+				"generate": "Hasilkan",
+				"translate": "Terjemahkan",
+				"search": "Cari"
+			},
+			"domains": {
+				"general": "Umum",
+				"legal": "Hukum",
+				"medical": "Medis",
+				"ecommerce": "E-dagang",
+				"education": "Pendidikan",
+				"finance": "Keuangan",
+				"gaming": "Game",
+				"tech": "Teknologi",
+				"marketing": "Pemasaran"
+			},
+			"proEntry": "Pro / Akun",
+			"proActive": "Pro",
+			"proEntryHint": "Kelola lisensi dan manfaat Pro",
+			"proBadge": "PRO",
+			"proLocked": "Fitur Pro",
+			"inputsTitle": "Masukan AI",
+			"transcriptLabel": "Transkrip",
+			"transcriptPlaceholder": "Jalankan “Transkripsi AI”, atau tempel teksnya di sini",
+			"segmentReady": "{{count}} takarir berwaktu siap",
+			"queryLabel": "Kueri pencarian",
+			"queryPlaceholder": "mis. di mana letak kesalahannya",
+			"sourceTextLabel": "Teks untuk dipoles",
+			"sourceTextPlaceholder": "Tempel teks yang ingin dipoles",
+			"resultsTitle": "Hasil AI",
+			"useTranscript": "Pakai sebagai masukan",
+			"copy": "Salin",
+			"copied": "Tersalin",
+			"itemCount": "{{count}} item",
+			"scoreLabel": "skor",
+			"noResults": "Tidak ada yang cocok",
+			"inputHints": {
+				"file": "Pilih berkas video / audio dulu",
+				"duration": "Butuh durasi media (pilih berkas dulu)",
+				"transcript": "Butuh transkrip: jalankan “Transkripsi AI” atau tempel teksnya",
+				"segments": "Butuh takarir berwaktu: jalankan “Transkripsi AI” dulu",
+				"query": "Tulis kueri pencarian",
+				"sourceText": "Tulis teks yang ingin dipoles"
+			},
+			"scenarioLabel": "Skenario:",
+			"scenarioNone": "Tanpa templat",
+			"scenario": {
+				"liveStream": "Siaran Langsung",
+				"teaching": "Pengajaran",
+				"demo": "Demo Produk",
+				"interview": "Wawancara",
+				"sales": "Pitch Penjualan"
+			}
+		}
+	}
+}

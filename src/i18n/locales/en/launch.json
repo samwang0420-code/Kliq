@@ -77,7 +77,9 @@
 			"upToDateTitle": "Kliq {{version}} is up to date.",
 			"availableTitle": "Kliq {{version}} is available.",
 			"availableGenericTitle": "An update is available."
-		}
+		},
+		"screenSourceName": "Screen {{n}}",
+		"screenSourcePrimary": "(Primary)"
 	},
 	"sourceSelector": {
 		"loadingSources": "Loading sources...",

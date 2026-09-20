@@ -228,6 +228,15 @@
 				"segments": "Timed captions required: run “AI Transcribe” first",
 				"query": "Enter a search query",
 				"sourceText": "Enter the text to polish"
+			},
+			"scenarioLabel": "Scenario:",
+			"scenarioNone": "No template",
+			"scenario": {
+				"liveStream": "Live Stream",
+				"teaching": "Teaching",
+				"demo": "Product Demo",
+				"interview": "Interview",
+				"sales": "Sales Call"
 			}
 		}
 	}

@@ -228,6 +228,15 @@
 				"segments": "Sottotitoli con timestamp richiesti: avvia prima «AI Transcribe»",
 				"query": "Inserisci una query di ricerca",
 				"sourceText": "Inserisci il testo da rifinire"
+			},
+			"scenarioLabel": "Scenario:",
+			"scenarioNone": "Nessun modello",
+			"scenario": {
+				"liveStream": "Diretta",
+				"teaching": "Didattica",
+				"demo": "Demo prodotto",
+				"interview": "Colloquio",
+				"sales": "Chiamata di vendita"
 			}
 		}
 	}

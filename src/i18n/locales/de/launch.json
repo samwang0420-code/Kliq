@@ -77,7 +77,9 @@
 		"noiseSuppressionDisabled": "Deaktiviert",
 		"noiseSuppressionDisabledDescription": "Nimmt das Original-Mikrofon-Audio auf.",
 		"noiseSuppressionUnavailableWarning": "Rauschunterdrückung ist auf diesem Gerät nicht verfügbar. Die Aufnahme wird ohne sie fortgesetzt.",
-		"noiseSuppressionFallbackWarning": "Rauschunterdrückung ist auf {{mode}} zurückgefallen."
+		"noiseSuppressionFallbackWarning": "Rauschunterdrückung ist auf {{mode}} zurückgefallen.",
+		"screenSourceName": "Bildschirm {{n}}",
+		"screenSourcePrimary": "(Primär)"
 	},
 	"sourceSelector": {
 		"loadingSources": "Quellen werden geladen...",

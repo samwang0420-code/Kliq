@@ -51,6 +51,7 @@ import {
 } from "@/lib/ai/action-inputs";
 import { actionRequiresPro } from "@/lib/license";
 import { openAccountCenter } from "@/lib/proGate";
+import { SCENARIO_TEMPLATES, type ScenarioTemplateId } from "@/lib/presets";
 import { cn } from "@/lib/utils";
 
 // 对外保持既有 import 路径可用（useAIActions / ExportSettingsMenu 从这里取类型）
@@ -209,6 +210,8 @@ export function AIToolbar({
 }: AIToolbarProps) {
 	const t = useScopedT("editor");
 	const [expanded, setExpanded] = useState(false);
+	/** 当前选中的场景模板（空串 = 不使用模板）；切换场景会连带切推荐热词域 */
+	const [scenarioId, setScenarioId] = useState("");
 	const isPro = useIsPro();
 
 	const groups = GROUP_ORDER.map((group) => ({
@@ -284,6 +287,36 @@ export function AIToolbar({
 					{availableDomains.map((d) => (
 						<option key={d} value={d}>
 							{t(`yanjing.ai.domains.${d}`)}
+						</option>
+					))}
+				</select>
+
+				{/* 场景模板（SCENARIO_TEMPLATES）的接线点：此前该表只被「列表注册」，
+				    没有任何 UI 消费它——写了没接上。选场景 = 一键切到推荐行业热词域。 */}
+				<label htmlFor="kliq-ai-scenario" className="ml-1 text-xs text-muted-foreground">
+					{t("yanjing.ai.scenarioLabel", "Scenario:")}
+				</label>
+				<select
+					id="kliq-ai-scenario"
+					value={scenarioId}
+					onChange={(e) => {
+						const next = e.target.value;
+						setScenarioId(next);
+						const template = SCENARIO_TEMPLATES[next as ScenarioTemplateId];
+						if (
+							template &&
+							availableDomains.includes(template.recommendedHotwordDomain)
+						) {
+							onDomainChange(template.recommendedHotwordDomain);
+						}
+					}}
+					disabled={disabled}
+					className="rounded-md border border-input bg-background px-2 py-0.5 text-xs outline-none transition-colors focus:border-foreground/30 disabled:opacity-60"
+				>
+					<option value="">{t("yanjing.ai.scenarioNone", "No template")}</option>
+					{Object.values(SCENARIO_TEMPLATES).map((s) => (
+						<option key={s.id} value={s.id}>
+							{t(`yanjing.ai.scenario.${s.id}`, s.nameEn)}
 						</option>
 					))}
 				</select>

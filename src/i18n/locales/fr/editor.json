@@ -228,6 +228,15 @@
 				"segments": "Sous-titres horodatés requis : lancez d’abord « AI Transcribe »",
 				"query": "Saisissez une requête de recherche",
 				"sourceText": "Saisissez le texte à peaufiner"
+			},
+			"scenarioLabel": "Scénario :",
+			"scenarioNone": "Aucun modèle",
+			"scenario": {
+				"liveStream": "Direct",
+				"teaching": "Cours",
+				"demo": "Démo produit",
+				"interview": "Entretien",
+				"sales": "Appel commercial"
 			}
 		}
 	}

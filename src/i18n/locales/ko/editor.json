@@ -228,6 +228,15 @@
 				"segments": "타임코드 자막 필요: 먼저 'AI 전사'를 실행하세요",
 				"query": "검색어를 입력하세요",
 				"sourceText": "다듬을 텍스트를 입력하세요"
+			},
+			"scenarioLabel": "시나리오:",
+			"scenarioNone": "템플릿 없음",
+			"scenario": {
+				"liveStream": "라이브 방송",
+				"teaching": "온라인 강의",
+				"demo": "제품 데모",
+				"interview": "면접 녹화",
+				"sales": "영업 통화"
 			}
 		}
 	}

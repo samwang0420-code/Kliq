@@ -228,6 +228,15 @@
 				"segments": "Legendas com tempo necessárias: execute “AI Transcribe” primeiro",
 				"query": "Informe uma consulta de busca",
 				"sourceText": "Informe o texto a aprimorar"
+			},
+			"scenarioLabel": "Cenário:",
+			"scenarioNone": "Sem modelo",
+			"scenario": {
+				"liveStream": "Live",
+				"teaching": "Ensino",
+				"demo": "Demo do produto",
+				"interview": "Entrevista",
+				"sales": "Chamada de vendas"
 			}
 		}
 	}

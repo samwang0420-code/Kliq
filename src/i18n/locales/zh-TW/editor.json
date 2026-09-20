@@ -228,6 +228,15 @@
 				"segments": "需要帶時間軸的字幕：先執行「AI 轉錄」",
 				"query": "需要填寫搜尋關鍵字",
 				"sourceText": "需要填寫待潤色文案"
+			},
+			"scenarioLabel": "場景：",
+			"scenarioNone": "不使用範本",
+			"scenario": {
+				"liveStream": "直播切片",
+				"teaching": "線上教學",
+				"demo": "產品演示",
+				"interview": "面試錄製",
+				"sales": "銷售通話"
 			}
 		}
 	}

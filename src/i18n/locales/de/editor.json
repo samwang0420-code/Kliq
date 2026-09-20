@@ -228,6 +228,15 @@
 				"segments": "Zeitcodierte Untertitel erforderlich: zuerst „KI-Transkription“ starten",
 				"query": "Suchbegriff eingeben",
 				"sourceText": "Zu überarbeitenden Text eingeben"
+			},
+			"scenarioLabel": "Szenario:",
+			"scenarioNone": "Keine Vorlage",
+			"scenario": {
+				"liveStream": "Livestream",
+				"teaching": "Unterricht",
+				"demo": "Produktdemo",
+				"interview": "Interview",
+				"sales": "Vertriebsgespräch"
 			}
 		}
 	}

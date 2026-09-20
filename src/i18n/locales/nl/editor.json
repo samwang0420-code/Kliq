@@ -228,6 +228,15 @@
 				"segments": "Getimede ondertitels vereist: start eerst “AI Transcribe”",
 				"query": "Voer een zoekopdracht in",
 				"sourceText": "Voer de bij te schaven tekst in"
+			},
+			"scenarioLabel": "Scenario:",
+			"scenarioNone": "Geen sjabloon",
+			"scenario": {
+				"liveStream": "Livestream",
+				"teaching": "Onderwijs",
+				"demo": "Productdemo",
+				"interview": "Interview",
+				"sales": "Verkoopgesprek"
 			}
 		}
 	}

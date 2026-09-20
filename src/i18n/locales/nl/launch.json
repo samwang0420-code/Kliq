@@ -77,7 +77,9 @@
 			"toggle": "Starten / Stoppen",
 			"pauseResume": "Pauzeren / Hervatten",
 			"stop": "Stoppen"
-		}
+		},
+		"screenSourceName": "Scherm {{n}}",
+		"screenSourcePrimary": "(Primair)"
 	},
 	"sourceSelector": {
 		"loadingSources": "Bronnen laden...",

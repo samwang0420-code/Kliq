@@ -228,6 +228,15 @@
 				"segments": "需要带时间轴的字幕：先运行「AI 转录」",
 				"query": "需要填写搜索关键词",
 				"sourceText": "需要填写待润色文案"
+			},
+			"scenarioLabel": "场景：",
+			"scenarioNone": "不使用模板",
+			"scenario": {
+				"liveStream": "直播切片",
+				"teaching": "在线教学",
+				"demo": "产品演示",
+				"interview": "面试录制",
+				"sales": "销售通话"
 			}
 		}
 	}

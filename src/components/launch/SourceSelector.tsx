@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useScopedT } from "@/contexts/I18nContext";
+import { localizeScreenSourceName } from "@/lib/screenSourceName";
 import { cn } from "@/lib/utils";
 import {
 	type DesktopSource,
@@ -86,7 +87,11 @@ export const SourceSelectorContent = ({
 
 				<div className="flex-1 min-w-0 flex flex-col items-start text-left">
 					<div className="text-sm font-medium source-selector-text w-full">
-						<MarqueeText text={source.windowTitle || source.name} />
+						{/* 屏幕源名是主进程硬编码英文（Screen 1 / Screen 1 (Primary)），
+						    显示层本地化；窗口标题来自 OS，原样展示。选中态仍用原始名比对。 */}
+						<MarqueeText
+							text={localizeScreenSourceName(source.windowTitle || source.name, t)}
+						/>
 					</div>
 					<div className="text-xs source-selector-subtle truncate w-full text-left">
 						{source.sourceType === "screen"
@@ -169,6 +174,7 @@ export const SourceSelector = React.memo(function SourceSelector({
 	onOpenChange: propsOnOpenChange,
 	children,
 }: SourceSelectorProps) {
+	const t = useScopedT("launch");
 	// Internal state for standalone/uncontrolled use
 	const [internalOpen, setInternalOpen] = useState(false);
 	const [internalSources, setInternalSources] = useState<DesktopSource[]>([]);
@@ -305,7 +311,7 @@ export const SourceSelector = React.memo(function SourceSelector({
 		>
 			<MonitorIcon size={16} className="shrink-0" />
 			<div className="flex-1 min-w-0">
-				<MarqueeText text={selectedSource} />
+				<MarqueeText text={localizeScreenSourceName(selectedSource, t)} />
 			</div>
 			<CaretUpIcon
 				size={10}

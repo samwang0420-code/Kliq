@@ -228,6 +228,15 @@
 				"segments": "Se requieren subtítulos con tiempos: ejecuta «AI Transcribe» primero",
 				"query": "Introduce una consulta de búsqueda",
 				"sourceText": "Introduce el texto a pulir"
+			},
+			"scenarioLabel": "Escenario:",
+			"scenarioNone": "Sin plantilla",
+			"scenario": {
+				"liveStream": "Directo",
+				"teaching": "Enseñanza",
+				"demo": "Demo de producto",
+				"interview": "Entrevista",
+				"sales": "Llamada de ventas"
 			}
 		}
 	}
