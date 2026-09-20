@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowSquareOut, Check, Lock, X } from "@phosphor-icons/react";
+import { ArrowRight, ArrowSquareOut, Check, Copy, Lock, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 import { useI18n } from "@/contexts/I18nContext";
@@ -7,8 +7,10 @@ import { activateLicense, deactivateLicense, maskLicenseKey, PRO_FEATURES } from
 import {
 	isCheckoutConfigured,
 	isLicenseServiceConfigured,
+	KLQ_ISSUES_URL,
 	KLQ_PRO_CHECKOUT_URL,
 	KLQ_PRO_PRICE_USD,
+	KLQ_REFUND_POLICY_URL,
 	KLQ_REPO_URL,
 } from "@/lib/licenseConfig";
 import { toast } from "@/lib/toast";
@@ -60,7 +62,7 @@ export function AccountCenterPanel({
 	const { t } = useI18n();
 	const status = useLicenseStatus();
 	const [licenseKey, setLicenseKey] = useState("");
-	const [busy, setBusy] = useState<"activating" | "deactivating" | null>(null);
+	const [busy, setBusy] = useState<"activating" | "deactivating" | "revalidating" | null>(null);
 
 	useEffect(() => {
 		if (!open) return;
@@ -100,12 +102,57 @@ export function AccountCenterPanel({
 	const handleDeactivate = useCallback(() => {
 		setBusy("deactivating");
 		try {
+			// 停用后把 key 回填到输入框：用户多半只是要换机器 / 重新激活，
+			// 让他重新手抄一遍 8 位 hex 没有必要。
+			const previous = status.licenseKey ?? "";
 			deactivateLicense();
+			setLicenseKey(previous);
 			toast.success(t("common.yanjing.license.deactivated", "License 已停用"));
 		} finally {
 			setBusy(null);
 		}
-	}, [t]);
+	}, [t, status.licenseKey]);
+
+	const handleCopyKey = useCallback(() => {
+		const key = status.licenseKey;
+		if (!key) return;
+		void navigator.clipboard
+			.writeText(key)
+			.then(() => toast.success(t("common.yanjing.account.copied", "已复制")))
+			.catch(() =>
+				toast.error(t("common.yanjing.account.copyFail", "复制失败，请手动抄写许可证")),
+			);
+	}, [status.licenseKey, t]);
+
+	/**
+	 * 重新做一次在线校验。
+	 *
+	 * 此前离线激活的提示写着「联网后可重新激活以与服务器确认」，但 Pro 一旦激活，
+	 * 界面上只剩「停用」—— 那条被承诺的路**根本不存在**。这里把它补上。
+	 */
+	const handleRevalidate = useCallback(async () => {
+		const key = status.licenseKey;
+		if (!key) return;
+		setBusy("revalidating");
+		try {
+			const result = await activateLicense(key);
+			if (!result.success) {
+				toast.error(result.error ?? t("common.yanjing.account.revalidateFail", "校验失败"));
+				return;
+			}
+			if (result.notice) {
+				toast.warning(
+					t("common.yanjing.account.revalidateOffline", "校验服务不可用，仍为离线状态"),
+				);
+				return;
+			}
+			toast.success(
+				t("common.yanjing.account.revalidateOk", "已与服务器确认，Pro 状态已更新"),
+			);
+		} finally {
+			setBusy(null);
+		}
+	}, [status.licenseKey, t]);
 
 	const isProActive = status.activated && status.tier === "pro";
 	const checkoutReady = isCheckoutConfigured();
@@ -242,15 +289,32 @@ export function AccountCenterPanel({
 
 									<dl className="mt-3 space-y-1.5 text-xs text-muted-foreground">
 										{isProActive && status.licenseKey && (
-											<div className="flex justify-between gap-4">
+											<div className="flex items-center justify-between gap-4">
 												<dt>
 													{t(
 														"common.yanjing.account.currentKey",
 														"当前许可证",
 													)}
 												</dt>
-												<dd className="font-mono">
-													{maskLicenseKey(status.licenseKey)}
+												<dd className="flex items-center gap-1.5">
+													<span className="font-mono">
+														{maskLicenseKey(status.licenseKey)}
+													</span>
+													<button
+														type="button"
+														onClick={handleCopyKey}
+														title={t(
+															"common.yanjing.account.copyKey",
+															"复制密钥",
+														)}
+														aria-label={t(
+															"common.yanjing.account.copyKey",
+															"复制密钥",
+														)}
+														className="rounded p-0.5 transition-colors hover:bg-foreground/5 hover:text-foreground"
+													>
+														<Copy size={11} />
+													</button>
 												</dd>
 											</div>
 										)}
@@ -307,12 +371,30 @@ export function AccountCenterPanel({
 									</dl>
 
 									{isProActive && status.offline && (
-										<p className="mt-3 text-xs text-muted-foreground">
-											{t(
-												"common.yanjing.account.offlineNote",
-												"当前离线激活：联网后可重新激活以与服务器确认。",
-											)}
-										</p>
+										<div className="mt-3 flex items-start justify-between gap-3">
+											<p className="text-xs leading-relaxed text-muted-foreground">
+												{t(
+													"common.yanjing.account.offlineNote",
+													"当前离线激活：联网后可重新激活以与服务器确认。",
+												)}
+											</p>
+											<button
+												type="button"
+												onClick={() => void handleRevalidate()}
+												disabled={busy === "revalidating"}
+												className="shrink-0 rounded-md border border-border px-2.5 py-1 text-xs transition-colors hover:bg-foreground/5 disabled:opacity-60"
+											>
+												{busy === "revalidating"
+													? t(
+															"common.yanjing.account.revalidating",
+															"校验中…",
+														)
+													: t(
+															"common.yanjing.account.revalidate",
+															"重新校验",
+														)}
+											</button>
+										</div>
 									)}
 								</div>
 							</section>
@@ -492,25 +574,67 @@ export function AccountCenterPanel({
 											</p>
 										</div>
 									)}
+
+									{/* 「购买 → 收到 key → 回来激活」这条链此前在应用里从未被说明过 */}
+									<p className="text-[11px] leading-relaxed text-muted-foreground">
+										{t(
+											"common.yanjing.account.buySteps",
+											"购买后 License key 会发到你的邮箱，回到这里粘贴激活即可。",
+										)}
+									</p>
+
+									{/* 退款政策：buyNote 一直承诺「30 天退款」，但此前没有任何入口 */}
+									{KLQ_REFUND_POLICY_URL && (
+										<a
+											href={KLQ_REFUND_POLICY_URL}
+											target="_blank"
+											rel="noopener noreferrer"
+											onClick={(event) => {
+												event.preventDefault();
+												void window.electronAPI?.openExternalUrl?.(
+													KLQ_REFUND_POLICY_URL,
+												);
+											}}
+											className="inline-flex items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:text-foreground"
+										>
+											{t("common.yanjing.account.refundPolicy", "退款政策")}
+											<ArrowSquareOut size={11} />
+										</a>
+									)}
 								</section>
 							)}
 						</div>
 
-						{/* 底部：源码 / 许可说明 */}
+						{/* 底部：源码 / 反馈 / 许可说明 */}
 						<footer className="border-t border-border px-6 py-4">
-							<a
-								href={KLQ_REPO_URL}
-								target="_blank"
-								rel="noopener noreferrer"
-								onClick={(event) => {
-									event.preventDefault();
-									void window.electronAPI?.openExternalUrl?.(KLQ_REPO_URL);
-								}}
-								className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
-							>
-								<ArrowSquareOut size={13} />
-								{t("common.yanjing.account.sourceCode", "源码")}
-							</a>
+							<div className="flex items-center gap-4">
+								<a
+									href={KLQ_REPO_URL}
+									target="_blank"
+									rel="noopener noreferrer"
+									onClick={(event) => {
+										event.preventDefault();
+										void window.electronAPI?.openExternalUrl?.(KLQ_REPO_URL);
+									}}
+									className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+								>
+									<ArrowSquareOut size={13} />
+									{t("common.yanjing.account.sourceCode", "源码")}
+								</a>
+								<a
+									href={KLQ_ISSUES_URL}
+									target="_blank"
+									rel="noopener noreferrer"
+									onClick={(event) => {
+										event.preventDefault();
+										void window.electronAPI?.openExternalUrl?.(KLQ_ISSUES_URL);
+									}}
+									className="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+								>
+									<ArrowSquareOut size={13} />
+									{t("common.yanjing.account.feedback", "反馈问题")}
+								</a>
+							</div>
 							<p className="mt-2 text-[11px] leading-relaxed text-muted-foreground/80">
 								{t(
 									"common.yanjing.account.licenseNote",
