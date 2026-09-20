@@ -48,5 +48,8 @@ W19 声称「8 语言打包完成」，但 `git log main` 中**没有任何对�
 
 ```bash
 git fetch upstream pull/<编号>/head:tmp-pr<编号> --depth=50
-git diff origin/main tmp-pr<编号> -- src/
+git fetch upstream main --depth=1
+git diff FETCH_HEAD tmp-pr<编号> -- src/     # 与「上游 main」比，不是与 origin/main 比
 ```
+
+（`origin/main` 现在是 Kliq 自己的代码，不再是上游镜像。）

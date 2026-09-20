@@ -40,12 +40,16 @@ git fetch upstream pull/996/head:pr-996 --depth=50
 
 ```bash
 git fetch upstream pull/996/head:tmp-pr996 --depth=50   # 重新抓取
-git diff origin/main tmp-pr996 -- <目标目录>              # 看上游到底改了什么
+git fetch upstream main --depth=1                       # 取上游 main 作比较基准
+git diff FETCH_HEAD tmp-pr996 -- <目标目录>              # 看这个 PR 相对上游改了什么
 git checkout dev
 git checkout tmp-pr996 -- <要移植的文件>                  # 只取需要的文件
 # 人工适配差异后提交
 git branch -D tmp-pr996                                  # 用完即删
 ```
+
+注意**不能**用 `git diff origin/main tmp-pr996`：`origin/main` 现在已经是 Kliq
+自己的代码，不是上游。
 
 已删除的 18 个 `pr-*` 分支其 tip 已归档为 `refs/archive/pr-N`，可用
 `git log --oneline refs/archive/pr-996` 找回，也可按上表重新 fetch。
@@ -60,9 +64,76 @@ git branch -D tmp-pr996                                  # 用完即删
 - `git merge upstream/main`、`git rebase upstream/main`、`git pull upstream main`
   **一律不可用**，会引入无关历史或直接冲突到无法解析；
 - 同步上游只有一条路：**文件级移植**（看 diff → 挑文件 → 人工适配）；
-- `refs/replace/f6cfae40…` 是 W08 修复 broken commit 时留下的替换引用，
-  **不要删除**，删掉会让历史里出现一个坏提交；
-- `origin/main` 曾经只是上游镜像（零自有提交），2026-09-20 已改为承载 Kliq 代码。
+- `origin/main` 曾经只是上游镜像（零自有提交、作者全是上游开发者），
+  2026-09-20 已强推为 Kliq 代码（`f096b879`）。上游旧镜像仍可从 `upstream` 恢复。
+
+## 4.1 2026-09-20 历史修复（重要，务必读完）
+
+**背景**：在这天之前，这个仓库的 `main` **从来没能推送成功过**。查证下来是
+W08 阶段留下了两处结构性损坏，都不是网络问题。
+
+### 损坏一：父指针指向一个 tree
+
+```
+f6cfae40 (main 的第 2 个提交)
+  ├── tree   cc5073ab      正常
+  └── parent 6fc52c09      异常！这是个 tree 对象，不是 commit
+```
+
+W08 当时发现后，只写了一个 `refs/replace/f6cfae40 → 544486af` 的替换引用去
+**遮盖**它 —— 所以 `git log` 看起来一切正常。但 **`git pack-objects` 不认
+`refs/replace`**，而 `push` / `bundle` / `fetch` 全都走它，于是：
+
+```
+error: Object 6fc52c09... not a commit
+fatal: revision walk setup failed
+```
+
+**这就是"45 个提交从未推送成功"的真正原因**，不是网络、不是 token、不是权限。
+
+### 损坏二：两个 tree 对象的条目顺序不合 git 规范
+
+```
+cc5073ab   electron/           排在 electron-builder.json5 之前
+74fbaba3   audio/              排在 audio.test.ts 之前
+```
+
+git 的排序规则是「名字 + 终止符」逐字节比较，**目录的终止符是 `/`**，
+所以 `.`（0x2E）< `/`（0x2F）—— `electron-builder.json5` 必须排在 `electron/` 前面。
+手工构造 tree 时用了朴素的字符串排序，就会犯这个错。
+GitHub 的 `index-pack` 会直接拒收：
+
+```
+remote: error: object cc5073ab...: treeNotSorted: not properly sorted
+remote: fatal: fsck error in packed object
+```
+
+### 怎么修的
+
+1. **父指针**：重放 main/dev 的提交链，把坏 parent 改回 `68ac10bc`。
+2. **tree 排序**：自底向上重建违规 tree（先修子 tree，父 tree 的指针跟着更新），
+   再重放提交链。
+
+**blob 与 tree 的内容一字未改** —— 修复前后每个提交的文件树逐字节相同，
+只有 commit 对象因 parent/tree 指针变化而级联换了 SHA。
+
+- 旧 → 新 SHA 完整映射：`outputs/git-history-repair-mapping-2026-09-20.txt`
+- 因此 **2026-09-20 之前所有文档里引用的 commit SHA 全部作废**，查旧 SHA 请用映射表
+- 那个 `git replace` 遮盖引用**已删除**（保留它只会让问题在下次推送时再炸一次）
+
+### 推送前必做自检
+
+因为踩过这个坑，**任何推送前先跑这一条**：
+
+```bash
+# 在隔离仓库里检查即将推送的对象集合，等同 GitHub 的 index-pack 校验
+rm -rf /tmp/gate && mkdir -p /tmp/gate && cd /tmp/gate && git init -q -b _s .
+git fetch --no-tags <本仓库路径> "+refs/heads/main:refs/heads/main" "+refs/heads/dev:refs/heads/dev"
+git fsck --strict --no-dangling main dev     # 必须无任何输出
+```
+
+本仓库自身跑 `git fsck` 会因 `refs/archive/_pre-repair-*`（旧损坏历史的归档）
+而报错，**属预期**，不影响推送。
 
 ## 5. tag 规范
 
