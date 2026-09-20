@@ -68,8 +68,8 @@
 			"checkingTitle": "Controleren op updates...",
 			"downloadingTitle": "Update downloaden...",
 			"errorTitle": "Updatecontrole mislukt. Klik om opnieuw te proberen.",
-			"upToDateTitle": "Yanjing {{version}} is up-to-date.",
-			"availableTitle": "Yanjing {{version}} is beschikbaar.",
+			"upToDateTitle": "Kliq {{version}} is up-to-date.",
+			"availableTitle": "Kliq {{version}} is beschikbaar.",
 			"availableGenericTitle": "Er is een update beschikbaar."
 		},
 		"shortcuts": "Opname-sneltoetsen",
@@ -91,10 +91,10 @@
 		"share": "Delen"
 	},
 	"permissions": {
-		"screenRecordingNeeded": "Yanjing heeft toestemming voor schermopname nodig voordat je begint. Systeeminstellingen zijn geopend. Schakel het in, sluit Yanjing en open het opnieuw.",
-		"screenRecordingMissing": "Toestemming voor schermopname ontbreekt nog. Systeeminstellingen zijn opnieuw geopend. Schakel het in, sluit Yanjing en open het opnieuw voordat je opneemt.",
-		"accessibilityNeeded": "Yanjing heeft ook toegankelijkheidstoestemming nodig voor cursortracking. Systeeminstellingen zijn geopend. Schakel het in, sluit Yanjing en open het opnieuw.",
-		"accessibilityMissing": "Toegankelijkheidstoestemming ontbreekt nog. Systeeminstellingen zijn opnieuw geopend. Schakel het in, sluit Yanjing en open het opnieuw voordat je opneemt.",
+		"screenRecordingNeeded": "Kliq heeft toestemming voor schermopname nodig voordat je begint. Systeeminstellingen zijn geopend. Schakel het in, sluit Kliq en open het opnieuw.",
+		"screenRecordingMissing": "Toestemming voor schermopname ontbreekt nog. Systeeminstellingen zijn opnieuw geopend. Schakel het in, sluit Kliq en open het opnieuw voordat je opneemt.",
+		"accessibilityNeeded": "Kliq heeft ook toegankelijkheidstoestemming nodig voor cursortracking. Systeeminstellingen zijn geopend. Schakel het in, sluit Kliq en open het opnieuw.",
+		"accessibilityMissing": "Toegankelijkheidstoestemming ontbreekt nog. Systeeminstellingen zijn opnieuw geopend. Schakel het in, sluit Kliq en open het opnieuw voordat je opneemt.",
 		"selectSource": "Selecteer een bron om op te nemen",
 		"systemAudioUnavailable": "Systeemaudio is niet beschikbaar voor deze bron. De opname gaat verder zonder systeemaudio.",
 		"microphoneDenied": "Microfoontoegang is geweigerd. De opname gaat verder zonder microfoonaudio.",
@@ -104,7 +104,7 @@
 	"updateToast": {
 		"availableTitle": "Update beschikbaar",
 		"experimentalAvailableTitle": "Experimentele update beschikbaar",
-		"experimentalDescription": "Je hebt experimentele updates ingeschakeld, dus je kunt de nieuwste update van Yanjing testen voordat die breed beschikbaar is.",
+		"experimentalDescription": "Je hebt experimentele updates ingeschakeld, dus je kunt de nieuwste update van Kliq testen voordat die breed beschikbaar is.",
 		"downloadingTitle": "Update downloaden",
 		"readyTitle": "Klaar om opnieuw te starten",
 		"checkErrorTitle": "Kan niet controleren op updates",

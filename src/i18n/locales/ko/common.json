@@ -26,7 +26,7 @@
 	"yanjing": {
 		"app": {
 			"tagline": "AI 강화 오픈소스 화면 레코더",
-			"version": "v1.4.0-yanjing"
+			"version": "v1.4.0-kliq"
 		},
 		
 		"license": {
@@ -43,7 +43,42 @@
 			"activatedSuccess": "激活成功!",
 			"invalidKey": "无效的许可证密钥",
 			"expiresAt": "到期时间:{{date}}",
-			"subscriptionManagement": "管理订阅"
+			"subscriptionManagement": "管理订阅",
+			"feature": {
+				"transcribe": "AI 전사(음성→텍스트)",
+				"captions": "이중 언어 자막 및 다국어 번역",
+				"generate": "요약 / 챕터 / 제목 / 태그 / SNS 문구",
+				"search": "시맨틱 검색(긴 녹화본 즉시 탐색)",
+				"proofread": "자막 AI 교정",
+				"edit": "원클릭 스마트 편집 및 문구 다듬기"
+			},
+			"lifetime": "단품 구매 · 영구 사용",
+			"needProTitle": "이 기능은 Pro 버전이 필요합니다",
+			"needProBody": "'{{feature}}'은(는) Pro 혜택입니다. 활성화하면 사용할 수 있습니다.",
+			"emptyKey": "라이선스 키를 입력하세요",
+			"activating": "확인 중…",
+			"deactivating": "비활성화 중…",
+			"deactivated": "라이선스가 비활성화되었습니다"
+		},
+		
+		"account": {
+			"title": "계정",
+			"subtitle": "이 기기의 라이선스와 Pro 혜택 관리",
+			"close": "닫기",
+			"deviceLicense": "이 기기 라이선스",
+			"currentKey": "라이선스 키",
+			"activatedAt": "활성화일",
+			"service": "라이선스 검증 서비스",
+			"serviceOnline": "연결됨",
+			"serviceOffline": "미설정(오프라인 검증만)",
+			"offlineNote": "오프라인으로 활성화되었습니다. 온라인 상태에서 다시 활성화하면 서버와 확인됩니다.",
+			"benefits": "Pro 혜택",
+			"freeHint": "무료 버전에도 전체 녹화와 기본 편집이 포함됩니다. Pro는 그 위에 모든 AI 기능을 개방합니다.",
+			"buyNote": "${{price}} 단품 구매 · 영구 사용 · 30일 환불",
+			"checkoutTitle": "구매 링크가 설정되지 않았습니다",
+			"checkoutNotConfigured": "빌드 시 VITE_KLQ_CHECKOUT_URL(본인의 Lemon Squeezy 결제 페이지)을 주입하면 활성화됩니다.",
+			"sourceCode": "소스 코드",
+			"licenseNote": "AGPL 3.0 · Recordly 기반 수정 · 독립 유지보수"
 		},
 		"settings": {
 			"title": "옌징 设置",

@@ -25,13 +25,13 @@ export function registerCaptionHandlers() {
 			const includeProjects = Boolean(options?.includeProjects);
 			const recordingsDir = await getRecordingsDir();
 			const result = await dialog.showOpenDialog({
-				title: includeProjects ? "Import Media or Yanjing Project" : "Select Video File",
+				title: includeProjects ? "Import Media or Kliq Project" : "Select Video File",
 				defaultPath: recordingsDir,
 				filters: [
 					...(includeProjects
 						? [
 								{
-									name: "Media or Yanjing Projects",
+									name: "Media or Kliq Projects",
 									extensions: [
 										...VIDEO_FILE_EXTENSIONS,
 										...PROJECT_FILE_EXTENSIONS,
@@ -41,7 +41,7 @@ export function registerCaptionHandlers() {
 						: []),
 					{ name: "Video Files", extensions: VIDEO_FILE_EXTENSIONS },
 					...(includeProjects
-						? [{ name: "Yanjing Projects", extensions: PROJECT_FILE_EXTENSIONS }]
+						? [{ name: "Kliq Projects", extensions: PROJECT_FILE_EXTENSIONS }]
 						: []),
 					{ name: "All Files", extensions: ["*"] },
 				],

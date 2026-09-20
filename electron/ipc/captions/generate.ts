@@ -38,7 +38,7 @@ async function executeWhisper(whisperExecutablePath: string, args: string[], tim
 	} catch (error) {
 		if (isMissingWindowsWhisperRuntimeDependency(error)) {
 			throw new Error(
-				"Whisper could not start because the Microsoft Visual C++ x64 Redistributable is missing. Install it from https://aka.ms/vc14/vc_redist.x64.exe, then restart Yanjing.",
+				"Whisper could not start because the Microsoft Visual C++ x64 Redistributable is missing. Install it from https://aka.ms/vc14/vc_redist.x64.exe, then restart Kliq.",
 			);
 		}
 		if (isProcessTimeoutError(error)) {
@@ -143,7 +143,7 @@ export async function resolveWhisperExecutablePath(preferredPath?: string | null
 
 	throw new Error(
 		`No Whisper runtime was found for ${process.platform}/${process.arch}. ` +
-			"This Yanjing build is missing its bundled caption runtime. Reinstall or update Yanjing, or select a whisper-cli executable in Caption settings.",
+			"This Kliq build is missing its bundled caption runtime. Reinstall or update Kliq, or select a whisper-cli executable in Caption settings.",
 	);
 }
 

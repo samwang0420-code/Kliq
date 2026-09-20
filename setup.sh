@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 言镜 — 本地一键脚本 (用户运行)
+# Kliq — 本地一键脚本 (用户运行)
 # 
 # 这个脚本会:
 # 1. 验证源码完整性
@@ -13,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "================================================="
-echo "  言镜 (Yanjing Recorder) — 本地设置脚本"
+echo "  Kliq (Kliq) — 本地设置脚本"
 echo "================================================="
 echo ""
 
@@ -101,10 +101,10 @@ def rec(n):
 
 rt = rec(root)
 ts = int(time.time())
-msg = ('tree ' + rt + '\nauthor YanJingAI <hi@yanjingai.tech> ' + str(ts) + ' +0800\n'
-       'committer YanJingAI <hi@yanjingai.tech> ' + str(ts) + ' +0800\n\n'
-       'feat(yanjing): v1.4.0-yanjing 初始版本\n\n'
-       '- 品牌改名: recordly -> yanjing-recorder, productName=言镜\n'
+msg = ('tree ' + rt + '\nauthor yanjingai <hi@yanjingai.tech> ' + str(ts) + ' +0800\n'
+       'committer yanjingai <hi@yanjingai.tech> ' + str(ts) + ' +0800\n\n'
+       'feat(kliq): v1.4.0-kliq 初始版本\n\n'
+       '- 品牌改名: recordly -> kliq-recorder, productName=Kliq\n'
        '- AGPL attribution + 行业热词 (5 领域词库)\n'
        '- AI 双语字幕 (Whisper + GPT-4)\n'
        '- Lemon Squeezy 许可证 + Cloudflare Pages\n'
@@ -113,17 +113,17 @@ msg = ('tree ' + rt + '\nauthor YanJingAI <hi@yanjingai.tech> ' + str(ts) + ' +0
 cs = gobj('commit', msg.encode())
 
 with open(f'{GIT_DIR}/refs/heads/main', 'w') as f: f.write(cs + '\n')
-with open(f'{GIT_DIR}/refs/tags/v1.4.0-yanjing', 'w') as f: f.write(cs + '\n')
+with open(f'{GIT_DIR}/refs/tags/v1.4.0-kliq', 'w') as f: f.write(cs + '\n')
 with open(f'{GIT_DIR}/HEAD', 'w') as f: f.write('ref: refs/heads/main\n')
 with open(f'{GIT_DIR}/config', 'w') as f:
-    f.write('[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n\tignorecase = true\n[user]\n\tname = YanJingAI\n\temail = hi@yanjingai.tech\n[remote \"origin\"]\n\turl = https://github.com/yanjingai/recorder.git\n\tfetch = +refs/heads/*:refs/remotes/origin/*\n')
+    f.write('[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n\tignorecase = true\n[user]\n\tname = yanjingai\n\temail = hi@yanjingai.tech\n[remote \"origin\"]\n\turl = https://github.com/yanjingai/recorder.git\n\tfetch = +refs/heads/*:refs/remotes/origin/*\n')
 with open(f'{GIT_DIR}/description', 'w') as f:
-    f.write('言镜 (Yanjing Recorder) - AI 增强的开源屏幕录制器\n')
+    f.write('Kliq (Kliq) - AI 增强的开源屏幕录制器\n')
 with open(f'{GIT_DIR}/packed-refs', 'w') as f:
     f.write('# pack-refs with: peeled fully-peeled sorted\n')
 
 print(f'  ✅ Commit: {cs[:12]}')
-print(f'  ✅ Tag: v1.4.0-yanjing')
+print(f'  ✅ Tag: v1.4.0-kliq')
 "
 fi
 echo ""
@@ -138,7 +138,7 @@ if os.path.exists(p):
         print(f.read().strip()[:12])
 ")
 echo "  HEAD: main @ ${COMMIT_SHA}"
-echo "  Tag:  v1.4.0-yanjing"
+echo "  Tag:  v1.4.0-kliq"
 echo ""
 
 # Step 4: 推送指引
@@ -159,7 +159,7 @@ echo ""
 echo "  2️⃣  安装 git CLI 后推送"
 echo "     # macOS 用户: 同意 xcode license 后 git CLI 才能用"
 echo "     sudo xcodebuild -license"
-echo "     git push https://github.com/yanjingai/recorder.git main v1.4.0-yanjing"
+echo "     git push https://github.com/yanjingai/recorder.git main v1.4.0-kliq"
 echo "     (用 HTTPS + Personal Access Token, 不用 SSH 更方便)"
 echo ""
 echo "  3️⃣  等 GitHub Actions 构建 (5-10 min)"

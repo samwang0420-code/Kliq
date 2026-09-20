@@ -1,5 +1,5 @@
 /**
- * 言镜 — AI 工具栏 (P0/P1 全部 AI 功能的统一 UI 入口)
+ * Kliq — AI 工具栏 (P0/P1 全部 AI 功能的统一 UI 入口)
  *
  * 把 P0 A1/A2/B1/B2/B3/C1/C2/C3/G1 + P1 A3/A4/A5/B4/B5/C4/C5/D1/E/F/G2/G3/G4
  * 全部功能汇总到一个组件, 用户在导出/录制前/录制后都可调用
@@ -7,6 +7,9 @@
 
 import { useState } from "react";
 import { useScopedT } from "@/contexts/I18nContext";
+import { useIsPro } from "@/hooks/useLicenseStatus";
+import { actionRequiresPro } from "@/lib/license";
+import { openAccountCenter } from "@/lib/proGate";
 
 export type AIAction =
 	| "transcribe" // B1 OpenAI Whisper 转录
@@ -203,6 +206,7 @@ export function AIToolbar({
 }: AIToolbarProps) {
 	const t = useScopedT("editor");
 	const [expanded, setExpanded] = useState(false);
+	const isPro = useIsPro();
 
 	const groups = {
 		transcribe: AI_ACTIONS.filter((a) => a.group === "transcribe"),
@@ -216,7 +220,7 @@ export function AIToolbar({
 		<div
 			className="ai-toolbar"
 			style={{
-				border: "1px solid var(--yanjing-border, #e5e5e5)",
+				border: "1px solid var(--kliq-border, #e5e5e5)",
 				borderRadius: 8,
 				padding: 12,
 				marginTop: 12,
@@ -231,13 +235,46 @@ export function AIToolbar({
 				}}
 			>
 				<div style={{ fontWeight: 600, fontSize: 14 }}>{t("yanjing.ai.toolbarTitle")}</div>
-				<button
-					type="button"
-					onClick={() => setExpanded(!expanded)}
-					style={{ fontSize: 12, padding: "2px 8px" }}
-				>
-					{t(expanded ? "yanjing.ai.toolbarCollapse" : "yanjing.ai.toolbarExpand")}
-				</button>
+				<div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+					{/* 个人中心入口：未激活时也要能点进来激活 / 购买 */}
+					<button
+						type="button"
+						onClick={() => openAccountCenter()}
+						title={t("yanjing.ai.proEntryHint", "Manage license & Pro benefits")}
+						style={{
+							display: "inline-flex",
+							alignItems: "center",
+							gap: 5,
+							fontSize: 12,
+							padding: "2px 9px",
+							border: isPro ? "1px solid #22c55e66" : "1px solid #d4d4d4",
+							borderRadius: 999,
+							background: isPro ? "#22c55e14" : "white",
+							color: isPro ? "#16a34a" : "#444",
+							cursor: "pointer",
+						}}
+					>
+						<span
+							style={{
+								width: 6,
+								height: 6,
+								borderRadius: 999,
+								background: isPro ? "#22c55e" : "#a3a3a3",
+							}}
+						/>
+						{t(
+							isPro ? "yanjing.ai.proActive" : "yanjing.ai.proEntry",
+							isPro ? "Pro" : "Pro / Account",
+						)}
+					</button>
+					<button
+						type="button"
+						onClick={() => setExpanded(!expanded)}
+						style={{ fontSize: 12, padding: "2px 8px" }}
+					>
+						{t(expanded ? "yanjing.ai.toolbarCollapse" : "yanjing.ai.toolbarExpand")}
+					</button>
+				</div>
 			</div>
 
 			<div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
@@ -273,25 +310,55 @@ export function AIToolbar({
 								{t(`yanjing.ai.groups.${gKey}`)}
 							</div>
 							<div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-								{groups[gKey].map((action) => (
-									<button
-										key={action.id}
-										type="button"
-										onClick={() => onAction(action.id)}
-										disabled={disabled || busy === action.id}
-										style={{
-											fontSize: 12,
-											padding: "4px 10px",
-											border: "1px solid #d4d4d4",
-											borderRadius: 4,
-											background: busy === action.id ? "#f5f5f5" : "white",
-											cursor: disabled ? "not-allowed" : "pointer",
-										}}
-									>
-										{action.icon} {t(action.labelKey, action.labelFallback)}
-										{busy === action.id && " ⏳"}
-									</button>
-								))}
+								{groups[gKey].map((action) => {
+									const gated = actionRequiresPro(action.id) && !isPro;
+									return (
+										<button
+											key={action.id}
+											type="button"
+											onClick={() => onAction(action.id)}
+											disabled={disabled || busy === action.id}
+											title={
+												gated
+													? t("yanjing.ai.proLocked", "Pro feature")
+													: undefined
+											}
+											style={{
+												display: "inline-flex",
+												alignItems: "center",
+												gap: 5,
+												fontSize: 12,
+												padding: "4px 10px",
+												border: gated
+													? "1px dashed #d4d4d4"
+													: "1px solid #d4d4d4",
+												borderRadius: 4,
+												background:
+													busy === action.id ? "#f5f5f5" : "white",
+												cursor: disabled ? "not-allowed" : "pointer",
+											}}
+										>
+											{action.icon} {t(action.labelKey, action.labelFallback)}
+											{busy === action.id && " ⏳"}
+											{gated && (
+												<span
+													style={{
+														fontSize: 9,
+														fontWeight: 700,
+														letterSpacing: 0.4,
+														padding: "1px 5px",
+														borderRadius: 999,
+														background: "#f5f5f5",
+														color: "#8a8a8a",
+														border: "1px solid #e2e2e2",
+													}}
+												>
+													{t("yanjing.ai.proBadge", "PRO")}
+												</span>
+											)}
+										</button>
+									);
+								})}
 							</div>
 						</div>
 					))}

@@ -1,4 +1,4 @@
-# 言镜 — Cloudflare Pages 部署指南
+# Kliq — Cloudflare Pages 部署指南
 
 ## 概述
 
@@ -90,7 +90,7 @@ CNAME  www     yanjingai-tech.pages.dev    Auto
 
 1. https://lemonsqueezy.com → New Store
 2. Products → New Product:
-   - Name: Yanjing Recorder Pro
+   - Name: Kliq Pro
    - Price: $29
    - License Key: Enable
 3. 保存 → 复制 Product ID

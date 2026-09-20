@@ -1,5 +1,5 @@
 /**
- * 言镜 — OpenAI 客户端
+ * Kliq — OpenAI 客户端
  *
  * 用于 AI 双语字幕 (Whisper 转录) + AI 章节/摘要 (GPT-4)
  *

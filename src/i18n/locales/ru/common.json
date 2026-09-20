@@ -1,7 +1,7 @@
 {
 	"app": {
-		"name": "Yanjing Recorder",
-		"editorTitle": "Yanjing Recorder Editor",
+		"name": "Kliq",
+		"editorTitle": "Kliq Editor",
 		"subtitle": "Запись экрана и редактирование видео",
 		"language": "Язык",
 		"manageRecordings": "Открыть папку с записями"
@@ -26,7 +26,7 @@
 	"yanjing": {
 		"app": {
 			"tagline": "Программа записи экрана с открытым кодом и ИИ",
-			"version": "v1.4.0-yanjing"
+			"version": "v1.4.0-kliq"
 		},
 		"license": {
 			"section": "Лицензия",
@@ -42,10 +42,45 @@
 			"activatedSuccess": "Активация выполнена!",
 			"invalidKey": "Недействительный лицензионный ключ",
 			"expiresAt": "Истекает: {{date}}",
-			"subscriptionManagement": "Управление подпиской"
+			"subscriptionManagement": "Управление подпиской",
+			"feature": {
+				"transcribe": "ИИ-транскрипция (речь в текст)",
+				"captions": "Двуязычные субтитры и мультиязычный перевод",
+				"generate": "Конспект / главы / заголовки / теги / тексты для соцсетей",
+				"search": "Семантический поиск (найти момент в длинной записи)",
+				"proofread": "ИИ-вычитка субтитров",
+				"edit": "Умный монтаж в один клик и шлифовка текста"
+			},
+			"lifetime": "Разовая покупка · навсегда",
+			"needProTitle": "Для этой функции нужен Pro",
+			"needProBody": "«{{feature}}» — возможность Pro. Активируйте, чтобы пользоваться.",
+			"emptyKey": "Введите лицензионный ключ",
+			"activating": "Проверка…",
+			"deactivating": "Отключение…",
+			"deactivated": "Лицензия отключена"
+		},
+		
+		"account": {
+			"title": "Аккаунт",
+			"subtitle": "Управление лицензией этого устройства и возможностями Pro",
+			"close": "Закрыть",
+			"deviceLicense": "Лицензия устройства",
+			"currentKey": "Лицензионный ключ",
+			"activatedAt": "Активирована",
+			"service": "Служба лицензий",
+			"serviceOnline": "Подключено",
+			"serviceOffline": "Не настроено (только офлайн-проверка)",
+			"offlineNote": "Активировано офлайн. Повторно активируйте при подключении, чтобы подтвердить на сервере.",
+			"benefits": "Возможности Pro",
+			"freeHint": "Бесплатная версия включает полную запись и базовый монтаж. Pro дополнительно открывает все функции ИИ.",
+			"buyNote": "${{price}} разово · навсегда · возврат 30 дней",
+			"checkoutTitle": "Покупка не настроена",
+			"checkoutNotConfigured": "Укажите VITE_KLQ_CHECKOUT_URL при сборке (своя касса Lemon Squeezy), чтобы включить.",
+			"sourceCode": "Исходный код",
+			"licenseNote": "AGPL 3.0 · Изменено на основе Recordly · Поддерживается независимо"
 		},
 		"settings": {
-			"title": "Настройки Yanjing",
+			"title": "Настройки Kliq",
 			"save": "Сохранить",
 			"saved": "Сохранено",
 			"reset": "Сбросить по умолчанию"

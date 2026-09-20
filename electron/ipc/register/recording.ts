@@ -18,7 +18,7 @@ import {
 	getHudOverlayCaptureProtectionEnabled,
 	reassertHudOverlayCaptureProtection,
 } from "../../windows";
-import { ALLOW_YANJING_WINDOW_CAPTURE } from "../constants";
+import { ALLOW_KLIQ_WINDOW_CAPTURE } from "../constants";
 import { startWindowBoundsCapture, stopWindowBoundsCapture } from "../cursor/bounds";
 import { startInteractionCapture, stopInteractionCapture } from "../cursor/interaction";
 import {
@@ -737,14 +737,14 @@ export function registerRecordingHandlers(
 				const appName = normalizeDesktopSourceName(String(source?.appName ?? ""));
 				const ownAppName = normalizeDesktopSourceName(app.getName());
 				if (
-					!ALLOW_YANJING_WINDOW_CAPTURE &&
+					!ALLOW_KLIQ_WINDOW_CAPTURE &&
 					source?.id?.startsWith("window:") &&
 					appName &&
-					(appName === ownAppName || appName === "言镜" || appName === "yanjing-recorder")
+					(appName === ownAppName || appName === "Kliq" || appName === "kliq-recorder")
 				) {
 					return {
 						success: false,
-						message: "Cannot record Yanjing windows. Please select another app window.",
+						message: "Cannot record Kliq windows. Please select another app window.",
 					};
 				}
 
@@ -871,8 +871,8 @@ export function registerRecordingHandlers(
 						type: "warning",
 						title: "Screen Recording Permission Required",
 						message:
-							"Yanjing needs screen recording permission to capture your screen.",
-						detail: "Please open System Settings > Privacy & Security > Screen Recording, make sure Yanjing is toggled ON, then try recording again.",
+							"Kliq needs screen recording permission to capture your screen.",
+						detail: "Please open System Settings > Privacy & Security > Screen Recording, make sure Kliq is toggled ON, then try recording again.",
 						buttons: ["Open System Settings", "Cancel"],
 						defaultId: 0,
 						cancelId: 1,
@@ -904,8 +904,8 @@ export function registerRecordingHandlers(
 					const { response } = await dialog.showMessageBox({
 						type: "warning",
 						title: "Microphone Permission Required",
-						message: "Yanjing needs microphone permission to record audio.",
-						detail: "Please open System Settings > Privacy & Security > Microphone, make sure Yanjing is toggled ON, then try recording again.",
+						message: "Kliq needs microphone permission to record audio.",
+						detail: "Please open System Settings > Privacy & Security > Microphone, make sure Kliq is toggled ON, then try recording again.",
 						buttons: ["Open System Settings", "Cancel"],
 						defaultId: 0,
 						cancelId: 1,

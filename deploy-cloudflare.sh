@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 言镜 — Cloudflare Pages 一键部署脚本
+# Kliq — Cloudflare Pages 一键部署脚本
 #
 # 用法:
 #   1. 登录 https://dash.cloudflare.com/profile/api-tokens
@@ -33,7 +33,7 @@ if [ -z "$CF_ACCOUNT_ID" ]; then
 fi
 
 echo "================================================="
-echo "  言镜 — Cloudflare Pages 一键部署"
+echo "  Kliq — Cloudflare Pages 一键部署"
 echo "================================================="
 echo ""
 

@@ -1,5 +1,5 @@
 /**
- * 言镜 — AI 双语字幕工作流
+ * Kliq — AI 双语字幕工作流
  *
  * 编排 Whisper 转录 → GPT-4 翻译 → SRT/VTT 输出
  *

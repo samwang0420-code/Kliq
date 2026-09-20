@@ -44,8 +44,8 @@ describe("isInternalRendererTarget", () => {
 		["http://localhost:5173/?windowType=editor", "http://localhost:5173/editor?reload=1"],
 		["http://127.0.0.1:43123/?windowType=editor", "http://127.0.0.1:43123/assets/index.js"],
 		[
-			"file:///opt/Yanjing/dist/index.html?windowType=editor",
-			"file:///opt/Yanjing/dist/index.html?windowType=hud-overlay#status",
+			"file:///opt/Kliq/dist/index.html?windowType=editor",
+			"file:///opt/Kliq/dist/index.html?windowType=hud-overlay#status",
 		],
 	])("identifies the current renderer origin/file", (currentUrl, targetUrl) => {
 		expect(isInternalRendererTarget(currentUrl, targetUrl)).toBe(true);
@@ -56,8 +56,8 @@ describe("isInternalRendererTarget", () => {
 		["http://localhost:5173/", "http://localhost:5174/"],
 		["https://recordly.example/", "http://recordly.example/"],
 		["https://recordly.example/", "https://user:pass@recordly.example/"],
-		["file:///opt/Yanjing/dist/index.html", "file:///etc/passwd"],
-		["file:///opt/Yanjing/dist/index.html", "data:text/html,hello"],
+		["file:///opt/Kliq/dist/index.html", "file:///etc/passwd"],
+		["file:///opt/Kliq/dist/index.html", "data:text/html,hello"],
 		["not a URL", "https://example.com/"],
 	])("distinguishes a target outside the current renderer", (currentUrl, targetUrl) => {
 		expect(isInternalRendererTarget(currentUrl, targetUrl)).toBe(false);
@@ -100,12 +100,12 @@ describe("navigation event handlers", () => {
 		const preventDefault = vi.fn();
 		const openExternal = vi.fn(async () => undefined);
 		const handler = createWillNavigateHandler(
-			() => "file:///opt/Yanjing/dist/index.html?windowType=editor",
+			() => "file:///opt/Kliq/dist/index.html?windowType=editor",
 			openExternal,
 		);
 
 		handler({
-			url: "file:///opt/Yanjing/dist/index.html?smokeExport=1",
+			url: "file:///opt/Kliq/dist/index.html?smokeExport=1",
 			preventDefault,
 		});
 
@@ -131,7 +131,7 @@ describe("navigation event handlers", () => {
 		const preventDefault = vi.fn();
 		const openExternal = vi.fn(async () => undefined);
 		const handler = createWillNavigateHandler(
-			() => "file:///opt/Yanjing/dist/index.html",
+			() => "file:///opt/Kliq/dist/index.html",
 			openExternal,
 		);
 
@@ -211,7 +211,7 @@ describe("navigation event handlers", () => {
 	});
 
 	it("does not trust a renderer-mutated URL as an exact reload", () => {
-		let currentUrl = "file:///opt/Yanjing/dist/index.html?windowType=editor";
+		let currentUrl = "file:///opt/Kliq/dist/index.html?windowType=editor";
 		const on = vi.fn();
 		const webContents = {
 			getURL: () => currentUrl,
@@ -223,7 +223,7 @@ describe("navigation event handlers", () => {
 		hardenWebContentsNavigation(webContents, openExternal);
 
 		// history.replaceState() changes getURL() without crossing a document-navigation boundary.
-		currentUrl = "file:///opt/Yanjing/dist/index.html?windowType=source-selector";
+		currentUrl = "file:///opt/Kliq/dist/index.html?windowType=source-selector";
 		const willNavigate = on.mock.calls.find(
 			([eventName]) => eventName === "will-navigate",
 		)?.[1];
@@ -259,7 +259,7 @@ describe("navigation event handlers", () => {
 			throw new Error("navigation handlers were not registered");
 		}
 
-		const loadedUrl = "file:///opt/Yanjing/dist/index.html?windowType=editor";
+		const loadedUrl = "file:///opt/Kliq/dist/index.html?windowType=editor";
 		didNavigate({}, loadedUrl);
 		const preventDefault = vi.fn();
 		willNavigate({ url: loadedUrl, preventDefault });

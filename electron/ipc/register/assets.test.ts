@@ -52,7 +52,7 @@ describe("registerAssetHandlers.read-local-file", () => {
 		const handler = ipcHandlers.get("read-local-file");
 		expect(handler).toBeTypeOf("function");
 
-		const payload = Buffer.from("hello yanjing-recorder", "utf8");
+		const payload = Buffer.from("hello kliq-recorder", "utf8");
 		const dir = await fs.mkdtemp(path.join(os.tmpdir(), "yanjing-assets-small-"));
 		tempDirs.push(dir);
 		const filePath = path.join(dir, "small.bin");
@@ -77,7 +77,7 @@ describe("registerAssetHandlers.read-local-file", () => {
 		const dir = await fs.mkdtemp(path.join(os.tmpdir(), "yanjing-assets-large-"));
 		tempDirs.push(dir);
 		const filePath = path.join(dir, "large-fixture.bin");
-		const header = Buffer.from("YANJING-LARGE-HEADER-PAYLOAD", "utf8");
+		const header = Buffer.from("KLIQ-LARGE-HEADER-PAYLOAD", "utf8");
 		await fs.writeFile(filePath, header);
 		const fileHandle = await fs.open(filePath, "r+");
 		try {
@@ -104,7 +104,7 @@ describe("registerAssetHandlers.read-local-file", () => {
 		const handler = ipcHandlers.get("read-local-file");
 		expect(handler).toBeTypeOf("function");
 
-		const result = (await handler!({}, "/nonexistent/yanjing-recorder-fixture.bin")) as {
+		const result = (await handler!({}, "/nonexistent/kliq-recorder-fixture.bin")) as {
 			success: boolean;
 			error?: string;
 		};

@@ -135,7 +135,7 @@
 	},
 	"nativeCaptureUnavailable": {
 		"title": "Nada está roto, pero no podremos renderizar una superposición de cursor animada.",
-		"description": "Tu dispositivo no es compatible con la captura nativa. Esto puede deberse a varias razones que todavía no hemos identificado. Yanjing seguirá funcionando, pero hará imposible el suavizado del cursor.",
+		"description": "Tu dispositivo no es compatible con la captura nativa. Esto puede deberse a varias razones que todavía no hemos identificado. Kliq seguirá funcionando, pero hará imposible el suavizado del cursor.",
 		"confirm": "Entendido"
 	},
 	"exportStatus": {
@@ -200,7 +200,12 @@
 				"gaming": "Videojuegos",
 				"tech": "Tecnología",
 				"marketing": "Marketing"
-			}
+			},
+			"proEntry": "Pro / Cuenta",
+			"proActive": "Pro",
+			"proEntryHint": "Gestionar licencia y ventajas Pro",
+			"proBadge": "PRO",
+			"proLocked": "Función Pro"
 		}
 	}
 }

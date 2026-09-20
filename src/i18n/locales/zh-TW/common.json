@@ -1,7 +1,7 @@
 {
 	"app": {
-		"name": "言镜",
-		"editorTitle": "言镜 編輯器",
+		"name": "Kliq",
+		"editorTitle": "Kliq 編輯器",
 		"subtitle": "屏幕錄制与編輯",
 		"language": "語言",
 		"manageRecordings": "打開錄制文件夹"
@@ -26,7 +26,7 @@
 	"yanjing": {
 		"app": {
 			"tagline": "AI 增強的開源屏幕錄制器",
-			"version": "v1.4.0-yanjing"
+			"version": "v1.4.0-kliq"
 		},
 		
 		"license": {
@@ -43,10 +43,45 @@
 			"activatedSuccess": "激活成功!",
 			"invalidKey": "無效的许可证密鑰",
 			"expiresAt": "到期時间:{{date}}",
-			"subscriptionManagement": "管理訂閱"
+			"subscriptionManagement": "管理訂閱",
+			"feature": {
+				"transcribe": "AI 轉錄（語音轉文字）",
+				"captions": "雙語字幕與多語翻譯",
+				"generate": "摘要 / 章節 / 標題 / 標籤 / 社群文案",
+				"search": "語意搜尋（長錄影秒級定位）",
+				"proofread": "字幕 AI 校對",
+				"edit": "一鍵智慧剪輯與文案潤飾"
+			},
+			"lifetime": "買斷 · 永久使用",
+			"needProTitle": "此功能需要 Pro 版",
+			"needProBody": "「{{feature}}」屬於 Pro 權益，啟用後即可使用。",
+			"emptyKey": "請輸入 License key",
+			"activating": "驗證中…",
+			"deactivating": "停用中…",
+			"deactivated": "License 已停用"
+		},
+		
+		"account": {
+			"title": "個人中心",
+			"subtitle": "管理本機授權與 Pro 權益",
+			"close": "關閉",
+			"deviceLicense": "本機授權",
+			"currentKey": "目前授權碼",
+			"activatedAt": "啟用時間",
+			"service": "授權驗證服務",
+			"serviceOnline": "已連線",
+			"serviceOffline": "未設定（僅離線驗證）",
+			"offlineNote": "目前為離線啟用：連線後可重新啟用以與伺服器確認。",
+			"benefits": "Pro 權益",
+			"freeHint": "免費版已包含完整錄影與基礎剪輯，Pro 在此之上解鎖全部 AI 能力。",
+			"buyNote": "${{price}} 一次買斷 · 永久使用 · 30 天退款",
+			"checkoutTitle": "購買入口未設定",
+			"checkoutNotConfigured": "建置時注入 VITE_KLQ_CHECKOUT_URL（你自己的 Lemon Squeezy 結帳頁）後啟用。",
+			"sourceCode": "原始碼",
+			"licenseNote": "AGPL 3.0 · 基於 Recordly 修改 · 獨立維護"
 		},
 		"settings": {
-			"title": "言镜 設置",
+			"title": "Kliq 設置",
 			"save": "保存",
 			"saved": "已保存",
 			"reset": "重置默认"

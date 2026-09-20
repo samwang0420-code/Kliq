@@ -1,6 +1,6 @@
 # Attribution / 来源声明
 
-本软件 **言镜 (Yanjing Recorder)** 是基于 [Recordly](https://github.com/webadderallorg/Recordly) 修改而来的衍生作品。
+本软件 **Kliq (Kliq)** 是基于 [Recordly](https://github.com/webadderallorg/Recordly) 修改而来的衍生作品。
 
 ## 上游信息
 
@@ -18,7 +18,7 @@
 3. **AI 行业热词**（法律 / 医疗 / 电商 / 教育）
 4. **中文 UI 优化**（沿用上游 zh-CN 翻译 + 增强）
 5. **支付集成**（Lemon Squeezy $29 一次性 / Stripe $49 年订阅）
-6. **品牌重塑**（言镜 / yanjingai.tech）
+6. **品牌重塑**（Kliq / yanjingai.tech）
 7. **§213 极简风设计**（纯黑 #0a0a0a + 绿点 #22c55e）
 
 ## AGPL-3.0 合规承诺

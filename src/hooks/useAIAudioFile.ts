@@ -1,5 +1,5 @@
 /**
- * 言镜 — AI 音轨文件加载 Hook (P0/P1 接入主流程关键)
+ * Kliq — AI 音轨文件加载 Hook (P0/P1 接入主流程关键)
  *
  * 用 electronAPI.aiReadFileAsBuffer 把本地文件转 Blob, 给 AI 函数喂 file 参数
  * 同时支持:
@@ -65,7 +65,7 @@ export function useAIAudioFile() {
 		setState({ file: null, filePath: null, mimeType: "", error: null });
 	}, []);
 
-	/** 调 Yanjing 上游的视频选择对话框 */
+	/** 调 Kliq 上游的视频选择对话框 */
 	const pickVideo = useCallback(async () => {
 		const api = getElectronAI();
 		if (!api?.openVideoFilePicker) {

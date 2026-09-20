@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Yanjing Recorder</title>
+    <title>Kliq</title>
     <link>https://yanjingai.tech/</link>
     <description>Open-source screen recorder forked from Recordly. Native timeline editor, cursor polish, auto-zoom, AI captions, chapters, summaries.</description>
     <language>en-us</language>
     <atom:link href="https://yanjingai.tech/rss.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Yanjing Recorder v1.4.0</title>
+      <title>Kliq v1.4.0</title>
       <link>https://yanjingai.tech/</link>
       <description>Initial release. AGPL 3.0, BYO API key, $9.9 Pro one-time.</description>
       <pubDate>Thu, 18 Sep 2026 13:00:00 +0800</pubDate>

@@ -1,29 +1,50 @@
 /**
- * 言镜 — 许可证管理模块
+ * Kliq — 许可证 / Pro 权益模块
  *
- * 模式: 用户通过 Lemon Squeezy 购买 → 收到 license key → 在设置页激活
+ * 商业模式（用户拍板）：**一次性买断**，$9.9，永久使用。
+ *   购买：Lemon Squeezy 结算页（URL 见 licenseConfig.ts，构建期注入）
+ *   交付：用户拿到 license key → 在「个人中心」激活
  *
- * 激活流程:
- * 1. 用户输入 license key (UUID v4 格式)
- * 2. 客户端调用 Lemon Squeezy API 验证 (Stage 6 骨架阶段: 离线校验)
- * 3. 验证成功后本地存储 (electron-store) + 标识 Pro 权限
+ * 激活流程：
+ *   1. 本地格式校验（`kliq-pro-` + 8 位 hex，兼容旧前缀 `yanjing-pro-`）
+ *   2. 在线校验（{SITE}/api/license-validate）拿到权威到期时间
+ *      - 网络不可用 / 未配置校验服务 → 回退为离线激活（标记 offline: true）
+ *      - 服务端明确判为无效（4xx 且非 404）→ 激活失败
+ *   3. 成功后写入本地存储，并通知订阅者刷新 UI
  *
- * Stage 6 落地版本 (骨架):
- * - 提供 activate / deactivate / isActivated / getStatus 四个 API
- * - 离线校验: license key 必须是 yanjing-pro-{8-char-id} 格式
- * - 在线校验: 客户端调用 /api/license/validate (后端 API 在 Stage 7 部署)
- * - Pro 权限检查: 通过 localStorage 的 yanjing.license.status 字段
+ * 存储：
+ *   - 现行键 `kliq.license.status`
+ *   - 旧品牌键 `yanjing.license.status` 只读回退，读到即迁移到新键
  */
 
-const LICENSE_KEY_PREFIX = "yanjing-pro-";
-const LICENSE_STORAGE_KEY = "yanjing.license.status";
+import {
+	isLicenseServiceConfigured,
+	KLQ_LICENSE_KEY_PREFIX,
+	KLQ_LICENSE_STORAGE_KEY,
+	KLQ_LICENSE_VALIDATE_URL,
+	LEGACY_LICENSE_KEY_PREFIX,
+	LEGACY_LICENSE_STORAGE_KEYS,
+} from "./licenseConfig";
+
+export type LicenseTier = "free" | "pro";
 
 export type LicenseStatus = {
 	activated: boolean;
-	tier: "free" | "pro";
+	tier: LicenseTier;
+	/** 一次性买断：正常情况下为 undefined（永久有效） */
 	expiresAt?: number;
 	licenseKey?: string;
 	activatedAt?: number;
+	/** true 表示仅通过离线格式校验激活，未与后端确认过 */
+	offline?: boolean;
+};
+
+export type ActivateResult = {
+	success: boolean;
+	status?: LicenseStatus;
+	error?: string;
+	/** 面向用户的提示（例如“在线校验不可用，已离线激活”） */
+	notice?: string;
 };
 
 const DEFAULT_STATUS: LicenseStatus = {
@@ -31,100 +52,286 @@ const DEFAULT_STATUS: LicenseStatus = {
 	tier: "free",
 };
 
-function getStorage(): { getItem: (k: string) => string | null; setItem: (k: string, v: string) => void } | null {
+/**
+ * Pro 权益分组（用于个人中心的权益清单与闸门提示文案）。
+ * 分组而非逐动作列出，是为了让 12 个语言包各只维护 6 条文案。
+ */
+export const PRO_FEATURES = [
+	"transcribe",
+	"captions",
+	"generate",
+	"search",
+	"proofread",
+	"edit",
+] as const;
+
+export type ProFeature = (typeof PRO_FEATURES)[number];
+
+const PRO_FEATURE_SET = new Set<string>(PRO_FEATURES);
+
+/**
+ * AI 工具栏动作 → Pro 权益分组。
+ * 未列出的动作（去静音 / 去填充词 / 智能加速 / 自动取景）保持免费：
+ * 它们在本地启发式完成，不产生 API 成本，作为免费版的可感知价值。
+ */
+export const ACTION_TO_PRO_FEATURE: Record<string, ProFeature> = {
+	transcribe: "transcribe",
+	"bilingual-captions": "captions",
+	"ai-translate-multi": "captions",
+	"ai-chapters": "generate",
+	"ai-summary": "generate",
+	"ai-titles": "generate",
+	"ai-tags": "generate",
+	"ai-social": "generate",
+	"ai-semantic-search": "search",
+	"ai-proofread": "proofread",
+	"ai-oneclick": "edit",
+	"ai-ui-polish": "edit",
+};
+
+/** 未激活 Pro 时被拦截时抛出的错误，UI 据此弹出升级面板 */
+export class ProRequiredError extends Error {
+	readonly feature: string;
+	constructor(feature: string) {
+		super(`Pro required: ${feature}`);
+		this.name = "ProRequiredError";
+		this.feature = feature;
+	}
+}
+
+// ---------------------------------------------------------------- storage
+
+type StorageLike = {
+	getItem: (key: string) => string | null;
+	setItem: (key: string, value: string) => void;
+};
+
+function getStorage(): StorageLike | null {
 	try {
 		if (typeof window === "undefined" || !window.localStorage) return null;
-		return window.localStorage;
+		return window.localStorage as unknown as StorageLike;
 	} catch {
 		return null;
 	}
 }
 
+function parseStatus(raw: string | null): LicenseStatus | null {
+	if (!raw) return null;
+	try {
+		const parsed = JSON.parse(raw) as Partial<LicenseStatus>;
+		const tier: LicenseTier = parsed.tier === "pro" ? "pro" : "free";
+		return {
+			activated: Boolean(parsed.activated) && tier === "pro",
+			tier,
+			expiresAt: typeof parsed.expiresAt === "number" ? parsed.expiresAt : undefined,
+			licenseKey: typeof parsed.licenseKey === "string" ? parsed.licenseKey : undefined,
+			activatedAt: typeof parsed.activatedAt === "number" ? parsed.activatedAt : undefined,
+			offline: parsed.offline === true,
+		};
+	} catch {
+		return null;
+	}
+}
+
+/** 读取许可状态（含旧键迁移） */
 export function getLicenseStatus(): LicenseStatus {
 	const storage = getStorage();
 	if (!storage) return DEFAULT_STATUS;
-	const raw = storage.getItem(LICENSE_STORAGE_KEY);
-	if (!raw) return DEFAULT_STATUS;
-	try {
-		return JSON.parse(raw) as LicenseStatus;
-	} catch {
-		return DEFAULT_STATUS;
+
+	const current = parseStatus(storage.getItem(KLQ_LICENSE_STORAGE_KEY));
+	if (current) return current;
+
+	for (const legacyKey of LEGACY_LICENSE_STORAGE_KEYS) {
+		const legacy = parseStatus(storage.getItem(legacyKey));
+		if (legacy) {
+			storage.setItem(KLQ_LICENSE_STORAGE_KEY, JSON.stringify(legacy));
+			return legacy;
+		}
+	}
+	return DEFAULT_STATUS;
+}
+
+const listeners = new Set<(status: LicenseStatus) => void>();
+
+/** 订阅许可状态变化（个人中心 / AI 工具栏共用） */
+export function subscribeLicense(listener: (status: LicenseStatus) => void): () => void {
+	listeners.add(listener);
+	return () => {
+		listeners.delete(listener);
+	};
+}
+
+function emit(status: LicenseStatus): void {
+	for (const listener of listeners) {
+		try {
+			listener(status);
+		} catch {
+			// 单个订阅者异常不应影响其它订阅者
+		}
 	}
 }
 
 export function setLicenseStatus(status: LicenseStatus): void {
 	const storage = getStorage();
-	if (!storage) return;
-	storage.setItem(LICENSE_STORAGE_KEY, JSON.stringify(status));
+	if (storage) {
+		storage.setItem(KLQ_LICENSE_STORAGE_KEY, JSON.stringify(status));
+	}
+	emit(status);
 }
 
-/**
- * 校验 license key 格式 (离线)
- */
+// ---------------------------------------------------------------- format
+
+/** 本地格式校验：`kliq-pro-XXXXXXXX`（兼容旧前缀） */
 export function validateLicenseKeyFormat(key: string): boolean {
 	const trimmed = key.trim();
-	if (!trimmed.startsWith(LICENSE_KEY_PREFIX)) return false;
-	const id = trimmed.slice(LICENSE_KEY_PREFIX.length);
-	return /^[a-f0-9]{8}$/i.test(id);
+	const prefix = trimmed.startsWith(KLQ_LICENSE_KEY_PREFIX)
+		? KLQ_LICENSE_KEY_PREFIX
+		: trimmed.startsWith(LEGACY_LICENSE_KEY_PREFIX)
+			? LEGACY_LICENSE_KEY_PREFIX
+			: null;
+	if (!prefix) return false;
+	return /^[a-f0-9]{8}$/i.test(trimmed.slice(prefix.length));
 }
 
+/** key 的展示脱敏：kliq-pro-ab12**** */
+export function maskLicenseKey(key: string): string {
+	if (key.length <= 12) return key;
+	return `${key.slice(0, 12)}****`;
+}
+
+// ---------------------------------------------------------------- activation
+
 /**
- * 激活 license (骨架阶段: 离线校验, Stage 7 加在线校验)
+ * 在线校验应答（与 functions/api/license-validate.ts 的契约保持一致）。
+ *
+ * 注意 `valid` 与 HTTP 状态码是**两件事**：Pages Function 对「key 格式不对」返回
+ * 4xx，但对「格式对、Lemon Squeezy 判定无效」会返回 200 + `{ valid: false }`。
+ * 若只看 `res.ok` 就会把无效 key 当成激活成功 —— 所以这里必须显式判 `valid`。
  */
-export async function activateLicense(key: string): Promise<{ success: boolean; error?: string; status?: LicenseStatus }> {
-	if (!validateLicenseKeyFormat(key)) {
-		return { success: false, error: "license key 格式无效 (期望 yanjing-pro-{8 位 hex})" };
+type ServerValidation = {
+	valid?: boolean;
+	expiresAt?: number | null;
+	activatedAt?: number | null;
+	error?: string;
+};
+
+type OnlineResult =
+	| { kind: "ok"; data: ServerValidation }
+	| { kind: "invalid"; message?: string }
+	| { kind: "unavailable"; message?: string };
+
+async function validateOnline(key: string): Promise<OnlineResult> {
+	if (!isLicenseServiceConfigured()) {
+		return { kind: "unavailable", message: "license service not configured" };
+	}
+	try {
+		const res = await fetch(KLQ_LICENSE_VALIDATE_URL, {
+			method: "POST",
+			headers: { "content-type": "application/json" },
+			body: JSON.stringify({ licenseKey: key }),
+		});
+		if (res.ok) {
+			const data = (await res.json()) as ServerValidation;
+			// 服务端在 200 里明确否认 → 判定无效，绝不落盘为已激活
+			if (data.valid === false) {
+				return { kind: "invalid", message: data.error ?? "server rejected the key" };
+			}
+			return { kind: "ok", data };
+		}
+		// 404：后端尚未登记该 key（例如离线发售的 key）→ 回退离线激活
+		if (res.status === 404) {
+			return { kind: "unavailable", message: `HTTP ${res.status}` };
+		}
+		return { kind: "invalid", message: `HTTP ${res.status}` };
+	} catch (error) {
+		return { kind: "unavailable", message: (error as Error).message };
+	}
+}
+
+/** 激活 license。在线校验优先，不可用时回退离线激活。 */
+export async function activateLicense(key: string): Promise<ActivateResult> {
+	const trimmed = key.trim();
+	if (!validateLicenseKeyFormat(trimmed)) {
+		return {
+			success: false,
+			error: `License key 格式无效（期望 ${KLQ_LICENSE_KEY_PREFIX}{8 位 hex}）`,
+		};
 	}
 
-	// Stage 7: 调用 https://yanjingai.tech/api/license/validate
-	// 当前骨架: 离线校验通过即激活
+	const online = await validateOnline(trimmed);
+
+	if (online.kind === "invalid") {
+		return { success: false, error: `License key 无效（${online.message ?? "校验未通过"}）` };
+	}
+
+	const now = Date.now();
+	if (online.kind === "ok") {
+		const status: LicenseStatus = {
+			activated: true,
+			tier: "pro",
+			licenseKey: trimmed,
+			activatedAt: online.data.activatedAt ?? now,
+			// 一次性买断：后端未给 expiresAt 即视为永久
+			expiresAt: online.data.expiresAt ?? undefined,
+			offline: false,
+		};
+		setLicenseStatus(status);
+		return { success: true, status };
+	}
+
 	const status: LicenseStatus = {
 		activated: true,
 		tier: "pro",
-		licenseKey: key.trim(),
-		activatedAt: Date.now(),
-		expiresAt: Date.now() + 365 * 24 * 3600 * 1000, // 1 年
+		licenseKey: trimmed,
+		activatedAt: now,
+		offline: true,
 	};
 	setLicenseStatus(status);
-
-	return { success: true, status };
+	return {
+		success: true,
+		status,
+		notice: isLicenseServiceConfigured()
+			? "校验服务暂不可用，已离线激活（联网后可重新激活以确认）"
+			: "未配置在线校验服务，已离线激活",
+	};
 }
 
-/**
- * 停用 license
- */
 export function deactivateLicense(): void {
-	setLicenseStatus(DEFAULT_STATUS);
-}
-
-/**
- * 检查 Pro 权限
- */
-export function isPro(): boolean {
-	return getLicenseStatus().activated && getLicenseStatus().tier === "pro";
-}
-
-/**
- * 检查某 AI 功能是否需要 Pro
- */
-export function isProFeature(feature: string): boolean {
-	// Stage 6 决策: 哪些功能需要 Pro
-	const proFeatures = [
-		"ai.bilingual-captions",       // 双语字幕
-		"ai.smart-chapters",           // 智能章节
-		"ai.summary",                  // AI 摘要
-		"ai.social-copy",              // 社媒文案
-		"ai.title-generation",         // 标题生成
-	];
-	return proFeatures.includes(feature);
-}
-
-/**
- * 闸门: 检查 Pro 功能, 未激活抛错
- */
-export function requirePro(feature: string): void {
-	if (!isProFeature(feature)) return;
-	if (!isPro()) {
-		throw new Error(`功能 "${feature}" 需要 Pro 版。请先激活 Pro license。`);
+	const storage = getStorage();
+	if (storage) {
+		storage.setItem(KLQ_LICENSE_STORAGE_KEY, JSON.stringify(DEFAULT_STATUS));
 	}
+	emit(DEFAULT_STATUS);
+}
+
+// ---------------------------------------------------------------- entitlement
+
+export function isPro(): boolean {
+	const status = getLicenseStatus();
+	return status.activated && status.tier === "pro";
+}
+
+export function isProFeature(feature: string): boolean {
+	return PRO_FEATURE_SET.has(feature);
+}
+
+/** 查询某个动作/功能是否被放行（不抛错，供 UI 展示锁标） */
+export function canUseFeature(feature: string): boolean {
+	return !isProFeature(feature) || isPro();
+}
+
+/** 闸门：未激活 Pro 时抛 ProRequiredError */
+export function requirePro(feature: string): void {
+	if (canUseFeature(feature)) return;
+	throw new ProRequiredError(feature);
+}
+
+/** AI 动作 id → 是否需要 Pro */
+export function actionRequiresPro(actionId: string): boolean {
+	return Boolean(ACTION_TO_PRO_FEATURE[actionId]);
+}
+
+/** AI 动作 id → Pro 功能 id（免费动作为 undefined） */
+export function proFeatureForAction(actionId: string): ProFeature | undefined {
+	return ACTION_TO_PRO_FEATURE[actionId];
 }

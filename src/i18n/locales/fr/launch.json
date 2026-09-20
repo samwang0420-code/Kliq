@@ -68,8 +68,8 @@
 			"checkingTitle": "Vérification des mises à jour...",
 			"downloadingTitle": "Téléchargement de la mise à jour...",
 			"errorTitle": "Échec de la vérification des mises à jour. Cliquez pour réessayer.",
-			"upToDateTitle": "Yanjing {{version}} est à jour.",
-			"availableTitle": "Yanjing {{version}} est disponible.",
+			"upToDateTitle": "Kliq {{version}} est à jour.",
+			"availableTitle": "Kliq {{version}} est disponible.",
 			"availableGenericTitle": "Une mise à jour est disponible."
 		},
 		"shortcuts": "Raccourcis d'enregistrement",
@@ -91,10 +91,10 @@
 		"share": "Partager"
 	},
 	"permissions": {
-		"screenRecordingNeeded": "Yanjing nécessite l’autorisation d’enregistrement d’écran avant de commencer. Les paramètres système ont été ouverts. Après l’avoir activée, quittez et relancez Yanjing.",
-		"screenRecordingMissing": "L’autorisation d’enregistrement d’écran est toujours manquante. Les paramètres système ont été ouverts à nouveau. Activez-la, puis quittez et relancez Yanjing avant d’enregistrer.",
-		"accessibilityNeeded": "Yanjing nécessite également l’autorisation d’accessibilité pour le suivi du curseur. Les paramètres système ont été ouverts. Après l’avoir activée, quittez et relancez Yanjing.",
-		"accessibilityMissing": "L’autorisation d’accessibilité est toujours manquante. Les paramètres système ont été ouverts à nouveau. Activez-la, puis quittez et relancez Yanjing avant d’enregistrer.",
+		"screenRecordingNeeded": "Kliq nécessite l’autorisation d’enregistrement d’écran avant de commencer. Les paramètres système ont été ouverts. Après l’avoir activée, quittez et relancez Kliq.",
+		"screenRecordingMissing": "L’autorisation d’enregistrement d’écran est toujours manquante. Les paramètres système ont été ouverts à nouveau. Activez-la, puis quittez et relancez Kliq avant d’enregistrer.",
+		"accessibilityNeeded": "Kliq nécessite également l’autorisation d’accessibilité pour le suivi du curseur. Les paramètres système ont été ouverts. Après l’avoir activée, quittez et relancez Kliq.",
+		"accessibilityMissing": "L’autorisation d’accessibilité est toujours manquante. Les paramètres système ont été ouverts à nouveau. Activez-la, puis quittez et relancez Kliq avant d’enregistrer.",
 		"selectSource": "Veuillez sélectionner une source à enregistrer",
 		"systemAudioUnavailable": "L’audio système n’est pas disponible pour cette source. L’enregistrement continuera sans audio système.",
 		"microphoneDenied": "L’accès au microphone a été refusé. L’enregistrement continuera sans audio du microphone.",
@@ -104,7 +104,7 @@
 	"updateToast": {
 		"availableTitle": "Mise à jour disponible",
 		"experimentalAvailableTitle": "Mise à jour expérimentale disponible",
-		"experimentalDescription": "Vous avez activé les mises à jour expérimentales, vous pouvez donc tester la dernière mise à jour de Yanjing avant sa disponibilité générale.",
+		"experimentalDescription": "Vous avez activé les mises à jour expérimentales, vous pouvez donc tester la dernière mise à jour de Kliq avant sa disponibilité générale.",
 		"downloadingTitle": "Téléchargement de la mise à jour",
 		"readyTitle": "Prêt à redémarrer",
 		"checkErrorTitle": "Impossible de vérifier les mises à jour",

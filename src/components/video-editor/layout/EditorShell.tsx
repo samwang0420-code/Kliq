@@ -1,4 +1,5 @@
 import type { ComponentProps } from "react";
+import { AccountCenterHost } from "@/components/account/AccountCenterHost";
 import { EditorAnnouncementBanner } from "@/components/announcements/EditorAnnouncementBanner";
 import { Toaster } from "@/components/ui/sonner";
 import type { useI18n } from "@/contexts/I18nContext";
@@ -258,6 +259,8 @@ export function EditorShell(props: Props) {
 				onCancel={ui.handleCancelCropEditor}
 				onDone={ui.handleCloseCropEditor}
 			/>
+			{/* 个人中心 / Pro 激活（收费闸门 UI 宿主，始终挂载） */}
+			<AccountCenterHost />
 			<Toaster className="pointer-events-auto" />
 		</div>
 	);

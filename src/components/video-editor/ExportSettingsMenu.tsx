@@ -17,6 +17,7 @@ import type {
 	GifSizePreset,
 } from "@/lib/exporter";
 import { GIF_FRAME_RATES, GIF_SIZE_PRESETS, MP4_FRAME_RATES } from "@/lib/exporter";
+import { ProRequiredError } from "@/lib/license";
 import { cn } from "@/lib/utils";
 
 interface ExportSettingsMenuProps {
@@ -109,6 +110,8 @@ export function ExportSettingsMenu({
 				await runAction(action, { file: audioFile });
 				console.log(`[AI] ${action} 完成`);
 			} catch (err) {
+				// Pro 闸门拦截不是失败：runAction 已弹出个人中心引导升级
+				if (err instanceof ProRequiredError) return;
 				console.error(`[AI] ${action} 失败:`, err);
 			}
 		},

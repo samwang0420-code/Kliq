@@ -7,7 +7,7 @@ import { webcamSegmentationAssetsPlugin } from "./webcamSegmentationAssets";
 
 function electronMainCjsOutputPlugin(): Plugin {
 	return {
-		name: "yanjing-recorder-main-cjs-output",
+		name: "kliq-recorder-main-cjs-output",
 		enforce: "post",
 		config(config) {
 			// Vite mergeConfig concatenates lib.formats with the plugin's ESM default.
@@ -37,7 +37,7 @@ function electronMainCjsOutputPlugin(): Plugin {
 
 function electronMainCjsGuardPlugin(): Plugin {
 	return {
-		name: "yanjing-recorder-main-cjs-guard",
+		name: "kliq-recorder-main-cjs-guard",
 		closeBundle() {
 			const scriptPath = path.resolve(__dirname, "scripts/smoke-electron-main-cjs.mjs");
 			const result = spawnSync(process.execPath, [scriptPath], {

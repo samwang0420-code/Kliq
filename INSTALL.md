@@ -1,4 +1,4 @@
-# 言镜 (Yanjing Recorder) — 安装与构建指南
+# Kliq (Kliq) — 安装与构建指南
 
 ## 重要说明:本仓库的打包限制
 
@@ -10,7 +10,7 @@
 > - **Linux AppImage**: 需要 Linux 工具链 (推荐用 GitHub Actions 自动构建)
 >
 > **解决方案**: 本项目配置了 GitHub Actions 工作流 (`.github/workflows/`),
-> 在 GitHub 仓库中 push tag `v1.4.0-yanjing` 即可触发跨平台自动构建,
+> 在 GitHub 仓库中 push tag `v1.4.0-kliq` 即可触发跨平台自动构建,
 > 然后从 GitHub Releases 下载对应平台的可执行文件。
 
 ---
@@ -55,15 +55,15 @@ npm run build:linux    # Linux → .AppImage
 我们已经配置了 `.github/workflows/release.yml`,push tag 后自动构建。
 
 ```bash
-git tag v1.4.0-yanjing
-git push origin v1.4.0-yanjing
+git tag v1.4.0-kliq
+git push origin v1.4.0-kliq
 ```
 
 3 平台并行构建,产物在 GitHub Releases:
-- `言镜-v1.4.0-yanjing-x64.dmg` (Intel Mac)
-- `言镜-v1.4.0-yanjing-arm64.dmg` (Apple Silicon Mac)
-- `言镜-v1.4.0-yanjing-windows-x64.exe` (Windows)
-- `言镜-v1.4.0-yanjing-linux-x64.AppImage` (Linux)
+- `Kliq-v1.4.0-kliq-x64.dmg` (Intel Mac)
+- `Kliq-v1.4.0-kliq-arm64.dmg` (Apple Silicon Mac)
+- `Kliq-v1.4.0-kliq-windows-x64.exe` (Windows)
+- `Kliq-v1.4.0-kliq-linux-x64.AppImage` (Linux)
 
 ---
 
@@ -83,7 +83,7 @@ npx wrangler pages deploy . --project-name yanjingai-tech
 ## 4. Lemon Squeezy 许可证激活流程
 
 1. 用户访问 `https://yanjingai.lemonsqueezy.com/checkout/buy/yanjing-pro`
-2. 支付 $29 → 收到 license key (格式 `yanjing-pro-{8 位 hex}`)
+2. 支付 $29 → 收到 license key (格式 `kliq-pro-{8 位 hex}`)
 3. 在 app 内 **Settings → License → Enter license key**
 4. 客户端调 `cloudflare/api/license-validate.ts` 校验
 5. 校验通过 → 标记为 Pro, 解锁全部 AI 功能

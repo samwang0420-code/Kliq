@@ -21,7 +21,7 @@ const APP_ROOT = path.join(electronWindowsDir, "..");
 const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 const RENDERER_DIST = path.join(APP_ROOT, "dist");
 const WINDOW_ICON_FILENAME =
-	process.platform === "darwin" ? "yanjingmac-512.png" : "yanjing-512.png";
+	process.platform === "darwin" ? "kliqmac-512.png" : "kliq-512.png";
 const WINDOW_ICON_PATH = path.join(
 	process.env.VITE_PUBLIC || RENDERER_DIST,
 	"app-icons",
@@ -474,7 +474,7 @@ export function createHudOverlayWindow(): BrowserWindow {
 		backgroundColor: "#00000000",
 		resizable: false,
 		alwaysOnTop: true,
-		// The HUD is Yanjing's persistent top-level window, so it owns the
+		// The HUD is Kliq's persistent top-level window, so it owns the
 		// Windows taskbar entry while auxiliary overlays stay hidden there.
 		...getHudOverlayTaskbarOptions(process.platform),
 		hasShadow: false,
@@ -514,7 +514,7 @@ export function createHudOverlayWindow(): BrowserWindow {
 		// flags. Reassert capture protection on both sides of the transition.
 		applyHudOverlayCaptureProtectionToWindow(win, hudOverlayHiddenFromCapture);
 		// A focusable window is required for a Windows taskbar entry, but the
-		// always-on-top HUD must not steal focus when Yanjing starts. show()
+		// always-on-top HUD must not steal focus when Kliq starts. show()
 		// activates the app, which on macOS pulls focus away from the window the
 		// user selected for capture, so present the HUD without activating it
 		// there too. Linux keeps show(): showInactive() is a no-op under Wayland,
@@ -741,7 +741,7 @@ export function createUpdateToastWindow(): BrowserWindow {
 
 	win.setVisibleOnAllWorkspaces(true, {
 		visibleOnFullScreen: true,
-		// Keep Yanjing a foreground application so macOS does not temporarily
+		// Keep Kliq a foreground application so macOS does not temporarily
 		// remove its Dock icon while showing an overlay window.
 		skipTransformProcessType: process.platform === "darwin",
 	});
@@ -945,7 +945,7 @@ export function createEditorWindow(): BrowserWindow {
 		resizable: true,
 		alwaysOnTop: false,
 		skipTaskbar: false,
-		title: "言镜",
+		title: "Kliq",
 		show: false,
 		backgroundColor: "#000000",
 		webPreferences: {
@@ -1079,7 +1079,7 @@ export function createCountdownWindow(): BrowserWindow {
 
 	win.setVisibleOnAllWorkspaces(true, {
 		visibleOnFullScreen: true,
-		// Keep Yanjing a foreground application so macOS does not temporarily
+		// Keep Kliq a foreground application so macOS does not temporarily
 		// remove its Dock icon while showing the countdown.
 		skipTransformProcessType: process.platform === "darwin",
 	});

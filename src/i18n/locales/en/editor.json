@@ -135,7 +135,7 @@
 	},
 	"nativeCaptureUnavailable": {
 		"title": "Nothing’s broken, but we won’t be able to render an animated cursor overlay.",
-		"description": "Your device does not support native capture. This could be for a variety of reasons we haven’t figured out yet. This doesn’t break Yanjing, but it does make cursor smoothing impossible.",
+		"description": "Your device does not support native capture. This could be for a variety of reasons we haven’t figured out yet. This doesn’t break Kliq, but it does make cursor smoothing impossible.",
 		"confirm": "Okay"
 	},
 	"exportStatus": {
@@ -200,7 +200,12 @@
 				"gaming": "Gaming",
 				"tech": "Tech",
 				"marketing": "Marketing"
-			}
+			},
+			"proEntry": "Pro / Account",
+			"proActive": "Pro",
+			"proEntryHint": "Manage license and Pro benefits",
+			"proBadge": "PRO",
+			"proLocked": "Pro feature"
 		}
 	}
 }

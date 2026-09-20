@@ -200,7 +200,12 @@
 				"gaming": "Игры",
 				"tech": "Технологии",
 				"marketing": "Маркетинг"
-			}
+			},
+			"proEntry": "Pro / Аккаунт",
+			"proActive": "Pro",
+			"proEntryHint": "Управление лицензией и возможностями Pro",
+			"proBadge": "PRO",
+			"proLocked": "Функция Pro"
 		}
 	}
 }

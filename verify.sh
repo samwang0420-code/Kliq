@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 言镜 (Yanjing Recorder) — 源码完整性验证脚本
+# Kliq (Kliq) — 源码完整性验证脚本
 #
 # 用途: 用户解压 tarball 后,跑这个脚本确认所有关键文件就位
 # 期望: 全部 ✅ OK,0 ❌ MISSING
@@ -12,7 +12,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "========================================="
-echo "  言镜 (Yanjing Recorder) — 验证脚本"
+echo "  Kliq (Kliq) — 验证脚本"
 echo "========================================="
 echo ""
 echo "工作目录: $SCRIPT_DIR"
@@ -86,9 +86,9 @@ fi
 echo "========================================="
 echo ""
 echo "下一步:"
-echo "  1. 创建 GitHub 仓库: https://github.com/new (命名: yanjing-recorder)"
+echo "  1. 创建 GitHub 仓库: https://github.com/new (命名: kliq-recorder)"
 echo "  2. git init -b main && git add . && git commit -m 'feat(yanjing): initial'"
-echo "  3. git push origin main && git tag v1.4.0-yanjing && git push origin v1.4.0-yanjing"
+echo "  3. git push origin main && git tag v1.4.0-kliq && git push origin v1.4.0-kliq"
 echo "  4. 等 5-10 分钟从 GitHub Releases 下载 .dmg / .exe / .AppImage"
 echo ""
 echo "详细步骤见 INSTALL.md / CLOUD.md / FAQ.md"

@@ -1,7 +1,7 @@
 语言: [EN](README.md) | 简中
 
 <p align="center">
-  <img width="220" alt="言镜 logo" src="https://github.com/user-attachments/assets/082bb4b0-5fc5-4e9f-abda-55611fd6aded" />
+  <img width="220" alt="Kliq logo" src="https://github.com/user-attachments/assets/082bb4b0-5fc5-4e9f-abda-55611fd6aded" />
 </p>
 
 <p align="center">
@@ -11,18 +11,18 @@
 </p>
 
 ### 无需额外剪辑，也能做出精致的屏幕录制。
-**言镜 (Yanjing Recorder)** 是一款基于 [Recordly](https://github.com/webadderallorg/Recordly) 的开源屏幕录制器,加入了 **AI 双语字幕、智能剪辑、行业热词、AI 章节摘要**。  
+**Kliq (Kliq)** 是一款基于 [Recordly](https://github.com/webadderallorg/Recordly) 的开源屏幕录制器,加入了 **AI 双语字幕、智能剪辑、行业热词、AI 章节摘要**。  
 **欢迎提交 PR。** [yanjingai.tech](https://yanjingai.tech) · [hi@yanjingai.tech](mailto:hi@yanjingai.tech) · [ATTRIBUTION](./ATTRIBUTION.md)
 
 > 本软件是基于 Recordly 修改而来的衍生作品 (AGPL 3.0)。感谢 [@webadderall](https://github.com/webadderall) 的开源贡献。
 
 ---
 
-## 言镜 (Yanjing Recorder) 是什么？
+## Kliq (Kliq) 是什么？
 
-言镜 是一款桌面应用,用于录制并编辑屏幕内容,内置面向演示视频的动态呈现工具。基于上游 Recordly,我们加入了 **AI 增强**:双语字幕、行业热词、智能章节、标题生成、社媒文案。你不需要再把原始素材交给动效设计师去补缩放、光标润色或样式化背景,言镜 可以在一个地方免费完成整套流程。
+Kliq 是一款桌面应用,用于录制并编辑屏幕内容,内置面向演示视频的动态呈现工具。基于上游 Recordly,我们加入了 **AI 增强**:双语字幕、行业热词、智能章节、标题生成、社媒文案。你不需要再把原始素材交给动效设计师去补缩放、光标润色或样式化背景,Kliq 可以在一个地方免费完成整套流程。
 
-言镜 支持：
+Kliq 支持：
 
 
 
@@ -46,7 +46,7 @@ Recordly 支持：
 
 ---
 
-## 言镜 新增了哪些功能 (vs 上游 Recordly)？
+## Kliq 新增了哪些功能 (vs 上游 Recordly)？
 
 ### ✨ AI 双语字幕 (P0)
 基于 OpenAI Whisper 转录 + GPT-4 翻译,一键生成中英/中法/中日等双语字幕。**行业热词可选**:法律 / 医疗 / 电商 / 教育。

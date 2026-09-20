@@ -84,7 +84,7 @@
 		"connectedZoomDuration": "Verbonden zoomduur",
 		"connectedZoomEasing": "Verbonden pancurve",
 		"zoomEasingOptions": {
-			"recordly": "Yanjing",
+			"recordly": "Kliq",
 			"glide": "Glijden",
 			"smooth": "Vloeiend",
 			"snappy": "Pittig",
@@ -275,7 +275,7 @@
 		"duplicateRegion": "Audio dupliceren"
 	},
 	"updates": {
-		"experimentalDescription": "Je hebt experimentele updates ingeschakeld, dus je kunt de nieuwste update van Yanjing Recorder testen voordat deze algemeen beschikbaar is.",
+		"experimentalDescription": "Je hebt experimentele updates ingeschakeld, dus je kunt de nieuwste update van Kliq testen voordat deze algemeen beschikbaar is.",
 		"title": "Updates",
 		"experimental": "Experimentele updates",
 		"saveFailed": "Kan het updatekanaal niet wijzigen."

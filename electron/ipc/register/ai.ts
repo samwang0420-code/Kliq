@@ -1,5 +1,5 @@
 /**
- * 言镜 — AI 相关 IPC handlers
+ * Kliq — AI 相关 IPC handlers
  *
  * P0/P1 AI 接入主流程所需:
  * - ai-extract-audio: 从视频文件提取音频 (Web Audio API 解码后 wav blob)

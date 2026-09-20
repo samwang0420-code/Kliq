@@ -2,7 +2,7 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { app, BrowserWindow, desktopCapturer, ipcMain, systemPreferences } from "electron";
 import { reassertHudOverlayMousePassthrough } from "../../windows";
-import { ALLOW_YANJING_WINDOW_CAPTURE } from "../constants";
+import { ALLOW_KLIQ_WINDOW_CAPTURE } from "../constants";
 import {
 	getNativeMacWindowSources,
 	resolveLinuxWindowBounds,
@@ -158,7 +158,7 @@ export function registerSourceHandlers({
 		const ownWindowNames = new Set(
 			[
 				app.getName(),
-				"言镜",
+				"Kliq",
 				...BrowserWindow.getAllWindows().flatMap((win) => {
 					const title = win.getTitle().trim();
 					return title ? [title] : [];
@@ -226,7 +226,7 @@ export function registerSourceHandlers({
 						return true;
 					}
 
-					if (ALLOW_YANJING_WINDOW_CAPTURE && (normalizedName.includes("yanjing-recorder") || normalizedName.includes("yanjing") || normalizedName.includes("言镜"))) {
+					if (ALLOW_KLIQ_WINDOW_CAPTURE && (normalizedName.includes("kliq-recorder") || normalizedName.includes("yanjing") || normalizedName.includes("Kliq"))) {
 						return true;
 					}
 
@@ -274,7 +274,7 @@ export function registerSourceHandlers({
 					const normalizedAppName = normalizeDesktopSourceName(source.appName ?? "");
 
 					if (
-						!ALLOW_YANJING_WINDOW_CAPTURE &&
+						!ALLOW_KLIQ_WINDOW_CAPTURE &&
 						normalizedAppName &&
 						normalizedAppName === ownAppName
 					) {
@@ -282,9 +282,9 @@ export function registerSourceHandlers({
 					}
 
 					if (
-						ALLOW_YANJING_WINDOW_CAPTURE &&
-						(normalizedAppName === "yanjing-recorder" ||
-							(normalizedWindowName?.includes("yanjing-recorder") || normalizedWindowName?.includes("yanjing") || normalizedWindowName?.includes("言镜")))
+						ALLOW_KLIQ_WINDOW_CAPTURE &&
+						(normalizedAppName === "kliq-recorder" ||
+							(normalizedWindowName?.includes("kliq-recorder") || normalizedWindowName?.includes("yanjing") || normalizedWindowName?.includes("Kliq")))
 					) {
 						return true;
 					}
@@ -343,7 +343,7 @@ export function registerSourceHandlers({
 						return true;
 					}
 
-					if (ALLOW_YANJING_WINDOW_CAPTURE && (normalizedName.includes("yanjing-recorder") || normalizedName.includes("yanjing") || normalizedName.includes("言镜"))) {
+					if (ALLOW_KLIQ_WINDOW_CAPTURE && (normalizedName.includes("kliq-recorder") || normalizedName.includes("yanjing") || normalizedName.includes("Kliq"))) {
 						return true;
 					}
 

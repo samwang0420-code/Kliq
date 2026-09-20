@@ -1,15 +1,32 @@
-<<<<<<< ours
+# === Kliq / 项目本地 ===
 outputs/
 work/
-yanjing-recorder-v1.4.0-yanjing.tar.gz
 deploy-tmp/
+
+# 本地项目记忆（不随仓库分发）
+.workbuddy/
+
+# === 构建产物 ===
 dist/
 dist-electron/
+dist-ssr/
 index-*.js
 *.tsbuildinfo
+release/**
+vite.config.js
+vite.config.d.ts
+
+# 根目录遗留的打包 main（package.json 的 main 指向 dist-electron/main.cjs）
+main.cjs
+
+# 发布压缩包（含改名前的旧命名）
+kliq-recorder-v1.4.0-kliq.tar.gz
+yanjing-recorder-v1.4.0-yanjing.tar.gz
+
+# 图标备份
 icons/icons.bak/
-=======
-# Logs
+
+# === 日志 ===
 logs
 *.log
 npm-debug.log*
@@ -18,13 +35,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# === 依赖 ===
 node_modules
-dist
-dist-electron
-dist-ssr
 *.local
 
-# Editor directories and files
+# === 编辑器 / 系统 ===
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -34,17 +49,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-release/**
 *.kiro/
-# npx electron-builder --mac --win
 .tmp/
 .history/
 extension-sources/
-*.tsbuildinfo
-vite.config.js
-vite.config.d.ts
 
-# Native capture build artifacts
+# === 原生捕获构建产物 ===
 electron/native/wgc-capture/build/
 electron/native/cursor-monitor/build/
 electron/native/gpu-export-probe/build/
@@ -53,8 +63,7 @@ electron/native/bin/*/whisper-*
 electron/native/bin/*/whisper-runtime.json
 electron/native/bin/*/*.dll
 
-# Local debug helpers
+# === 本地调试脚本 ===
 tmp-*.ps1
 .tmp-*.ps1
 gpu-export-probe.mp4
->>>>>>> theirs

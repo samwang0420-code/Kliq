@@ -1,4 +1,4 @@
-name: Release Yanjing Recorder
+name: Release Kliq
 
 on:
   push:

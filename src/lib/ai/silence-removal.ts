@@ -1,5 +1,5 @@
 /**
- * 言镜 — AI 去静音段 (P0/A1)
+ * Kliq — AI 去静音段 (P0/A1)
  *
  * 调用 OpenAI Whisper 转录音频 → 解析 segments 之间的 gap → 输出 silence regions
  *

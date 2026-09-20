@@ -84,7 +84,7 @@
 		"connectedZoomDuration": "Durata zoom connessi",
 		"connectedZoomEasing": "Curva pan connesso",
 		"zoomEasingOptions": {
-			"recordly": "Yanjing",
+			"recordly": "Kliq",
 			"glide": "Glide",
 			"smooth": "Fluido",
 			"snappy": "Rapido",
@@ -275,7 +275,7 @@
 		"duplicateRegion": "Duplica audio"
 	},
 	"updates": {
-		"experimentalDescription": "Hai attivato gli aggiornamenti sperimentali, quindi puoi scegliere di provare l'ultimo aggiornamento di Yanjing Recorder prima che sia disponibile per tutti.",
+		"experimentalDescription": "Hai attivato gli aggiornamenti sperimentali, quindi puoi scegliere di provare l'ultimo aggiornamento di Kliq prima che sia disponibile per tutti.",
 		"title": "Aggiornamenti",
 		"experimental": "Aggiornamenti sperimentali",
 		"saveFailed": "Impossibile cambiare il canale di aggiornamento."

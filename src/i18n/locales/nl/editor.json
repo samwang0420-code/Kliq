@@ -135,7 +135,7 @@
 	},
 	"nativeCaptureUnavailable": {
 		"title": "Er is niets kapot, maar we kunnen geen geanimeerde cursor-overlay renderen.",
-		"description": "Je apparaat ondersteunt geen native capture. Dit kan verschillende oorzaken hebben die we nog niet hebben achterhaald. Yanjing blijft werken, maar cursor smoothing is dan niet mogelijk.",
+		"description": "Je apparaat ondersteunt geen native capture. Dit kan verschillende oorzaken hebben die we nog niet hebben achterhaald. Kliq blijft werken, maar cursor smoothing is dan niet mogelijk.",
 		"confirm": "Oké"
 	},
 	"exportStatus": {
@@ -200,7 +200,12 @@
 				"gaming": "Gaming",
 				"tech": "Technologie",
 				"marketing": "Marketing"
-			}
+			},
+			"proEntry": "Pro / Account",
+			"proActive": "Pro",
+			"proEntryHint": "Beheer licentie en Pro-voordelen",
+			"proBadge": "PRO",
+			"proLocked": "Pro-functie"
 		}
 	}
 }

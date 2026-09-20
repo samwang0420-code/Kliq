@@ -135,7 +135,7 @@
 	},
 	"nativeCaptureUnavailable": {
 		"title": "Niente è rotto, ma non sarà possibile renderizzare un overlay del cursore animato.",
-		"description": "Il tuo dispositivo non supporta la cattura nativa. Le cause possono essere varie e non ancora identificate. Yanjing funziona comunque, ma non è possibile applicare lo smoothing del cursore.",
+		"description": "Il tuo dispositivo non supporta la cattura nativa. Le cause possono essere varie e non ancora identificate. Kliq funziona comunque, ma non è possibile applicare lo smoothing del cursore.",
 		"confirm": "Ok"
 	},
 	"exportStatus": {
@@ -200,7 +200,12 @@
 				"gaming": "Videogiochi",
 				"tech": "Tecnologia",
 				"marketing": "Marketing"
-			}
+			},
+			"proEntry": "Pro / Account",
+			"proActive": "Pro",
+			"proEntryHint": "Gestisci licenza e vantaggi Pro",
+			"proBadge": "PRO",
+			"proLocked": "Funzione Pro"
 		}
 	}
 }

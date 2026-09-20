@@ -33,14 +33,14 @@
 		/* §213 极简风: 纯黑 + 绿点 */
 		--brand-accent: #0a0a0a;
 		--brand-accent-rgb: 10, 10, 10;
-		--yanjing-green: #22c55e;
-		--yanjing-green-rgb: 34, 197, 94;
-		--yanjing-gray-50: #fafafa;
-		--yanjing-gray-100: #f4f4f5;
-		--yanjing-gray-200: #e4e4e7;
-		--yanjing-gray-400: #a1a1aa;
-		--yanjing-gray-600: #52525b;
-		--yanjing-gray-900: #18181b;
+		--kliq-green: #22c55e;
+		--kliq-green-rgb: 34, 197, 94;
+		--kliq-gray-50: #fafafa;
+		--kliq-gray-100: #f4f4f5;
+		--kliq-gray-200: #e4e4e7;
+		--kliq-gray-400: #a1a1aa;
+		--kliq-gray-600: #52525b;
+		--kliq-gray-900: #18181b;
 		--background: 0 0% 100%;
 		--foreground: 20 14.3% 4.1%;
 		--card: 0 0% 100%;

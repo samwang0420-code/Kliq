@@ -1,4 +1,4 @@
-# 言镜 (Yanjing Recorder) — FAQ
+# Kliq (Kliq) — FAQ
 
 > 常见问题与解决方案。遇到问题时,先看这里。
 
@@ -20,8 +20,8 @@
    git add . && git commit -m "feat(yanjing): initial"
    git remote add origin git@github.com:yanjingai/recorder.git
    git push -u origin main
-   git tag v1.4.0-yanjing
-   git push origin v1.4.0-yanjing
+   git tag v1.4.0-kliq
+   git push origin v1.4.0-kliq
    ```
    等 5-10 分钟,在 GitHub Releases 下载 `.dmg` / `.exe` / `.AppImage`
 
@@ -142,7 +142,7 @@ transcribeWithWhisper({
 **A**: 多种原因。
 
 **排查**:
-1. license key 格式: `yanjing-pro-{8 位 hex}`,例如 `yanjing-pro-a1b2c3d4`
+1. license key 格式: `kliq-pro-{8 位 hex}`,例如 `kliq-pro-a1b2c3d4`
 2. 网络可达 `https://api.lemonsqueezy.com`
 3. Cloudflare Function 环境变量配置正确:
    - `LEMON_SQUEEZY_API_KEY`
@@ -194,12 +194,12 @@ Cloudflare Pages 默认支持 TypeScript Function,无需 esbuild 配置。
 
 ---
 
-## Q13: 言镜 AI 和这个项目有什么区别?
+## Q13: Kliq AI 和这个项目有什么区别?
 
 **A**: **没有任何关系**。
 
-- 言镜 AI (离线会记) 是 **本地 LLM / 本地 ASR** 的桌面 app
-- 言镜 Recorder (本项目) 是 **线上大模型 API** 的屏幕录制器
+- Kliq AI (离线会记) 是 **本地 LLM / 本地 ASR** 的桌面 app
+- Kliq Recorder (本项目) 是 **线上大模型 API** 的屏幕录制器
 - **代码不共享、域名共享**(都叫 yanjingai.tech)
 - 产品形态、技术栈、目标用户完全不同
 
@@ -296,7 +296,7 @@ Cloudflare Pages 默认支持 TypeScript Function,无需 esbuild 配置。
 
 - **30 天验收通过** → 持续迭代 + 加 Pro tier
 - **30 天验收失败** → 标记失败,只修严重 bug
-- **言镜 AI (离线会记) 重启** → 抽调精力,Recordly 维护可能降级
+- **Kliq AI (离线会记) 重启** → 抽调精力,Recordly 维护可能降级
 
 §250 / §251 / §252 已经定了验收标准。
 

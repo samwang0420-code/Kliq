@@ -1,5 +1,5 @@
 /**
- * 言镜 — AI 去填充词 (P0/A2)
+ * Kliq — AI 去填充词 (P0/A2)
  *
  * 调用 OpenAI Whisper 转录音频 → 检测 "um/uh/那个/然后/比如" 等中英文填充词
  * → 输出 filler regions (用户可一键应用为静音覆盖或删除)

@@ -1,7 +1,7 @@
 {
 	"app": {
-		"name": "Yanjing Recorder",
-		"editorTitle": "Yanjing Recorder Editor",
+		"name": "Kliq",
+		"editorTitle": "Kliq Editor",
 		"subtitle": "Bildschirmaufzeichnung und -bearbeitung",
 		"language": "Sprache",
 		"manageRecordings": "Aufzeichnungsordner öffnen"
@@ -26,7 +26,7 @@
 	"yanjing": {
 		"app": {
 			"tagline": "KI-gestützter Open-Source-Bildschirmrekorder",
-			"version": "v1.4.0-yanjing"
+			"version": "v1.4.0-kliq"
 		},
 		"license": {
 			"section": "Lizenz",
@@ -42,10 +42,45 @@
 			"activatedSuccess": "Aktivierung erfolgreich!",
 			"invalidKey": "Ungültiger Lizenzschlüssel",
 			"expiresAt": "Läuft ab am: {{date}}",
-			"subscriptionManagement": "Abonnement verwalten"
+			"subscriptionManagement": "Abonnement verwalten",
+			"feature": {
+				"transcribe": "KI-Transkription (Sprache zu Text)",
+				"captions": "Zweisprachige Untertitel & mehrsprachige Übersetzung",
+				"generate": "Zusammenfassung / Kapitel / Titel / Tags / Social-Copy",
+				"search": "Semantische Suche (Stellen in langen Aufnahmen finden)",
+				"proofread": "KI-Untertitelkorrektur",
+				"edit": "Ein-Klick-Schnitt & Textpolitur"
+			},
+			"lifetime": "Einmalkauf · dauerhafte Nutzung",
+			"needProTitle": "Diese Funktion erfordert Pro",
+			"needProBody": "„{{feature}}“ ist eine Pro-Leistung. Nach der Aktivierung nutzbar.",
+			"emptyKey": "Lizenzschlüssel eingeben",
+			"activating": "Prüfe…",
+			"deactivating": "Deaktiviere…",
+			"deactivated": "Lizenz deaktiviert"
+		},
+		
+		"account": {
+			"title": "Konto",
+			"subtitle": "Lizenz dieses Geräts und Pro-Leistungen verwalten",
+			"close": "Schließen",
+			"deviceLicense": "Gerätelizenz",
+			"currentKey": "Lizenzschlüssel",
+			"activatedAt": "Aktiviert am",
+			"service": "Lizenzdienst",
+			"serviceOnline": "Verbunden",
+			"serviceOffline": "Nicht konfiguriert (nur Offline-Prüfung)",
+			"offlineNote": "Offline aktiviert. Online erneut aktivieren, um es mit dem Server abzugleichen.",
+			"benefits": "Pro-Leistungen",
+			"freeHint": "Die kostenlose Edition enthält die vollständige Aufnahme und Basisbearbeitung. Pro schaltet zusätzlich alle KI-Funktionen frei.",
+			"buyNote": "${{price}} Einmalzahlung · dauerhaft · 30 Tage Rückerstattung",
+			"checkoutTitle": "Kauf-Link nicht konfiguriert",
+			"checkoutNotConfigured": "Beim Build VITE_KLQ_CHECKOUT_URL setzen (eigene Lemon-Squeezy-Kasse), um dies zu aktivieren.",
+			"sourceCode": "Quellcode",
+			"licenseNote": "AGPL 3.0 · Von Recordly abgewandelt · Unabhängig gepflegt"
 		},
 		"settings": {
-			"title": "Yanjing-Einstellungen",
+			"title": "Kliq-Einstellungen",
 			"save": "Speichern",
 			"saved": "Gespeichert",
 			"reset": "Auf Standard zurücksetzen"

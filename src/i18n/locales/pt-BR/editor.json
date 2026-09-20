@@ -135,7 +135,7 @@
 	},
 	"nativeCaptureUnavailable": {
 		"title": "Nada está quebrado, mas não poderemos renderizar uma sobreposição animada do cursor.",
-		"description": "Seu dispositivo não oferece suporte à captura nativa. Isso pode acontecer por vários motivos que ainda não identificamos. O Yanjing continuará funcionando, mas a suavização do cursor ficará indisponível.",
+		"description": "Seu dispositivo não oferece suporte à captura nativa. Isso pode acontecer por vários motivos que ainda não identificamos. O Kliq continuará funcionando, mas a suavização do cursor ficará indisponível.",
 		"confirm": "Entendi"
 	},
 	"exportStatus": {
@@ -200,7 +200,12 @@
 				"gaming": "Games",
 				"tech": "Tecnologia",
 				"marketing": "Marketing"
-			}
+			},
+			"proEntry": "Pro / Conta",
+			"proActive": "Pro",
+			"proEntryHint": "Gerenciar licença e benefícios Pro",
+			"proBadge": "PRO",
+			"proLocked": "Recurso Pro"
 		}
 	}
 }

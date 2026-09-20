@@ -1,7 +1,7 @@
 {
 	"app": {
-		"name": "Yanjing Recorder",
-		"editorTitle": "Editor de Yanjing",
+		"name": "Kliq",
+		"editorTitle": "Editor de Kliq",
 		"subtitle": "Grabación de pantalla y edición",
 		"language": "Idioma",
 		"manageRecordings": "Abrir carpeta de grabaciones"
@@ -26,7 +26,7 @@
 	"yanjing": {
 		"app": {
 			"tagline": "Grabador de pantalla de código abierto con IA",
-			"version": "v1.4.0-yanjing"
+			"version": "v1.4.0-kliq"
 		},
 		"license": {
 			"section": "Licencia",
@@ -42,10 +42,45 @@
 			"activatedSuccess": "¡Activación exitosa!",
 			"invalidKey": "Clave de licencia no válida",
 			"expiresAt": "Caduca el: {{date}}",
-			"subscriptionManagement": "Gestionar suscripción"
+			"subscriptionManagement": "Gestionar suscripción",
+			"feature": {
+				"transcribe": "Transcripción con IA (voz a texto)",
+				"captions": "Subtítulos bilingües y traducción multilingüe",
+				"generate": "Resumen / capítulos / títulos / etiquetas / textos sociales",
+				"search": "Búsqueda semántica (localiza momentos en grabaciones largas)",
+				"proofread": "Corrección de subtítulos con IA",
+				"edit": "Edición inteligente en un clic y pulido de textos"
+			},
+			"lifetime": "Pago único · uso permanente",
+			"needProTitle": "Esta función requiere Pro",
+			"needProBody": "«{{feature}}» es una ventaja Pro. Actívala para usarla.",
+			"emptyKey": "Introduce tu clave de licencia",
+			"activating": "Verificando…",
+			"deactivating": "Desactivando…",
+			"deactivated": "Licencia desactivada"
+		},
+		
+		"account": {
+			"title": "Cuenta",
+			"subtitle": "Gestiona la licencia de este dispositivo y las ventajas Pro",
+			"close": "Cerrar",
+			"deviceLicense": "Licencia del dispositivo",
+			"currentKey": "Clave de licencia",
+			"activatedAt": "Activada el",
+			"service": "Servicio de licencias",
+			"serviceOnline": "Conectado",
+			"serviceOffline": "Sin configurar (solo comprobación offline)",
+			"offlineNote": "Activada sin conexión. Vuelve a activarla en línea para confirmarla con el servidor.",
+			"benefits": "Ventajas Pro",
+			"freeHint": "La edición gratuita incluye la grabación completa y la edición básica. Pro desbloquea además todas las funciones de IA.",
+			"buyNote": "${{price}} pago único · uso permanente · reembolso de 30 días",
+			"checkoutTitle": "Compra sin configurar",
+			"checkoutNotConfigured": "Define VITE_KLQ_CHECKOUT_URL al compilar (tu propio pago de Lemon Squeezy) para activarlo.",
+			"sourceCode": "Código fuente",
+			"licenseNote": "AGPL 3.0 · Modificado a partir de Recordly · Mantenido de forma independiente"
 		},
 		"settings": {
-			"title": "Ajustes de Yanjing",
+			"title": "Ajustes de Kliq",
 			"save": "Guardar",
 			"saved": "Guardado",
 			"reset": "Restablecer valores predeterminados"

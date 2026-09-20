@@ -135,7 +135,7 @@
 	},
 	"nativeCaptureUnavailable": {
 		"title": "沒有出錯，但我們無法轉譯動畫游標覆蓋層。",
-		"description": "你的裝置不支援原生擷取。這可能是由我們尚未釐清的多種原因造成的。Yanjing 仍可繼續運作，但無法進行游標平滑處理。",
+		"description": "你的裝置不支援原生擷取。這可能是由我們尚未釐清的多種原因造成的。Kliq 仍可繼續運作，但無法進行游標平滑處理。",
 		"confirm": "好的"
 	},
 	"exportStatus": {
@@ -200,7 +200,12 @@
 				"gaming": "遊戲",
 				"tech": "科技",
 				"marketing": "行銷"
-			}
+			},
+			"proEntry": "Pro / 帳號",
+			"proActive": "Pro",
+			"proEntryHint": "管理授權與 Pro 權益",
+			"proBadge": "PRO",
+			"proLocked": "Pro 功能"
 		}
 	}
 }

@@ -1,4 +1,4 @@
-# Changelog — 言镜 (Yanjing Recorder)
+# Changelog — Kliq (Kliq)
 
 所有相对于上游 [Recordly v1.4.0](https://github.com/webadderallorg/Recordly) 的变更都记录在此。
 
@@ -7,8 +7,8 @@
 ## [Unreleased] - 2026-09-18+
 
 ### Stage 1 — 项目骨架 + 品牌改名
-- 改名 `recordly` → `yanjing-recorder`
-- `productName` → "言镜"
+- 改名 `recordly` → `kliq-recorder`
+- `productName` → "Kliq"
 - `appId` → `tech.yanjingai.recorder`
 - 添加 `ATTRIBUTION.md` (AGPL 合规声明)
 - 添加 `.env.example` (OPENAI_API_KEY 等环境变量)

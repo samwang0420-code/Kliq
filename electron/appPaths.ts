@@ -2,7 +2,7 @@ import path from "node:path";
 import { app } from "electron";
 
 if (process.env["VITE_DEV_SERVER_URL"]) {
-	const devUserDataPath = path.join(app.getPath("appData"), "yanjing-recorder-dev");
+	const devUserDataPath = path.join(app.getPath("appData"), "kliq-recorder-dev");
 	app.setPath("userData", devUserDataPath);
 	app.setPath("sessionData", path.join(devUserDataPath, "session"));
 }

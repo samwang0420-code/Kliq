@@ -358,10 +358,10 @@ export function registerProjectHandlers() {
 				const defaultName = `${safeName}.${PROJECT_FILE_EXTENSION}`;
 
 				const result = await dialog.showSaveDialog({
-					title: "Save Yanjing Project",
+					title: "Save Kliq Project",
 					defaultPath: path.join(projectsDir, defaultName),
 					filters: [
-						{ name: "Yanjing Project", extensions: [PROJECT_FILE_EXTENSION] },
+						{ name: "Kliq Project", extensions: [PROJECT_FILE_EXTENSION] },
 						{ name: "JSON", extensions: ["json"] },
 					],
 					properties: ["createDirectory", "showOverwriteConfirmation"],
@@ -511,11 +511,11 @@ export function registerProjectHandlers() {
 		try {
 			const projectsDir = await getProjectsDir();
 			const result = await dialog.showOpenDialog({
-				title: "Open Yanjing Project",
+				title: "Open Kliq Project",
 				defaultPath: projectsDir,
 				filters: [
 					{
-						name: "Yanjing Project",
+						name: "Kliq Project",
 						extensions: [PROJECT_FILE_EXTENSION, ...LEGACY_PROJECT_FILE_EXTENSIONS],
 					},
 					{ name: "JSON", extensions: ["json"] },

@@ -1,5 +1,5 @@
 /**
- * 言镜 — AI 内容生成
+ * Kliq — AI 内容生成
  *
  * 提供:
  * - generateChapters(transcript) → 自动识别视频章节

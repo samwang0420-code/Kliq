@@ -368,7 +368,7 @@ describe("ModernVideoExporter native static-layout eligibility", () => {
 			getAssetBasePath: () => Promise<string>;
 			listAssetDirectory: () => Promise<{ success: true; files: string[] }>;
 		};
-		electronAPI.getAssetBasePath = vi.fn(async () => "file:///C:/Yanjing/resources/");
+		electronAPI.getAssetBasePath = vi.fn(async () => "file:///C:/Kliq/resources/");
 		electronAPI.listAssetDirectory = vi.fn(async () => ({
 			success: true,
 			files: ["tahoe-light.jpg"],
@@ -376,13 +376,13 @@ describe("ModernVideoExporter native static-layout eligibility", () => {
 
 		await expect(exporter.resolveNativeStaticLayoutBackground()).resolves.toEqual({
 			backgroundColor: "#101010",
-			backgroundImagePath: "C:/Yanjing/resources/wallpapers/tahoe-light.jpg",
+			backgroundImagePath: "C:/Kliq/resources/wallpapers/tahoe-light.jpg",
 		});
 	});
 
 	it("reports video backgrounds while speed can use native timeline maps", () => {
 		const exporter = createExporter({
-			wallpaper: "file:///C:/Yanjing/background.webm",
+			wallpaper: "file:///C:/Kliq/background.webm",
 			speedRegions: [{ id: "speed-1", startMs: 1_000, endMs: 4_000, speed: 1.5 }],
 		});
 
@@ -401,7 +401,7 @@ describe("ModernVideoExporter native static-layout eligibility", () => {
 	it("collects every native static-layout blocker for beta diagnostics", () => {
 		const exporter = createExporter({
 			width: 1921,
-			wallpaper: "file:///C:/Yanjing/background.webm",
+			wallpaper: "file:///C:/Kliq/background.webm",
 			speedRegions: [{ id: "speed-1", startMs: 1_000, endMs: 4_000, speed: 1.5 }],
 			annotationRegions: [{ id: "annotation-1", startMs: 0, endMs: 1_000 }],
 			autoCaptions: [{ id: "caption-1", text: "hello", startMs: 0, endMs: 1_000 }],

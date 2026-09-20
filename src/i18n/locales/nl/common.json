@@ -1,7 +1,7 @@
 {
 	"app": {
-		"name": "Yanjing Recorder",
-		"editorTitle": "Yanjing Recorder Editor",
+		"name": "Kliq",
+		"editorTitle": "Kliq Editor",
 		"subtitle": "Schermopname en bewerking",
 		"language": "Taal",
 		"manageRecordings": "Opnamemap openen"
@@ -26,7 +26,7 @@
 	"yanjing": {
 		"app": {
 			"tagline": "AI-gestuurde open-source schermrecorder",
-			"version": "v1.4.0-yanjing"
+			"version": "v1.4.0-kliq"
 		},
 		"license": {
 			"section": "Licentie",
@@ -42,10 +42,45 @@
 			"activatedSuccess": "Activering gelukt!",
 			"invalidKey": "Ongeldige licentiesleutel",
 			"expiresAt": "Verloopt op: {{date}}",
-			"subscriptionManagement": "Abonnement beheren"
+			"subscriptionManagement": "Abonnement beheren",
+			"feature": {
+				"transcribe": "AI-transcriptie (spraak naar tekst)",
+				"captions": "Tweetalige ondertitels en meertalige vertaling",
+				"generate": "Samenvatting / hoofdstukken / titels / tags / socialteksten",
+				"search": "Semantisch zoeken (vind momenten in lange opnames)",
+				"proofread": "AI-correctie van ondertitels",
+				"edit": "Slim monteren in één klik en tekstverfijning"
+			},
+			"lifetime": "Eenmalige aankoop · voor altijd",
+			"needProTitle": "Deze functie vereist Pro",
+			"needProBody": "“{{feature}}” is een Pro-voordeel. Activeer om het te gebruiken.",
+			"emptyKey": "Voer je licentiesleutel in",
+			"activating": "Controleren…",
+			"deactivating": "Deactiveren…",
+			"deactivated": "Licentie gedeactiveerd"
+		},
+		
+		"account": {
+			"title": "Account",
+			"subtitle": "Beheer de licentie van dit apparaat en Pro-voordelen",
+			"close": "Sluiten",
+			"deviceLicense": "Apparaatlicentie",
+			"currentKey": "Licentiesleutel",
+			"activatedAt": "Geactiveerd op",
+			"service": "Licentieservice",
+			"serviceOnline": "Verbonden",
+			"serviceOffline": "Niet geconfigureerd (alleen offline controle)",
+			"offlineNote": "Offline geactiveerd. Activeer opnieuw zodra je online bent om dit met de server te bevestigen.",
+			"benefits": "Pro-voordelen",
+			"freeHint": "De gratis editie bevat volledige opname en basismontage. Pro ontgrendelt daarbovenop alle AI-functies.",
+			"buyNote": "${{price}} eenmalig · voor altijd · 30 dagen retour",
+			"checkoutTitle": "Aankoop niet geconfigureerd",
+			"checkoutNotConfigured": "Stel VITE_KLQ_CHECKOUT_URL in tijdens de build (je eigen Lemon Squeezy-checkout) om dit in te schakelen.",
+			"sourceCode": "Broncode",
+			"licenseNote": "AGPL 3.0 · Aangepast op basis van Recordly · Onafhankelijk onderhouden"
 		},
 		"settings": {
-			"title": "Yanjing-instellingen",
+			"title": "Kliq-instellingen",
 			"save": "Opslaan",
 			"saved": "Opgeslagen",
 			"reset": "Herstel standaardwaarden"

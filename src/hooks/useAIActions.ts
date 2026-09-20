@@ -1,19 +1,46 @@
 /**
- * 言镜 — AI Actions Hook (P0/P1 全部 AI 调用的统一调度)
+ * Kliq — AI Actions Hook (P0/P1 全部 AI 调用的统一调度)
  */
 
-import { useState, useCallback } from "react";
-import { detectSilenceRegions, type SilenceRegion } from "@/lib/ai/silence-removal";
-import { detectFillerRegions, type FillerRegion } from "@/lib/ai/filler-removal";
-import { detectSpeedRegions, detectZoomRegions, oneClickEdit, type SpeedRegion, type ZoomRegion } from "@/lib/ai/smart-edit";
-import { generateBilingualCaptions, type BilingualCaption } from "@/lib/ai/bilingual-captions";
-import { generateChapters, generateSummary, generateTitles, generateTags, generateSocialCopy, type Chapter, type Summary, type TitleCandidate, type SocialCopy } from "@/lib/ai/content-gen";
-import { proofreadCaptions, translateToMultipleLanguages, SUPPORTED_LANGUAGES, type TargetLanguage } from "@/lib/ai/caption-polish";
-import { semanticSearch, type SearchHit } from "@/lib/ai/semantic-search";
-import { polishUIText, polishUITextBatch } from "@/lib/ai/ui-polish";
-import { transcribeWithWhisper, type TranscribeResult, type TranscribeSegment } from "@/lib/ai/openai-client";
-import type { HotwordDomain } from "@/lib/hotwords";
+import { useCallback, useState } from "react";
 import type { AIAction } from "@/components/video-editor/AIToolbar";
+import { type BilingualCaption, generateBilingualCaptions } from "@/lib/ai/bilingual-captions";
+import {
+	proofreadCaptions,
+	SUPPORTED_LANGUAGES,
+	type TargetLanguage,
+	translateToMultipleLanguages,
+} from "@/lib/ai/caption-polish";
+import {
+	type Chapter,
+	generateChapters,
+	generateSocialCopy,
+	generateSummary,
+	generateTags,
+	generateTitles,
+	type SocialCopy,
+	type Summary,
+	type TitleCandidate,
+} from "@/lib/ai/content-gen";
+import { detectFillerRegions, type FillerRegion } from "@/lib/ai/filler-removal";
+import {
+	type TranscribeResult,
+	type TranscribeSegment,
+	transcribeWithWhisper,
+} from "@/lib/ai/openai-client";
+import { type SearchHit, semanticSearch } from "@/lib/ai/semantic-search";
+import { detectSilenceRegions, type SilenceRegion } from "@/lib/ai/silence-removal";
+import {
+	detectSpeedRegions,
+	detectZoomRegions,
+	oneClickEdit,
+	type SpeedRegion,
+	type ZoomRegion,
+} from "@/lib/ai/smart-edit";
+import { polishUIText, polishUITextBatch } from "@/lib/ai/ui-polish";
+import type { HotwordDomain } from "@/lib/hotwords";
+import { canUseFeature, ProRequiredError, proFeatureForAction } from "@/lib/license";
+import { requestProUpgrade } from "@/lib/proGate";
 
 export type AIResultsState = {
 	silenceRegions: SilenceRegion[] | null;
@@ -42,14 +69,35 @@ export function useAIActions(options: UseAIActionsOptions) {
 	const [busy, setBusy] = useState<AIAction | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [results, setResults] = useState<AIResultsState>({
-		silenceRegions: null, fillerRegions: null, speedRegions: null,
-		zoomRegions: null, chapters: null, summary: null, titles: null,
-		tags: null, socialCopy: null, bilingualCaptions: null, translations: null,
-		proofreadIssues: null, transcribeResult: null, searchHits: null, uiPolishResult: null,
+		silenceRegions: null,
+		fillerRegions: null,
+		speedRegions: null,
+		zoomRegions: null,
+		chapters: null,
+		summary: null,
+		titles: null,
+		tags: null,
+		socialCopy: null,
+		bilingualCaptions: null,
+		translations: null,
+		proofreadIssues: null,
+		transcribeResult: null,
+		searchHits: null,
+		uiPolishResult: null,
 	});
 
 	const runAction = useCallback(
 		async (action: AIAction, params?: Record<string, unknown>) => {
+			// ---- Pro 闸门 -------------------------------------------------------
+			// 命中闸门的动作（见 license.ts → ACTION_TO_PRO_FEATURE）在未激活 Pro 时
+			// 一律不执行：打开个人中心并抛出 ProRequiredError，由调用方静默处理。
+			// 去静音 / 去填充词 / 智能加速 / 自动取景 不在映射表内，保持免费可用。
+			const gateFeature = proFeatureForAction(action);
+			if (gateFeature && !canUseFeature(gateFeature)) {
+				requestProUpgrade(gateFeature);
+				throw new ProRequiredError(gateFeature);
+			}
+
 			setBusy(action);
 			setError(null);
 			try {
@@ -176,7 +224,8 @@ export function useAIActions(options: UseAIActionsOptions) {
 					case "ai-translate-multi": {
 						const segments = params?.segments as TranscribeSegment[];
 						const targets = params?.targets as TargetLanguage[];
-						if (!segments || !targets?.length) throw new Error("需要 segments 和 target 语言列表");
+						if (!segments || !targets?.length)
+							throw new Error("需要 segments 和 target 语言列表");
 						const r = await translateToMultipleLanguages(segments, targets);
 						setResults((s) => ({ ...s, translations: r }));
 						return r;
@@ -203,9 +252,10 @@ export function useAIActions(options: UseAIActionsOptions) {
 						const targetLanguage = (params?.targetLanguage as string) ?? "en";
 						const mode = (params?.mode as "single" | "batch") ?? "single";
 						if (!sourceText) throw new Error("需要 sourceText");
-						const result = mode === "batch"
-							? await polishUITextBatch({ sourceText, targetLanguage })
-							: await polishUIText({ sourceText, targetLanguage });
+						const result =
+							mode === "batch"
+								? await polishUITextBatch({ sourceText, targetLanguage })
+								: await polishUIText({ sourceText, targetLanguage });
 						setResults((s) => ({ ...s, uiPolishResult: result.polishedText }));
 						return result;
 					}

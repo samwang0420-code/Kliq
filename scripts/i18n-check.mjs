@@ -3,18 +3,41 @@ import path from "node:path";
 
 const root = process.cwd();
 const localesDir = path.join(root, "src", "i18n", "locales");
+const configPath = path.join(root, "src", "i18n", "config.ts");
 
-const locales = fs
-	.readdirSync(localesDir)
-	.filter((entry) => {
-		const fullPath = path.join(localesDir, entry);
-		return fs.statSync(fullPath).isDirectory();
-	})
-	.sort((left, right) => left.localeCompare(right));
+/**
+ * 语言列表以 src/i18n/config.ts 的 SUPPORTED_LOCALES 为准，而不是扫目录。
+ * 原因：仓库里可能残留不再注册的语言目录（例如只有 common.json 的半成品），
+ * 它们不会进入运行时，却会让本检查产生假阳性失败。漏检真正的注册语言才是本
+ * 脚本要防的事，所以这里做双向校验：注册语言必须有目录，目录必须已被注册。
+ */
+function readSupportedLocales() {
+	const source = fs.readFileSync(configPath, "utf8");
+	const block = source.match(/SUPPORTED_LOCALES\s*=\s*\[([\s\S]*?)\]\s*as const/);
+	if (!block) {
+		throw new Error("i18n-check: unable to parse SUPPORTED_LOCALES from src/i18n/config.ts");
+	}
+	return [...block[1].matchAll(/"([^"]+)"/g)].map((match) => match[1]);
+}
+
+const locales = readSupportedLocales().sort((left, right) => left.localeCompare(right));
 
 if (!locales.includes("en")) {
-	console.error('i18n-check: expected base locale directory "en"');
+	console.error('i18n-check: expected "en" to be a registered locale');
 	process.exit(1);
+}
+
+// 目录存在但未注册 → 提示，不视为失败（其内容不会进入运行时）
+const registered = new Set(locales);
+const orphanDirs = fs
+	.readdirSync(localesDir)
+	.filter((entry) => fs.statSync(path.join(localesDir, entry)).isDirectory())
+	.filter((entry) => !registered.has(entry))
+	.sort();
+for (const orphan of orphanDirs) {
+	console.warn(
+		`i18n-check: warning — directory ${orphan}/ exists but is not in SUPPORTED_LOCALES (ignored)`,
+	);
 }
 
 function loadJson(filePath) {

@@ -135,7 +135,7 @@
 	},
 	"nativeCaptureUnavailable": {
 		"title": "Rien n'est cassé, mais nous ne pourrons pas afficher une superposition animée du curseur.",
-		"description": "Votre appareil ne prend pas en charge la capture native. Cela peut arriver pour plusieurs raisons que nous n'avons pas encore identifiées. Yanjing continuera de fonctionner, mais le lissage du curseur sera impossible.",
+		"description": "Votre appareil ne prend pas en charge la capture native. Cela peut arriver pour plusieurs raisons que nous n'avons pas encore identifiées. Kliq continuera de fonctionner, mais le lissage du curseur sera impossible.",
 		"confirm": "D'accord"
 	},
 	"exportStatus": {
@@ -200,7 +200,12 @@
 				"gaming": "Jeux vidéo",
 				"tech": "Technologie",
 				"marketing": "Marketing"
-			}
+			},
+			"proEntry": "Pro / Compte",
+			"proActive": "Pro",
+			"proEntryHint": "Gérer la licence et les avantages Pro",
+			"proBadge": "PRO",
+			"proLocked": "Fonction Pro"
 		}
 	}
 }

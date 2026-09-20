@@ -1,7 +1,7 @@
 {
 	"app": {
-		"name": "言鏡",
-		"editorTitle": "言鏡 编辑器",
+		"name": "Kliq",
+		"editorTitle": "Kliq 编辑器",
 		"subtitle": "屏幕录制与编辑",
 		"language": "言語",
 		"manageRecordings": "録画フォルダを開く"
@@ -26,7 +26,7 @@
 	"yanjing": {
 		"app": {
 			"tagline": "AI強化オープンソース画面レコーダー",
-			"version": "v1.4.0-yanjing"
+			"version": "v1.4.0-kliq"
 		},
 		
 		"license": {
@@ -46,7 +46,7 @@
 			"subscriptionManagement": "管理订阅"
 		},
 		"settings": {
-			"title": "言鏡 设置",
+			"title": "Kliq 设置",
 			"save": "保存",
 			"saved": "已保存",
 			"reset": "リセット默认"

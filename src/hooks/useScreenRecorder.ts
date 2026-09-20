@@ -638,8 +638,8 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 			await window.electronAPI.openScreenRecordingPreferences();
 			alert(
 				options.startup
-					? "Yanjing needs Screen Recording permission before you start. System Settings has been opened. After enabling it, quit and reopen Yanjing."
-					: "Screen Recording permission is still missing. System Settings has been opened again. Enable it, then quit and reopen Yanjing before recording.",
+					? "Kliq needs Screen Recording permission before you start. System Settings has been opened. After enabling it, quit and reopen Kliq."
+					: "Screen Recording permission is still missing. System Settings has been opened again. Enable it, then quit and reopen Kliq before recording.",
 			);
 			return false;
 		}
@@ -661,8 +661,8 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 		await window.electronAPI.openAccessibilityPreferences();
 		alert(
 			options.startup
-				? "Yanjing also needs Accessibility permission for cursor tracking. System Settings has been opened. After enabling it, quit and reopen Yanjing."
-				: "Accessibility permission is still missing. System Settings has been opened again. Enable it, then quit and reopen Yanjing before recording.",
+				? "Kliq also needs Accessibility permission for cursor tracking. System Settings has been opened. After enabling it, quit and reopen Kliq."
+				: "Accessibility permission is still missing. System Settings has been opened again. Enable it, then quit and reopen Kliq before recording.",
 		);
 
 		return false;

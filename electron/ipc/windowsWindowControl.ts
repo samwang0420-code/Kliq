@@ -10,15 +10,15 @@ export async function bringWindowsWindowForward(windowId: number): Promise<void>
 	const script = [
 		'Add-Type -TypeDefinition @"',
 		"using System; using System.Runtime.InteropServices;",
-		"public static class YanjingForegroundWindow {",
+		"public static class KliqForegroundWindow {",
 		'  [DllImport("user32.dll")] public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);',
 		'  [DllImport("user32.dll")] public static extern bool IsIconic(IntPtr hWnd);',
 		'  [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);',
 		"}",
 		'"@',
 		"$handle = [IntPtr][Int64]$env:RECORDLY_WINDOW_ID",
-		"if ([YanjingForegroundWindow]::IsIconic($handle)) { [YanjingForegroundWindow]::ShowWindowAsync($handle, 9) | Out-Null }",
-		"[YanjingForegroundWindow]::SetForegroundWindow($handle) | Out-Null",
+		"if ([KliqForegroundWindow]::IsIconic($handle)) { [KliqForegroundWindow]::ShowWindowAsync($handle, 9) | Out-Null }",
+		"[KliqForegroundWindow]::SetForegroundWindow($handle) | Out-Null",
 	].join("\n");
 
 	await execFileAsync("powershell.exe", ["-NoProfile", "-Command", script], {
@@ -42,7 +42,7 @@ export async function resolveWindowsWindowBounds(
 		'Add-Type -TypeDefinition @"',
 		"using System;",
 		"using System.Runtime.InteropServices;",
-		"public static class YanjingWindowBounds {",
+		"public static class KliqWindowBounds {",
 		"  [StructLayout(LayoutKind.Sequential)]",
 		"  public struct RECT {",
 		"    public int Left;",
@@ -67,10 +67,10 @@ export async function resolveWindowsWindowBounds(
 		"  if ($matchingProcess) { $handle = $matchingProcess.MainWindowHandle.ToInt64() }",
 		"}",
 		"if ($handle -le 0) { exit 1 }",
-		"$rect = New-Object YanjingWindowBounds+RECT",
-		"[YanjingWindowBounds]::SetThreadDpiAwarenessContext([IntPtr](-4)) | Out-Null",
-		"$dwmResult = [YanjingWindowBounds]::DwmGetWindowAttribute([IntPtr]$handle, 9, [ref]$rect, [Runtime.InteropServices.Marshal]::SizeOf($rect))",
-		"if ($dwmResult -ne 0 -and -not [YanjingWindowBounds]::GetWindowRect([IntPtr]$handle, [ref]$rect)) { exit 1 }",
+		"$rect = New-Object KliqWindowBounds+RECT",
+		"[KliqWindowBounds]::SetThreadDpiAwarenessContext([IntPtr](-4)) | Out-Null",
+		"$dwmResult = [KliqWindowBounds]::DwmGetWindowAttribute([IntPtr]$handle, 9, [ref]$rect, [Runtime.InteropServices.Marshal]::SizeOf($rect))",
+		"if ($dwmResult -ne 0 -and -not [KliqWindowBounds]::GetWindowRect([IntPtr]$handle, [ref]$rect)) { exit 1 }",
 		"@{ x = $rect.Left; y = $rect.Top; width = $rect.Right - $rect.Left; height = $rect.Bottom - $rect.Top } | ConvertTo-Json -Compress",
 	].join("\n");
 

@@ -1,5 +1,5 @@
 /**
- * 言镜 (Yanjing Recorder) — API Key 管理模块
+ * Kliq (Kliq) — API Key 管理模块
  *
  * 目标: 安全地把用户的 OpenAI / Anthropic API key 存储在本地,
  *       永远不发送到我们的服务器 (我们没有服务器)。

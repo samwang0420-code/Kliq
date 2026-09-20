@@ -1,6 +1,6 @@
 import { ipcMain } from "electron";
 
-const DEFAULT_ANNOUNCEMENT_FEED_URL = null; // §270 上游 Recordly announcements feed 关闭 (Yanjing 自管)
+const DEFAULT_ANNOUNCEMENT_FEED_URL = null; // §270 上游 Recordly announcements feed 关闭 (Kliq 自管)
 const ANNOUNCEMENT_FETCH_TIMEOUT_MS = 5_000;
 const ANNOUNCEMENT_CACHE_TTL_MS = 6 * 60 * 60 * 1_000;
 const MAX_ANNOUNCEMENT_FEED_BYTES = 1_000_000;

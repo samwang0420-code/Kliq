@@ -1,7 +1,7 @@
 {
 	"app": {
-		"name": "Yanjing Recorder",
-		"editorTitle": "Yanjing Recorder Editor",
+		"name": "Kliq",
+		"editorTitle": "Kliq Editor",
 		"subtitle": "Screen recording and editing",
 		"language": "Language",
 		"manageRecordings": "Open recordings folder"
@@ -26,7 +26,7 @@
 	"yanjing": {
 		"app": {
 			"tagline": "AI-powered open-source screen recorder",
-			"version": "v1.4.0-yanjing"
+			"version": "v1.4.0-kliq"
 		},
 		
 		"license": {
@@ -43,10 +43,45 @@
 			"activatedSuccess": "Activation successful!",
 			"invalidKey": "Invalid license key",
 			"expiresAt": "Expires at: {{date}}",
-			"subscriptionManagement": "Manage subscription"
+			"subscriptionManagement": "Manage subscription",
+			"feature": {
+				"transcribe": "AI transcription (speech to text)",
+				"captions": "Bilingual captions & multi-language translation",
+				"generate": "Summary / chapters / titles / tags / social copy",
+				"search": "Semantic search (find moments in long recordings)",
+				"proofread": "AI caption proofreading",
+				"edit": "One-click smart edit & copy polish"
+			},
+			"lifetime": "Lifetime · one-time purchase",
+			"needProTitle": "This feature requires Pro",
+			"needProBody": "“{{feature}}” is a Pro benefit. Activate to use it.",
+			"emptyKey": "Enter your license key",
+			"activating": "Verifying…",
+			"deactivating": "Deactivating…",
+			"deactivated": "License deactivated"
+		},
+		
+		"account": {
+			"title": "Account",
+			"subtitle": "Manage this device's license and Pro benefits",
+			"close": "Close",
+			"deviceLicense": "Device license",
+			"currentKey": "License key",
+			"activatedAt": "Activated on",
+			"service": "License service",
+			"serviceOnline": "Connected",
+			"serviceOffline": "Not configured (offline check only)",
+			"offlineNote": "Activated offline. Re-activate while online to confirm with the server.",
+			"benefits": "Pro benefits",
+			"freeHint": "The free edition includes full recording and core editing. Pro unlocks every AI capability on top.",
+			"buyNote": "${{price}} one-time · lifetime access · 30-day refund",
+			"checkoutTitle": "Checkout not configured",
+			"checkoutNotConfigured": "Set VITE_KLQ_CHECKOUT_URL at build time (your own Lemon Squeezy checkout) to enable.",
+			"sourceCode": "Source code",
+			"licenseNote": "AGPL 3.0 · Modified from Recordly · Independently maintained"
 		},
 		"settings": {
-			"title": "Yanjing Settings",
+			"title": "Kliq Settings",
 			"save": "Save",
 			"saved": "Saved",
 			"reset": "Reset to default"
