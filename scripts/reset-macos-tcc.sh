@@ -19,8 +19,9 @@ echo "==> 1. 杀掉所有 Kliq 旧进程（关键！open 按 bundle id 唤醒，
      若旧进程还在跑，弹权限/显示图标的永远是旧进程）"
 pkill -f "Kliq.app" 2>/dev/null; sleep 1
 
-echo "==> 2. 重置 TCC 录屏授权（仅 ${BUNDLE_ID}）"
+echo "==> 2. 重置 TCC 授权（ScreenCapture + Accessibility，仅 ${BUNDLE_ID}）"
 tccutil reset ScreenCapture "${BUNDLE_ID}"
+tccutil reset Accessibility "${BUNDLE_ID}"
 
 echo "==> 3. 重新注册 /Applications/Kliq.app（刷新 LaunchServices 图标缓存）"
 lsregister() { /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister "$@"; }
