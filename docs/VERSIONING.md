@@ -132,8 +132,9 @@ git fetch --no-tags <本仓库路径> "+refs/heads/main:refs/heads/main" "+refs/
 git fsck --strict --no-dangling main dev     # 必须无任何输出
 ```
 
-本仓库自身跑 `git fsck` 会因 `refs/archive/_pre-repair-*`（旧损坏历史的归档）
-而报错，**属预期**，不影响推送。
+本仓库现在自身跑 `git fsck --strict --no-dangling` 也是**零输出**（旧损坏对象已于
+2026-09-20 经 `reflog expire` + `gc --prune=now` 回收，`.git` 从 943MB 降到 196MB）。
+`refs/archive/pr-*` 是 18 个上游 PR 素材分支的 tip，属浅克隆素材，fsck 视其为合法。
 
 ## 5. tag 规范
 
