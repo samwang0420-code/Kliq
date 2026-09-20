@@ -7,7 +7,8 @@ from pathlib import Path
 from PIL import Image
 
 REPO = Path.home() / "Documents/ChatGPT/record"
-SRC = REPO / "work/icon-design/A-dark-rings.png"
+DEFAULT_SRC = REPO / "icons/src/kliq-icon-master.png"
+SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_SRC
 
 PNG_SIZES = [16, 24, 32, 48, 64, 128, 256, 512, 1024]
 APP_ICON_SIZES = [16, 32, 64, 128, 256, 512, 1024]
