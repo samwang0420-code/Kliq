@@ -4,11 +4,14 @@
 
 **症状**：录屏/麦克风权限在系统设置里已开启，Kliq 仍不停弹授权窗。
 
-**根因**（2026-09-21 实锤）：
+**根因**（2026-09-21 实锤，两层）：
 - TCC 按 bundle id `tech.yanjingai.recorder` 记录授权；
 - 当前发布包是 **ad-hoc 签名**，每次构建 cdhash 都会变化，TCC 旧授权对新构建无效；
 - 机器上同时存在多份 Kliq.app（如 `/Applications` + `~/Applications` + `release/` 产物）时，
   授权的副本和运行的副本不是同一份 → 必然循环弹窗。
+- **更隐蔽的一层：旧进程占位**。`open` 按 bundle id 激活应用——如果旧版本进程还在后台跑，
+  `open /Applications/Kliq.app` 唤醒的其实是旧进程，弹窗图标/权限行为全是旧的。
+  实测 1.4.0 旧进程后台常驻导致 reset 后仍反复弹窗、图标不更新。
 
 **修复**：运行 `scripts/reset-macos-tcc.sh`（重置 TCC + 刷新图标缓存），然后重新授权一次。
 

@@ -15,16 +15,20 @@
 
 BUNDLE_ID="tech.yanjingai.recorder"
 
-echo "==> 1. 重置 TCC 录屏授权（仅 ${BUNDLE_ID}）"
+echo "==> 1. 杀掉所有 Kliq 旧进程（关键！open 按 bundle id 唤醒，
+     若旧进程还在跑，弹权限/显示图标的永远是旧进程）"
+pkill -f "Kliq.app" 2>/dev/null; sleep 1
+
+echo "==> 2. 重置 TCC 录屏授权（仅 ${BUNDLE_ID}）"
 tccutil reset ScreenCapture "${BUNDLE_ID}"
 
-echo "==> 2. 重新注册 /Applications/Kliq.app（刷新 LaunchServices 图标缓存）"
+echo "==> 3. 重新注册 /Applications/Kliq.app（刷新 LaunchServices 图标缓存）"
 lsregister() { /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister "$@"; }
 lsregister -f /Applications/Kliq.app
 
-echo "==> 3. 重启 Dock / Finder 刷新图标"
+echo "==> 4. 重启 Dock / Finder 刷新图标"
 killall Dock Finder 2>/dev/null
 
-echo "==> 完成。重新打开 Kliq，在弹窗里点「打开系统设置」重新允许即可。"
+echo "==> 完成。从 /Applications 启动 Kliq，重新授权一次即可。"
 echo "提示：务必删掉多余的旧副本（如 ~/Applications/Kliq.app），只留 /Applications 一份，"
 echo "     否则下次构建还会复发。"
