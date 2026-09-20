@@ -4,7 +4,7 @@
   "name_en": "Technology",
   "license": "MIT (自建)",
   "source": "自建 (基于计算机/AI/互联网常用术语)",
-  "word_count": 50,
+  "word_count": 54,
   "words": [
     "API", "SDK", "前端", "后端", "全栈", "算法", "数据结构", "数据库", "缓存", "消息队列",
     "微服务", "容器化", "Docker", "Kubernetes", "云原生", "Serverless", "边缘计算", "CDN",

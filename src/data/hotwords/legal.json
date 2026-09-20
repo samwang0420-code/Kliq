@@ -4,7 +4,7 @@
   "name_en": "Legal",
   "license": "Apache-2.0 (THUOCL Law) + MIT (LaWGPT)",
   "source": "THUOCL Law + LaWGPT legal_vocab",
-  "word_count": 30,
+  "word_count": 41,
   "words": [
     "原告", "被告", "第三人", "代理人", "诉讼", "仲裁", "管辖", "上诉", "再审",
     "申诉", "抗辩", "答辩", "反诉", "反请求", "证据", "证人", "鉴定", "勘验",

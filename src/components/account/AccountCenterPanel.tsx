@@ -13,6 +13,7 @@ import {
 } from "@/lib/licenseConfig";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
+import { AiServiceSection } from "./AiServiceSection";
 
 type AccountCenterPanelProps = {
 	open: boolean;
@@ -429,6 +430,11 @@ export function AccountCenterPanel({
 									)}
 								</p>
 							</section>
+
+							{/* AI 服务（BYO API key）—— Pro 权益的落地入口。
+							    此前 apiKeys.ts 的 setApiKey 零调用，付过钱的用户无处配置密钥，
+							    所有 AI 动作必然报「未配置」。 */}
+							<AiServiceSection isProActive={isProActive} />
 
 							{/* 购买入口 */}
 							{!isProActive && (

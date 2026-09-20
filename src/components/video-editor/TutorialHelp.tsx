@@ -37,7 +37,7 @@ import { formatShortcut } from "@/utils/platformUtils";
 const KLIQ_DISCORD_URL = "";
 const KLIQ_X_URL = "";
 const KLIQ_X_HANDLE = "";
-const CONTACT_EMAIL = "hi@yanjingai.tech";
+const CONTACT_EMAIL = "sam.wang01@icloud.com";
 export const APP_HEADER_ACTION_BUTTON_CLASS =
 	"h-7 px-2 text-xs text-muted-foreground hover:bg-foreground/10 hover:text-foreground transition-all gap-1.5";
 export const APP_HEADER_ICON_BUTTON_CLASS =

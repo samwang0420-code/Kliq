@@ -85,7 +85,7 @@ npx wrangler pages deploy . --project-name yanjingai-tech
 1. 用户访问 `https://yanjingai.lemonsqueezy.com/checkout/buy/yanjing-pro`
 2. 支付 $29 → 收到 license key (格式 `kliq-pro-{8 位 hex}`)
 3. 在 app 内 **Settings → License → Enter license key**
-4. 客户端调 `cloudflare/api/license-validate.ts` 校验
+4. 客户端调 `functions/api/license-validate.ts` 校验
 5. 校验通过 → 标记为 Pro, 解锁全部 AI 功能
 
 ---

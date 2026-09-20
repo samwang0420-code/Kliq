@@ -26,7 +26,12 @@ GitHub 对旧地址保留 **301 重定向**（按仓库 ID 维系），旧链接
 | `topics` | 空 | 8 个（screen-recorder / video-editor / electron …） |
 
 > `homepage` 原值指向上游站点，等于「点进自己仓库却跳去上游」。
-> 待 `VITE_KLQ_SITE_URL` 定下来后一起填。
+>
+> **已填（2026-09-20 晚）**：`homepage` = `https://yanjingai.tech`，`.env.example` 的
+> `VITE_KLQ_SITE_URL` 同步落盘。站点源码在仓库内 `cloudflare/pages/`，部署配置见根目录
+> `wrangler.toml`，许可证校验函数在 `functions/api/license-validate.ts`。
+> 注意：`yanjingai.tech` 目前**尚未绑定**到 Pages 项目（DNS 无记录），
+> 现网只有 `https://yanjingai-tech.pages.dev` 可达。
 
 改名后必须同步的两处（已做）：
 
