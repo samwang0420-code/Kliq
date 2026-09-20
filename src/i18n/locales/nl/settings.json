@@ -260,7 +260,9 @@
 		"saveProject": "Project opslaan",
 		"exportVideo": "{{format}} exporteren",
 		"reportBug": "Bug melden",
-		"starOnGithub": "Ster op GitHub"
+		"starOnGithub": "Ster op GitHub",
+		"pickFile": "Video/audio selecteren",
+		"clearFile": "Bestand verwijderen"
 	},
 	"audio": {
 		"title": "Audio",

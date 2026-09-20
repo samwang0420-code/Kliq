@@ -205,7 +205,30 @@
 			"proActive": "Pro",
 			"proEntryHint": "Gestisci licenza e vantaggi Pro",
 			"proBadge": "PRO",
-			"proLocked": "Funzione Pro"
+			"proLocked": "Funzione Pro",
+			"inputsTitle": "Input IA",
+			"transcriptLabel": "Trascrizione",
+			"transcriptPlaceholder": "Avvia «AI Transcribe» o incolla qui il testo",
+			"segmentReady": "{{count}} sottotitoli con timestamp pronti",
+			"queryLabel": "Query di ricerca",
+			"queryPlaceholder": "es. dove è andato storto",
+			"sourceTextLabel": "Testo da rifinire",
+			"sourceTextPlaceholder": "Incolla il testo da rifinire",
+			"resultsTitle": "Risultati IA",
+			"useTranscript": "Usa come input",
+			"copy": "Copia",
+			"copied": "Copiato",
+			"itemCount": "{{count}} elemento/i",
+			"scoreLabel": "punteggio",
+			"noResults": "Nessuna corrispondenza",
+			"inputHints": {
+				"file": "Seleziona prima un file video/audio",
+				"duration": "Durata del media richiesta (scegli un file)",
+				"transcript": "Trascrizione richiesta: avvia «AI Transcribe» o incolla il testo",
+				"segments": "Sottotitoli con timestamp richiesti: avvia prima «AI Transcribe»",
+				"query": "Inserisci una query di ricerca",
+				"sourceText": "Inserisci il testo da rifinire"
+			}
 		}
 	}
 }

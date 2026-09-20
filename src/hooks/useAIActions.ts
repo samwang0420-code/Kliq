@@ -28,7 +28,7 @@ import {
 	type TranscribeSegment,
 	transcribeWithWhisper,
 } from "@/lib/ai/openai-client";
-import { type SearchHit, semanticSearch } from "@/lib/ai/semantic-search";
+import { indexTranscript, type SearchHit, semanticSearch } from "@/lib/ai/semantic-search";
 import { detectSilenceRegions, type SilenceRegion } from "@/lib/ai/silence-removal";
 import {
 	detectSpeedRegions,
@@ -187,9 +187,11 @@ export function useAIActions(options: UseAIActionsOptions) {
 					}
 					case "ai-chapters": {
 						const transcript = params?.transcript as string;
-						const duration = params?.durationMs as number;
+						// 单位是**秒**：Chapter.start/end 与 Whisper segment 同单位。
+						// 传毫秒会让模型把最后一段 end 定成 60000 而不是 60.0。
+						const durationSec = params?.durationSec as number;
 						if (!transcript) throw new Error("需要 transcript 文本");
-						const r = await generateChapters(transcript, duration);
+						const r = await generateChapters(transcript, durationSec);
 						setResults((s) => ({ ...s, chapters: r }));
 						return r;
 					}
@@ -242,7 +244,15 @@ export function useAIActions(options: UseAIActionsOptions) {
 					}
 					case "ai-semantic-search": {
 						const query = params?.query as string;
+						const segments = params?.segments as TranscribeSegment[] | undefined;
+						const videoTitle = (params?.videoTitle as string) ?? "当前视频";
 						if (!query) throw new Error("需要搜索 query");
+						// 语义搜索是在「已建立索引的转录」里做向量检索。索引此前**从未被
+						// 建立过** —— indexTranscript 全仓零调用，检索集合恒为空，于是无论
+						// 查询什么都只会返回 0 条。这里在做检索前先把当前视频索引进去。
+						if (segments?.length) {
+							await indexTranscript(`current-${Date.now()}`, videoTitle, segments);
+						}
 						const r = await semanticSearch({ query, topK: 10 });
 						setResults((s) => ({ ...s, searchHits: r }));
 						return r;

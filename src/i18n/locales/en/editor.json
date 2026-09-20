@@ -205,7 +205,30 @@
 			"proActive": "Pro",
 			"proEntryHint": "Manage license and Pro benefits",
 			"proBadge": "PRO",
-			"proLocked": "Pro feature"
+			"proLocked": "Pro feature",
+			"inputsTitle": "AI Inputs",
+			"transcriptLabel": "Transcript",
+			"transcriptPlaceholder": "Run “AI Transcribe”, or paste the text here",
+			"segmentReady": "{{count}} timed captions ready",
+			"queryLabel": "Search query",
+			"queryPlaceholder": "e.g. where did it go wrong",
+			"sourceTextLabel": "Text to polish",
+			"sourceTextPlaceholder": "Paste the copy you want polished",
+			"resultsTitle": "AI Results",
+			"useTranscript": "Use as input",
+			"copy": "Copy",
+			"copied": "Copied",
+			"itemCount": "{{count}} item(s)",
+			"scoreLabel": "score",
+			"noResults": "No matches",
+			"inputHints": {
+				"file": "Select a video / audio file first",
+				"duration": "Media duration required (pick a file first)",
+				"transcript": "Transcript required: run “AI Transcribe” or paste the text",
+				"segments": "Timed captions required: run “AI Transcribe” first",
+				"query": "Enter a search query",
+				"sourceText": "Enter the text to polish"
+			}
 		}
 	}
 }

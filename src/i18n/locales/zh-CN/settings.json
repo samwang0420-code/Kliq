@@ -260,7 +260,9 @@
 		"saveProject": "保存项目",
 		"exportVideo": "导出{{format}}",
 		"reportBug": "报告问题",
-		"starOnGithub": "在 GitHub 上点赞"
+		"starOnGithub": "在 GitHub 上点赞",
+		"pickFile": "选择视频 / 音频",
+		"clearFile": "移除文件"
 	},
 	"audio": {
 		"title": "音频",

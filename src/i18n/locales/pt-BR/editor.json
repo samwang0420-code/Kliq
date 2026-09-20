@@ -205,7 +205,30 @@
 			"proActive": "Pro",
 			"proEntryHint": "Gerenciar licença e benefícios Pro",
 			"proBadge": "PRO",
-			"proLocked": "Recurso Pro"
+			"proLocked": "Recurso Pro",
+			"inputsTitle": "Entradas de IA",
+			"transcriptLabel": "Transcrição",
+			"transcriptPlaceholder": "Execute “AI Transcribe” ou cole o texto aqui",
+			"segmentReady": "{{count}} legendas com marcação de tempo prontas",
+			"queryLabel": "Consulta de busca",
+			"queryPlaceholder": "ex. onde deu errado",
+			"sourceTextLabel": "Texto a aprimorar",
+			"sourceTextPlaceholder": "Cole o texto que deseja aprimorar",
+			"resultsTitle": "Resultados de IA",
+			"useTranscript": "Usar como entrada",
+			"copy": "Copiar",
+			"copied": "Copiado",
+			"itemCount": "{{count}} item(ns)",
+			"scoreLabel": "pontuação",
+			"noResults": "Nenhuma correspondência",
+			"inputHints": {
+				"file": "Selecione primeiro um arquivo de vídeo/áudio",
+				"duration": "Duração da mídia necessária (escolha um arquivo)",
+				"transcript": "Transcrição necessária: execute “AI Transcribe” ou cole o texto",
+				"segments": "Legendas com tempo necessárias: execute “AI Transcribe” primeiro",
+				"query": "Informe uma consulta de busca",
+				"sourceText": "Informe o texto a aprimorar"
+			}
 		}
 	}
 }

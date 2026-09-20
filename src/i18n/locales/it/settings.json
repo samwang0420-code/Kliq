@@ -260,7 +260,9 @@
 		"saveProject": "Salva progetto",
 		"exportVideo": "Esporta {{format}}",
 		"reportBug": "Segnala bug",
-		"starOnGithub": "Metti una stella su GitHub"
+		"starOnGithub": "Metti una stella su GitHub",
+		"pickFile": "Seleziona video/audio",
+		"clearFile": "Rimuovi file"
 	},
 	"audio": {
 		"title": "Audio",

@@ -260,7 +260,9 @@
 		"saveProject": "儲存專案",
 		"exportVideo": "匯出 {{format}}",
 		"reportBug": "回報錯誤",
-		"starOnGithub": "在 GitHub 按讚"
+		"starOnGithub": "在 GitHub 按讚",
+		"pickFile": "選擇影片 / 音訊",
+		"clearFile": "移除檔案"
 	},
 	"audio": {
 		"title": "音訊",

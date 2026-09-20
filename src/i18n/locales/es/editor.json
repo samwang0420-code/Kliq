@@ -205,7 +205,30 @@
 			"proActive": "Pro",
 			"proEntryHint": "Gestionar licencia y ventajas Pro",
 			"proBadge": "PRO",
-			"proLocked": "Función Pro"
+			"proLocked": "Función Pro",
+			"inputsTitle": "Entradas de IA",
+			"transcriptLabel": "Transcripción",
+			"transcriptPlaceholder": "Ejecuta «AI Transcribe» o pega el texto aquí",
+			"segmentReady": "{{count}} subtítulos con marca de tiempo listos",
+			"queryLabel": "Consulta de búsqueda",
+			"queryPlaceholder": "p. ej. dónde falló",
+			"sourceTextLabel": "Texto a pulir",
+			"sourceTextPlaceholder": "Pega el texto que quieres pulir",
+			"resultsTitle": "Resultados de IA",
+			"useTranscript": "Usar como entrada",
+			"copy": "Copiar",
+			"copied": "Copiado",
+			"itemCount": "{{count}} elemento(s)",
+			"scoreLabel": "puntuación",
+			"noResults": "Sin coincidencias",
+			"inputHints": {
+				"file": "Selecciona primero un archivo de vídeo/audio",
+				"duration": "Se requiere la duración del medio (elige un archivo)",
+				"transcript": "Se requiere transcripción: ejecuta «AI Transcribe» o pega el texto",
+				"segments": "Se requieren subtítulos con tiempos: ejecuta «AI Transcribe» primero",
+				"query": "Introduce una consulta de búsqueda",
+				"sourceText": "Introduce el texto a pulir"
+			}
 		}
 	}
 }

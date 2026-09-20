@@ -72,11 +72,14 @@ export async function transcribeWithWhisper(options: TranscribeOptions): Promise
 		formData.append("response_format", options.responseFormat);
 	}
 
-	// Whisper prompt 长度限制 224 tokens
+	// Whisper prompt 上限 224 tokens —— 预算由 buildWhisperPrompt 内部保证
+	// （它按 token 估算挑词，绝不超限）。这里**不再**按字符 slice：此前那句
+	// `prompt.slice(0, 1000)` 是按字符截断，而限额单位是 token，中文下 1000 字符
+	// ≈ 1000 token，是上限的 4 倍多 —— 那层「保护」其实从未生效。
 	if (options.hotwordDomain) {
 		const prompt = buildWhisperPrompt(options.hotwordDomain);
 		if (prompt) {
-			formData.append("prompt", prompt.slice(0, 1000));
+			formData.append("prompt", prompt);
 		}
 	}
 

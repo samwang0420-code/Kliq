@@ -205,7 +205,30 @@
 			"proActive": "Pro",
 			"proEntryHint": "管理授權與 Pro 權益",
 			"proBadge": "PRO",
-			"proLocked": "Pro 功能"
+			"proLocked": "Pro 功能",
+			"inputsTitle": "AI 輸入",
+			"transcriptLabel": "轉錄文字",
+			"transcriptPlaceholder": "先點「AI 轉錄」，或直接貼上文字",
+			"segmentReady": "已有 {{count}} 條帶時間軸的字幕",
+			"queryLabel": "搜尋關鍵字",
+			"queryPlaceholder": "例如：講了什麼坑",
+			"sourceTextLabel": "待潤色文案",
+			"sourceTextPlaceholder": "貼上你想潤色的文案",
+			"resultsTitle": "AI 結果",
+			"useTranscript": "填入輸入區",
+			"copy": "複製",
+			"copied": "已複製",
+			"itemCount": "{{count}} 條",
+			"scoreLabel": "匹配度",
+			"noResults": "沒有符合的結果",
+			"inputHints": {
+				"file": "請先選擇影片 / 音訊檔案",
+				"duration": "需要媒體長度（先選擇檔案）",
+				"transcript": "需要轉錄文字：先執行「AI 轉錄」或貼上文字",
+				"segments": "需要帶時間軸的字幕：先執行「AI 轉錄」",
+				"query": "需要填寫搜尋關鍵字",
+				"sourceText": "需要填寫待潤色文案"
+			}
 		}
 	}
 }
