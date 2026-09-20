@@ -25,6 +25,7 @@ import { supportsHudCaptureProtection } from "../../lib/hudCaptureProtection";
 import { Button } from "../ui/button";
 import { HudInteractionContext } from "./contexts/HudInteractionContext";
 import { canToggleFloatingWebcamPreview } from "./floatingWebcamPreview";
+import { useFocusMode } from "./hooks/useFocusMode";
 import { useHudBarDrag } from "./hooks/useHudBarDrag";
 import { useLaunchHudInteractionState } from "./hooks/useLaunchHudInteractionState";
 import { useLaunchWindowActions } from "./hooks/useLaunchWindowActions";
@@ -44,7 +45,6 @@ import { ProjectPopover } from "./popovers/ProjectPopover";
 import { SourcePopover } from "./popovers/SourcePopover";
 import { WebcamPopover } from "./popovers/WebcamPopover";
 import { RecordingControls } from "./RecordingControls";
-import { useFocusMode } from "./hooks/useFocusMode";
 
 const SHOW_DEV_UPDATE_PREVIEW = import.meta.env.DEV;
 
@@ -118,6 +118,7 @@ function LaunchWindowContent() {
 
 	const {
 		hudOverlayMousePassthroughSupported,
+		hudOverlayResizeAnchor,
 		platform,
 		appVersion,
 		hideHudFromCapture,
@@ -502,8 +503,12 @@ function LaunchWindowContent() {
 			value={{ onMouseEnter: handleHudMouseEnter, onMouseLeave: handleHudMouseLeave }}
 		>
 			<div
-				className="w-full flex justify-center bg-transparent overflow-visible items-end pb-5 pointer-events-none"
-				style={{ height: "100vh" }}
+				className="w-full flex justify-center bg-transparent overflow-visible items-end pointer-events-none"
+				style={{
+					height: "100vh",
+					paddingBottom:
+						hudOverlayResizeAnchor === "center" ? "calc(50vh - 60px)" : "1.25rem",
+				}}
 			>
 				<div
 					ref={hudContentRef}
