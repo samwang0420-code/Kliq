@@ -5,14 +5,37 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
-    name: Build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: Build ${{ matrix.label }}
+    runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        include:
+          - label: macOS arm64
+            runner: macos-14
+            arch_tag: darwin-arm64
+            electron_arch: arm64
+            platform: mac
+          - label: macOS x64
+            runner: macos-15-intel
+            arch_tag: darwin-x64
+            electron_arch: x64
+            platform: mac
+          - label: Windows x64
+            runner: windows-latest
+            arch_tag: win32-x64
+            electron_arch: x64
+            platform: win
+          - label: Linux x64
+            runner: ubuntu-latest
+            arch_tag: linux-x64
+            electron_arch: x64
+            platform: linux
 
     steps:
       - name: Checkout code
@@ -22,16 +45,45 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
 
+      - name: Setup Python
+        if: matrix.platform == 'mac'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # --ignore-scripts: FFmpeg and native helpers (incl. the whisper.cpp
+      # caption runtime) are staged by the explicit steps below. The old
+      # release flow ran a hand-picked "skip whisper.cpp" helper step behind
+      # `|| echo`, so released bundles shipped without whisper-cli and
+      # auto-captions failed instantly for every user (#220).
       - name: Install dependencies
-        run: npm ci || npm install
+        run: npm ci --ignore-scripts
 
-      - name: Build native helpers (skip whisper.cpp)
+      - name: Install bundled FFmpeg binary
+        run: node node_modules/ffmpeg-static/install.js
+
+      - name: Verify bundled FFmpeg binary
         run: |
-          npm run build:windows-capture || echo "Skipped windows-capture on ${{ matrix.os }}"
-          npm run build:nvidia-cuda-compositor || echo "Skipped nvidia-cuda on ${{ matrix.os }}"
-          npm run build:cursor-monitor || echo "Skipped cursor-monitor on ${{ matrix.os }}"
+          node -e "const fs=require('node:fs'); const ffmpeg=require('ffmpeg-static'); if (typeof ffmpeg !== 'string' || !fs.existsSync(ffmpeg)) { throw new Error('Bundled ffmpeg-static binary is missing: ' + ffmpeg); } console.log('Using bundled ffmpeg binary: ' + ffmpeg);"
+
+      - name: Install app dependencies
+        run: npx electron-builder install-app-deps
+
+      - name: Install Linux native build dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libx11-dev libxt-dev libxtst-dev libxkbfile-dev libxi-dev libxrandr-dev libxinerama-dev
+
+      - name: Remove stale uiohook build output
+        if: matrix.platform == 'linux'
+        run: rm -rf node_modules/uiohook-napi/build
+
+      # Stages the whisper.cpp runtime (Windows: official signed prebuilt zip;
+      # macOS/Linux: source build) plus every platform capture helper.
+      - name: Build platform native helpers (incl. whisper runtime)
+        run: npm run build:platform-native-helpers
 
       - name: TypeScript check
         run: npx tsc --noEmit
@@ -45,28 +97,55 @@ jobs:
       - name: Smoke test Electron main CJS
         run: node scripts/smoke-electron-main-cjs.mjs
 
-      - name: Build Electron app
+      - name: Build macOS app
+        if: matrix.platform == 'mac'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ "${{ matrix.os }}" = "macos-latest" ]; then
-            npx electron-builder --mac --publish never
-          elif [ "${{ matrix.os }}" = "windows-latest" ]; then
-            npx electron-builder --win --publish never
-          else
-            npx electron-builder --linux --publish never
-          fi
+          npx electron-builder --mac dir dmg zip --${{ matrix.electron_arch }} --publish never
+
+      - name: Build Windows app
+        if: matrix.platform == 'win'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx electron-builder --win dir nsis --${{ matrix.electron_arch }} --publish never
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Build Linux app
+        if: matrix.platform == 'linux'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx electron-builder --linux dir AppImage --${{ matrix.electron_arch }} --publish never
+
+      # Hard gate: fail the release when the packaged app is missing native
+      # helpers or the bundled whisper-cli runtime. This is the check whose
+      # absence let #220 ship — caption generation worked in dev checkouts
+      # while released bundles had no whisper-cli to resolve.
+      - name: Smoke test packaged binary paths
+        env:
+          PACKAGED_SMOKE_ARCH_TAGS: ${{ matrix.arch_tag }}
+        run: npm run smoke:packaged-binaries
+
+      - name: Generate artifact checksums
+        run: npm run checksums:release -- SHA256SUMS-${{ matrix.arch_tag }}.txt
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: yanjing-recorder-${{ matrix.os }}
+          name: release-${{ matrix.arch_tag }}
           path: |
             release/*.dmg
             release/*.zip
             release/*.exe
             release/*.AppImage
-          if-no-files-found: warn
+            release/*.blockmap
+            release/latest*.yml
+            release/SHA256SUMS*.txt
+          if-no-files-found: error
+          retention-days: 30
 
   release:
     name: Create GitHub Release
