@@ -67,9 +67,11 @@ jobs:
         run: |
           node -e "const fs=require('node:fs'); const ffmpeg=require('ffmpeg-static'); if (typeof ffmpeg !== 'string' || !fs.existsSync(ffmpeg)) { throw new Error('Bundled ffmpeg-static binary is missing: ' + ffmpeg); } console.log('Using bundled ffmpeg binary: ' + ffmpeg);"
 
-      - name: Install app dependencies
-        run: npx electron-builder install-app-deps
-
+      # Order matters: `install-app-deps` rebuilds uiohook-napi, which needs the
+      # X11 headers below on Linux. Running it first made the Linux job die with
+      # a missing Xlib.h, which failed the whole build matrix and left
+      # "Create GitHub Release" skipped — so the repo had zero releases and the
+      # website's download button pointed at an empty list.
       - name: Install Linux native build dependencies
         if: matrix.platform == 'linux'
         run: |
@@ -79,6 +81,9 @@ jobs:
       - name: Remove stale uiohook build output
         if: matrix.platform == 'linux'
         run: rm -rf node_modules/uiohook-napi/build
+
+      - name: Install app dependencies
+        run: npx electron-builder install-app-deps
 
       # Stages the whisper.cpp runtime (Windows: official signed prebuilt zip;
       # macOS/Linux: source build) plus every platform capture helper.
