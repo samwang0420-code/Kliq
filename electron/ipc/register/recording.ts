@@ -21,6 +21,16 @@ import {
 import { ALLOW_YANJING_WINDOW_CAPTURE } from "../constants";
 import { startWindowBoundsCapture, stopWindowBoundsCapture } from "../cursor/bounds";
 import { startInteractionCapture, stopInteractionCapture } from "../cursor/interaction";
+import {
+	clearKeystrokeEvents,
+	getKeystrokeEventsSnapshot,
+	pauseKeystrokeCapture,
+	readKeystrokeTelemetry,
+	resumeKeystrokeCapture,
+	startKeystrokeCapture as startKeystrokeTelemetryCapture,
+	stopKeystrokeCapture as stopKeystrokeTelemetryCapture,
+	writeKeystrokeTelemetry,
+} from "../cursor/keystrokeCapture";
 import { startNativeCursorMonitor, stopNativeCursorMonitor } from "../cursor/monitor";
 import {
 	normalizeCursorTelemetrySamples,
@@ -734,8 +744,7 @@ export function registerRecordingHandlers(
 				) {
 					return {
 						success: false,
-						message:
-							"Cannot record Yanjing windows. Please select another app window.",
+						message: "Cannot record Yanjing windows. Please select another app window.",
 					};
 				}
 
@@ -957,6 +966,70 @@ export function registerRecordingHandlers(
 			}
 		},
 	);
+
+	ipcMain.handle("start-keystroke-capture", (_, mode: "off" | "shortcuts-only" | "all") => {
+		try {
+			startKeystrokeTelemetryCapture(mode);
+			return { success: true, mode };
+		} catch (error) {
+			return { success: false, error: String(error) };
+		}
+	});
+
+	ipcMain.handle("stop-keystroke-capture", () => {
+		stopKeystrokeTelemetryCapture();
+		return { success: true };
+	});
+
+	ipcMain.handle("pause-keystroke-capture", () => {
+		pauseKeystrokeCapture();
+		return { success: true };
+	});
+
+	ipcMain.handle("resume-keystroke-capture", () => {
+		resumeKeystrokeCapture();
+		return { success: true };
+	});
+
+	ipcMain.handle("get-recorded-keystrokes", () => {
+		return { success: true, events: getKeystrokeEventsSnapshot() };
+	});
+
+	ipcMain.handle("write-keystroke-telemetry", async (_, videoPath: string | undefined) => {
+		const targetVideoPath = normalizeVideoSourcePath(videoPath ?? currentVideoPath);
+		if (!targetVideoPath) {
+			return {
+				success: false,
+				count: 0,
+				message: "No video path available for keystroke telemetry",
+			};
+		}
+		try {
+			const count = await writeKeystrokeTelemetry(targetVideoPath);
+			return { success: true, count };
+		} catch (error) {
+			console.error("Failed to save keystroke telemetry:", error);
+			return {
+				success: false,
+				count: 0,
+				message: "Failed to save keystroke telemetry",
+				error: String(error),
+			};
+		}
+	});
+
+	ipcMain.handle("read-keystroke-telemetry", async (_, videoPath: string) => {
+		const targetVideoPath = normalizeVideoSourcePath(videoPath);
+		if (!targetVideoPath) {
+			return { success: false, data: null };
+		}
+		try {
+			const data = await readKeystrokeTelemetry(targetVideoPath);
+			return { success: true, data };
+		} catch (error) {
+			return { success: false, data: null, error: String(error) };
+		}
+	});
 
 	ipcMain.handle("stop-native-screen-recording", async () => {
 		const start = Date.now();
@@ -1881,7 +1954,7 @@ export function registerRecordingHandlers(
 		}
 	});
 
-	ipcMain.handle("set-recording-state", (_, recording: boolean) => {
+	ipcMain.handle("set-recording-state", async (_, recording: boolean) => {
 		if (recording) {
 			stopCursorCapture();
 			stopInteractionCapture();
@@ -1897,6 +1970,10 @@ export function registerRecordingHandlers(
 			sampleCursorPoint();
 			startCursorSampling();
 			void startInteractionCapture();
+			// Keystroke overlay (§969) — opt-in only. The renderer is responsible
+			// for calling start-keystroke-capture after confirming the user has
+			// enabled the preference. We do not auto-start because the feature
+			// captures user input that may include passwords.
 		} else {
 			setIsCursorCaptureActive(false);
 			stopCursorCapture();
@@ -1906,6 +1983,18 @@ export function registerRecordingHandlers(
 			showCursor();
 			setLinuxCursorScreenPoint(null);
 			resetCursorCaptureClock();
+			stopKeystrokeTelemetryCapture();
+			// Persist keystroke telemetry (§969). Failure is non-fatal: the
+			// keystroke overlay is opt-in, so missing telemetry must not block
+			// the recording from finalising.
+			if (currentVideoPath) {
+				try {
+					await writeKeystrokeTelemetry(currentVideoPath);
+				} catch (error) {
+					console.warn("[keystrokeTelemetry] Failed to persist on stop:", error);
+				}
+			}
+			clearKeystrokeEvents();
 			snapshotCursorTelemetryForPersistence();
 			setActiveCursorSamples([]);
 		}

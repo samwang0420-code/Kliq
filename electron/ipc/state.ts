@@ -78,6 +78,23 @@ export let cursorCaptureInterval: NodeJS.Timeout | null = null;
 export let cursorCaptureStartTimeMs = 0;
 export let cursorCaptureAccumulatedPausedMs = 0;
 export let cursorCapturePauseStartedAtMs: number | null = null;
+
+// ── Keystroke capture (§969) ───────────────────────────────────────────────────
+export let keystrokeCaptureActive = false;
+export let keystrokeCaptureMode: "off" | "shortcuts-only" | "all" = "off";
+// §969: frozen at start time so writeKeystrokeTelemetry can read the real mode
+// even after stopKeystrokeCapture() resets keystrokeCaptureMode to "off".
+export let keystrokeCaptureLastMode: "off" | "shortcuts-only" | "all" = "off";
+export let keystrokeEventsBuffer: Array<{
+	timeMs: number;
+	key: string;
+	keycode: number;
+	hasModifier: boolean;
+	isShortcut: boolean;
+}> = [];
+export let keystrokeCaptureStartedAtMs: number | null = null;
+export let keystrokeCaptureAccumulatedPausedMs = 0;
+export let keystrokeCapturePauseStartedAtMs: number | null = null;
 export let activeCursorSamples: CursorTelemetryPoint[] = [];
 export let pendingCursorSamples: CursorTelemetryPoint[] = [];
 export let isCursorCaptureActive = false;
@@ -257,6 +274,54 @@ export function setIsCursorCaptureActive(v: boolean) {
 export function setInteractionCaptureCleanup(v: (() => void) | null) {
 	interactionCaptureCleanup = v;
 }
+
+// ── Keystroke capture (§969) ───────────────────────────────────────────────────
+export function setKeystrokeCaptureActive(v: boolean) {
+	keystrokeCaptureActive = v;
+}
+
+export function setKeystrokeCaptureMode(v: "off" | "shortcuts-only" | "all") {
+	keystrokeCaptureMode = v;
+	if (v !== "off") keystrokeCaptureLastMode = v;
+}
+
+export function getKeystrokeCaptureLastMode() {
+	return keystrokeCaptureLastMode;
+}
+
+export function getKeystrokeEventsBuffer() {
+	return keystrokeEventsBuffer;
+}
+
+export function setKeystrokeEventsBuffer(v: typeof keystrokeEventsBuffer) {
+	keystrokeEventsBuffer = v;
+}
+
+export function setKeystrokeCaptureStartedAtMs(v: number | null) {
+	keystrokeCaptureStartedAtMs = v;
+}
+
+export function setKeystrokeCaptureAccumulatedPausedMs(v: number) {
+	keystrokeCaptureAccumulatedPausedMs = v;
+}
+
+export function setKeystrokeCapturePauseStartedAtMs(v: number | null) {
+	keystrokeCapturePauseStartedAtMs = v;
+}
+
+export function getKeystrokeCaptureElapsedMs(): number {
+	if (keystrokeCaptureStartedAtMs === null) {
+		return 0;
+	}
+	const pausedDelta =
+		keystrokeCapturePauseStartedAtMs !== null
+			? Date.now() - keystrokeCapturePauseStartedAtMs
+			: 0;
+	return (
+		Date.now() - keystrokeCaptureStartedAtMs - keystrokeCaptureAccumulatedPausedMs - pausedDelta
+	);
+}
+
 export function setHasLoggedInteractionHookFailure(v: boolean) {
 	hasLoggedInteractionHookFailure = v;
 }

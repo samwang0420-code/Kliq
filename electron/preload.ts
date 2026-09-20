@@ -546,6 +546,27 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	recoverNativeScreenRecording: () => {
 		return ipcRenderer.invoke("recover-native-screen-recording");
 	},
+	startKeystrokeCapture: (mode: "off" | "shortcuts-only" | "all") => {
+		return ipcRenderer.invoke("start-keystroke-capture", mode);
+	},
+	stopKeystrokeCapture: () => {
+		return ipcRenderer.invoke("stop-keystroke-capture");
+	},
+	pauseKeystrokeCapture: () => {
+		return ipcRenderer.invoke("pause-keystroke-capture");
+	},
+	resumeKeystrokeCapture: () => {
+		return ipcRenderer.invoke("resume-keystroke-capture");
+	},
+	getRecordedKeystrokes: () => {
+		return ipcRenderer.invoke("get-recorded-keystrokes");
+	},
+	writeKeystrokeTelemetry: (videoPath: string) => {
+		return ipcRenderer.invoke("write-keystroke-telemetry", videoPath);
+	},
+	readKeystrokeTelemetry: (videoPath: string) => {
+		return ipcRenderer.invoke("read-keystroke-telemetry", videoPath);
+	},
 	getLastNativeCaptureDiagnostics: () => {
 		return ipcRenderer.invoke("get-last-native-capture-diagnostics");
 	},

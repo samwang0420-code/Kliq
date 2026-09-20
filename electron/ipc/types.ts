@@ -120,7 +120,7 @@ export type NativeMacWindowSource = {
 	height?: number;
 };
 
-export type HookEventName = "mousedown" | "mouseup" | "mousemove";
+export type HookEventName = "mousedown" | "mouseup" | "mousemove" | "keydown";
 
 export type HookMouseEvent = {
 	button?: number;
@@ -141,10 +141,34 @@ export type HookMouseEvent = {
 
 export type HookEventListener = (event: HookMouseEvent) => void;
 
+export type HookKeyboardEvent = {
+	key?: string;
+	keycode?: number;
+	rawcode?: number;
+	ctrlKey?: boolean;
+	altKey?: boolean;
+	shiftKey?: boolean;
+	metaKey?: boolean;
+	data?: {
+		key?: string;
+		keycode?: number;
+		rawcode?: number;
+		ctrlKey?: boolean;
+		altKey?: boolean;
+		shiftKey?: boolean;
+		metaKey?: boolean;
+	};
+};
+
+export type HookKeyboardListener = (event: HookKeyboardEvent) => void;
+
 export type UiohookLike = {
-	on: (eventName: HookEventName, listener: HookEventListener) => void;
-	off?: (eventName: HookEventName, listener: HookEventListener) => void;
-	removeListener?: (eventName: HookEventName, listener: HookEventListener) => void;
+	on: (eventName: HookEventName, listener: HookEventListener | HookKeyboardListener) => void;
+	off?: (eventName: HookEventName, listener: HookEventListener | HookKeyboardListener) => void;
+	removeListener?: (
+		eventName: HookEventName,
+		listener: HookEventListener | HookKeyboardListener,
+	) => void;
 	start: () => void;
 	stop?: () => void;
 };
@@ -155,6 +179,28 @@ export type UiohookModuleNamespace = {
 	Uiohook?: UiohookLike;
 	default?: UiohookLike | UiohookModuleNamespace;
 };
+
+export type KeystrokeCaptureMode = "off" | "shortcuts-only" | "all";
+
+export interface KeystrokeEvent {
+	/** Milliseconds since the recording started (monotonic). */
+	timeMs: number;
+	/** Normalised key label, e.g. "a", "Enter", "ArrowUp", "Ctrl+C", "Cmd+Shift+P". */
+	key: string;
+	/** uiohook raw keycode (0 if unknown). */
+	keycode: number;
+	/** True when at least one modifier was held at the moment the key went down. */
+	hasModifier: boolean;
+	/** True for entries that contain a Ctrl/Cmd/Alt sequence (shortcut, paste, etc.). */
+	isShortcut: boolean;
+}
+
+export interface KeystrokeRecording {
+	captureMode: KeystrokeCaptureMode;
+	startedAt: string;
+	endedAt: string;
+	events: KeystrokeEvent[];
+}
 
 export type AudioSyncAdjustment = {
 	mode: "none" | "tempo" | "delay" | "pad";
