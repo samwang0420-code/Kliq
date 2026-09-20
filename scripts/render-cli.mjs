@@ -21,7 +21,7 @@
  */
 
 import { spawn } from "node:child_process";
-import { existsSync, statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
@@ -95,35 +95,87 @@ if (!existsSync(electron)) {
 	process.exit(1);
 }
 
-const child = spawn(electron, [repoRoot], {
-	cwd: repoRoot,
-	env: {
-		...process.env,
-		RECORDLY_SMOKE_EXPORT: "1",
-		RECORDLY_SMOKE_EXPORT_INPUT: projectPath,
-		RECORDLY_SMOKE_EXPORT_OUTPUT: outputPath,
-		...(args.native ? { RECORDLY_SMOKE_EXPORT_USE_NATIVE: "1" } : {}),
-		...(args.quality ? { RECORDLY_SMOKE_EXPORT_QUALITY: args.quality } : {}),
-		...(args.encoding ? { RECORDLY_SMOKE_EXPORT_ENCODING_MODE: args.encoding } : {}),
-		...(args.webcam ? { RECORDLY_SMOKE_EXPORT_WEBCAM_INPUT: path.resolve(args.webcam) } : {}),
-		...(args.pipeline ? { RECORDLY_SMOKE_EXPORT_PIPELINE: args.pipeline } : {}),
-		...(args.backend ? { RECORDLY_SMOKE_EXPORT_BACKEND: args.backend } : {}),
-		ELECTRON_ENABLE_LOGGING: process.env.ELECTRON_ENABLE_LOGGING ?? "1",
+const childEnv = {
+	...process.env,
+	RECORDLY_SMOKE_EXPORT: "1",
+	RECORDLY_SMOKE_EXPORT_INPUT: projectPath,
+	RECORDLY_SMOKE_EXPORT_OUTPUT: outputPath,
+	...(args.native ? { RECORDLY_SMOKE_EXPORT_USE_NATIVE: "1" } : {}),
+	...(args.quality ? { RECORDLY_SMOKE_EXPORT_QUALITY: args.quality } : {}),
+	...(args.encoding ? { RECORDLY_SMOKE_EXPORT_ENCODING_MODE: args.encoding } : {}),
+	...(args.webcam ? { RECORDLY_SMOKE_EXPORT_WEBCAM_INPUT: path.resolve(args.webcam) } : {}),
+	...(args.pipeline ? { RECORDLY_SMOKE_EXPORT_PIPELINE: args.pipeline } : {}),
+	...(args.backend ? { RECORDLY_SMOKE_EXPORT_BACKEND: args.backend } : {}),
+	ELECTRON_ENABLE_LOGGING: process.env.ELECTRON_ENABLE_LOGGING ?? "1",
+};
+// ELECTRON_RUN_AS_NODE 会让 Electron 以纯 Node 模式启动，require("electron")
+// 里没有 app —— main.cjs 顶层 app.getPath() 直接崩，报错还长得像代码 bug。
+// 常见于 CI/沙盒继承环境，spawn 子进程前必须显式删除（置空串不可靠）。
+delete childEnv.ELECTRON_RUN_AS_NODE;
+
+const child = spawn(
+	electron,
+	[
+		// 无 GUI / 容器环境（CI、沙盒）里 Electron 的 helper 子进程常因
+		// sandbox 初始化失败整批崩溃（GPU process isn't usable）。
+		// 本 CLI 的定位就是无人值守渲染，默认关 sandbox 与 GPU：
+		// 导出走 CPU 编码；--enable-unsafe-swiftshader 保留软件 WebGL，
+		// 让预览渲染器（Pixi）在无 GPU 环境仍能初始化。真机不受影响。
+		"--no-sandbox",
+		"--disable-gpu",
+		"--enable-unsafe-swiftshader",
+		repoRoot,
+	],
+	{
+		cwd: repoRoot,
+		env: childEnv,
+		stdio: "inherit",
 	},
-	stdio: "inherit",
-});
+);
 
 child.on("exit", (code, signal) => {
 	if (signal) {
 		console.error(`render-cli: terminated by ${signal}`);
 		process.exit(1);
 	}
-	if (code === 0) {
-		console.log(`render-cli: done → ${outputPath}`);
-	} else {
+	if (code !== 0) {
 		console.error(`render-cli: export failed with exit code ${code}`);
+		process.exit(code ?? 1);
 	}
-	process.exit(code ?? 1);
+
+	// 退出码 0 不代表导出成功：smoke 导出的真实结果写在
+	// `<输出>.report.json`（渲染层无论成败都会正常关窗退出，见
+	// useSmokeExportAutomation / useExportRunner）。必须以报告 + 产物为准。
+	const reportPath = `${outputPath}.report.json`;
+	if (!existsSync(reportPath)) {
+		console.error(
+			`render-cli: no report written at ${reportPath} — export automation did not run to completion`,
+		);
+		process.exit(1);
+	}
+	let report;
+	try {
+		report = JSON.parse(readFileSync(reportPath, "utf8"));
+	} catch (error) {
+		console.error(`render-cli: failed to parse report ${reportPath}:`, error);
+		process.exit(1);
+	}
+	if (report.success !== true) {
+		console.error(`render-cli: export FAILED (phase: ${report.phase ?? "?"})`);
+		if (report.error) console.error(report.error);
+		process.exit(1);
+	}
+	console.log(
+		`render-cli: report ok (phase: ${report.phase}, elapsed: ${report.elapsedMs ?? "?"}ms)`,
+	);
+
+	if (!existsSync(outputPath)) {
+		console.error(`render-cli: report says success but output file is missing: ${outputPath}`);
+		process.exit(1);
+	}
+
+	console.log(`render-cli: done → ${outputPath}`);
+	process.exit(0);
 });
 
 child.on("error", (error) => {

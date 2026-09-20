@@ -27,6 +27,7 @@ import {
 	buildNativeStaticBackgroundRenderArgs,
 	buildNativeStaticLayoutChunks,
 	buildNativeVideoExportArgs,
+	getNativeStaticLayoutCudaMissingReason,
 	buildTrimmedSourceAudioFilter,
 	createNativeSquircleMaskPgmBuffer,
 	getEditedAudioExtension,
@@ -3731,6 +3732,18 @@ export async function exportNativeStaticLayoutVideo(
 		}
 		if (!didRenderVideo && hasNativeStaticLayoutSourceCrop(options)) {
 			throw new Error("Native crop export requires a GPU compositor backend");
+		}
+
+		if (!didRenderVideo) {
+			// 所有静态布局渲染分支都是 CUDA/nvenc 专用（见
+			// getNativeStaticLayoutCudaMissingReason 的文档）。没有 nvenc 时
+			// 提前抛出带明确原因的错误 → IPC 返回 success:false → 渲染层
+			// 回退 WebCodecs，而不是让 ffmpeg 报一条难懂的 "-rc" 解析错误。
+			const availableEncoders = await getAvailableNativeVideoEncoders(ffmpegPath);
+			const cudaMissingReason = getNativeStaticLayoutCudaMissingReason(availableEncoders);
+			if (cudaMissingReason) {
+				throw new Error(`Native static layout export unavailable: ${cudaMissingReason}`);
+			}
 		}
 
 		if (!didRenderVideo && usePrecompositedLayout) {

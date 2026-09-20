@@ -12,6 +12,7 @@ import {
 	buildTrimmedSourceAudioFilter,
 	createNativeSquircleMaskPgmBuffer,
 	FFMPEG_BT709_VIDEO_COLOR_ARGS,
+	getNativeStaticLayoutCudaMissingReason,
 	isNativeCudaOutOfMemory,
 } from "./nativeVideoExport";
 
@@ -321,5 +322,22 @@ describe("native static layout command builders", () => {
 			),
 		).toBe(true);
 		expect(isNativeCudaOutOfMemory("FFmpeg exited with code 1")).toBe(false);
+	});
+});
+
+describe("getNativeStaticLayoutCudaMissingReason", () => {
+	it("returns null when h264_nvenc is available", () => {
+		expect(
+			getNativeStaticLayoutCudaMissingReason(new Set(["h264_nvenc", "libx264"])),
+		).toBeNull();
+	});
+
+	it("returns a reason when the FFmpeg build lacks nvenc (macOS / non-NVIDIA hosts)", () => {
+		const reason = getNativeStaticLayoutCudaMissingReason(new Set(["libx264"]));
+		expect(reason).toContain("h264_nvenc");
+	});
+
+	it("returns a reason for an empty encoder list", () => {
+		expect(getNativeStaticLayoutCudaMissingReason(new Set())).not.toBeNull();
 	});
 });
