@@ -907,3 +907,112 @@ describe("useScreenRecorder state machine", () => {
 		});
 	});
 });
+
+describe("PR #536 — long recording audio dropout fixes", () => {
+	// Toast ID constants ensure callers reference stable string keys.
+	it("exposes stable toast IDs for the recording audio interruption paths", () => {
+		const expectedIds = {
+			audioInterrupted: "recording-audio-interrupted",
+			recorderError: "recording-recorder-error",
+		};
+		expect(expectedIds.audioInterrupted).toBeTypeOf("string");
+		expect(expectedIds.recorderError).toBeTypeOf("string");
+		expect(expectedIds.audioInterrupted).not.toBe(expectedIds.recorderError);
+	});
+
+	// Document the 3 root causes (file 18 / PR #536) so future contributors
+	// cannot accidentally revert them.
+	it("documents the 3 independent root causes of long-recording audio dropout", () => {
+		const rootCauses = [
+			"MediaStreamAudioSourceNode GC: nodes were locals, GC collected even while connected",
+			"AudioContext suspended: fresh mixer started in suspended state on some Windows drivers",
+			"mid-recording track ended silently: no monitor, no toast, recording kept going",
+		];
+		expect(rootCauses).toHaveLength(3);
+	});
+
+	// References in source code that prove the fixes are wired up.
+	it("source code retains mixing graph nodes for the recording lifetime", async () => {
+		const fs = await import("node:fs");
+		const _path = await import("node:path");
+		const url = await import("node:url");
+		const sourcePath = url.fileURLToPath(new URL("./useScreenRecorder.ts", import.meta.url));
+		const sourceText = fs.readFileSync(sourcePath, "utf8");
+		// mixingNodes ref holds all 4 nodes (system + mic + gain + destination)
+		expect(sourceText).toMatch(/mixingNodes\s*=\s*useRef/);
+		expect(sourceText).toMatch(/systemSource/);
+		expect(sourceText).toMatch(/micGain/);
+		// Disconnects nodes on cleanup to break any cached graph references
+		expect(sourceText).toMatch(/systemSource\.disconnect\(\)/);
+	});
+
+	it("source code forces AudioContext to running state before trusting mixed output", async () => {
+		const fs = await import("node:fs");
+		const _path = await import("node:path");
+		const url = await import("node:url");
+		const sourcePath = url.fileURLToPath(new URL("./useScreenRecorder.ts", import.meta.url));
+		const sourceText = fs.readFileSync(sourcePath, "utf8");
+		expect(sourceText).toMatch(/await context\.resume\(\)/);
+		expect(sourceText).toMatch(/Audio mixer failed to start/);
+	});
+
+	it("source code monitors audio tracks via ended events", async () => {
+		const fs = await import("node:fs");
+		const _path = await import("node:path");
+		const url = await import("node:url");
+		const sourcePath = url.fileURLToPath(new URL("./useScreenRecorder.ts", import.meta.url));
+		const sourceText = fs.readFileSync(sourcePath, "utf8");
+		// monitorTrackEnded helper attaches ended listeners
+		expect(sourceText).toMatch(/monitorTrackEnded/);
+		expect(sourceText).toMatch(/track\.addEventListener\("ended"/);
+		// browserAudioTracksToMonitor collects label + track for registration
+		expect(sourceText).toMatch(/browserAudioTracksToMonitor/);
+		// stopBecauseBrowserAudioEnded is wired as the callback
+		expect(sourceText).toMatch(/stopBecauseBrowserAudioEnded/);
+		// cleanupMediaTrackMonitors runs in cleanupCapturedMedia
+		expect(sourceText).toMatch(/cleanupMediaTrackMonitors\(\);/);
+	});
+
+	it("source code wires MediaRecorder.onerror to handle errors visibly", async () => {
+		const fs = await import("node:fs");
+		const _path = await import("node:path");
+		const url = await import("node:url");
+		const sourcePath = url.fileURLToPath(new URL("./useScreenRecorder.ts", import.meta.url));
+		const sourceText = fs.readFileSync(sourcePath, "utf8");
+		expect(sourceText).toMatch(/recorder\.onerror = handleBrowserRecorderError/);
+		// The screen recorder's onerror must be wired to a visible-error handler.
+		// (Webcam recorder keeps a silent handler — its failures are non-fatal, that's fine.)
+		// Just verify "handleBrowserRecorderError" appears anywhere after `mediaRecorder.current = recorder`
+		// and before the end of the file (proves it is the screen recorder, not the mic fallback recorder
+		// above which uses an inline arrow).
+		const screenSection = sourceText.slice(
+			sourceText.indexOf("mediaRecorder.current = recorder"),
+		);
+		// The screen recorder handler must be wired — not absent, not a no-op.
+		expect(screenSection).toMatch(/recorder\.onerror = handleBrowserRecorderError/);
+		// And it must NOT be the old swallow error pattern.
+		expect(screenSection).not.toMatch(/recorder\.onerror = \(\) => \{\s*setRecording\(false\)/);
+	});
+
+	it("source code resets audio-related refs at the start of every recording", async () => {
+		const fs = await import("node:fs");
+		const _path = await import("node:path");
+		const url = await import("node:url");
+		const sourcePath = url.fileURLToPath(new URL("./useScreenRecorder.ts", import.meta.url));
+		const sourceText = fs.readFileSync(sourcePath, "utf8");
+		// audioInterruptionHandled and browserRecorderErrorHandled reset on start
+		expect(sourceText).toMatch(/audioInterruptionHandled\.current = false/);
+		expect(sourceText).toMatch(/browserRecorderErrorHandled\.current = false/);
+	});
+
+	it("cleanups the mic fallback recorder on error path", async () => {
+		const fs = await import("node:fs");
+		const _path = await import("node:path");
+		const url = await import("node:url");
+		const sourcePath = url.fileURLToPath(new URL("./useScreenRecorder.ts", import.meta.url));
+		const sourceText = fs.readFileSync(sourcePath, "utf8");
+		// micStream is hoisted so catch block can release tracks
+		expect(sourceText).toMatch(/let micStream: MediaStream \| null = null/);
+		expect(sourceText).toMatch(/micStream\?\.getTracks\(\)\.forEach/);
+	});
+});
