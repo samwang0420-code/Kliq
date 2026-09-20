@@ -101,6 +101,14 @@ bool WgcSession::initializeWithItem(int fps) {
     if (!captureItem_) return false;
 
     auto size = captureItem_.Size();
+    // Keep the WGC frame-pool textures aligned with the fixed-size H.264
+    // encoder staging texture. Window captures can start with odd dimensions
+    // from DWM shadows or fractional DPI; recreateFramePoolIfNeeded already
+    // normalizes, so the initial pool must match to avoid a size mismatch on
+    // the first frame.
+    size.Width = normalizeFramePoolExtent(size.Width);
+    size.Height = normalizeFramePoolExtent(size.Height);
+
     captureWidth_ = size.Width;
     captureHeight_ = size.Height;
     framePoolWidth_ = size.Width;
@@ -116,13 +124,29 @@ bool WgcSession::initializeWithItem(int fps) {
 
     session_.IsCursorCaptureEnabled(false);
 
-    // IsBorderRequired is only available on Windows 11+ (build 22000). propagating an hresult_error results in Native Windows capture failure
-    try {
-        session_.IsBorderRequired(false);
-    } catch (winrt::hresult_error const&) {
-    }
+	// IsBorderRequired is only available on Windows 11+ (build 22000). propagating an hresult_error results in Native Windows capture failure
+	try {
+		session_.IsBorderRequired(false);
+	} catch (winrt::hresult_error const&) {
+	}
 
-    return true;
+	// IncludeSecondaryWindows was introduced in UniversalApiContract v19
+	// (Windows 11 24H2 / SDK 10.0.26100). Older SDK headers do not declare
+	// IGraphicsCaptureSession6, so keep this as an optional compile-time path.
+	// When available it captures window-scoped popups (tooltips, dropdowns,
+	// flyouts) that belong to the selected window, which are otherwise dropped.
+#if defined(WINDOWS_FOUNDATION_UNIVERSALAPICONTRACT_VERSION) && \
+    WINDOWS_FOUNDATION_UNIVERSALAPICONTRACT_VERSION >= 0x130000
+	try {
+		if (auto session6 = session_.try_as<
+		        winrt::Windows::Graphics::Capture::IGraphicsCaptureSession6>()) {
+			session6.IncludeSecondaryWindows(true);
+		}
+	} catch (winrt::hresult_error const&) {
+	}
+#endif
+
+	return true;
 }
 
 bool WgcSession::recreateFramePoolIfNeeded(
