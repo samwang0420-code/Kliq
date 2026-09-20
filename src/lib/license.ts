@@ -267,8 +267,15 @@ async function validateOnline(key: string): Promise<OnlineResult> {
 			}
 			return { kind: "ok", data };
 		}
-		// 404：后端尚未登记该 key（例如离线发售的 key）→ 回退离线激活
+		// 404 = 校验端点本身不存在（站点未部署 / 路由缺失）→ 回退离线激活。
+		// 「上游说不存在」的 404 已被 Pages Function 转成 200 + valid:false，
+		// 不会走到这里 —— 两种 404 的分工见 functions/api/license-validate.ts。
 		if (res.status === 404) {
+			return { kind: "unavailable", message: `HTTP ${res.status}` };
+		}
+		// 503 = 上游 Lemon Squeezy 故障：不是这把 key 的错，
+		// 降级离线激活，联网后可重新校验；判成 invalid 会错杀真 key。
+		if (res.status === 503) {
 			return { kind: "unavailable", message: `HTTP ${res.status}` };
 		}
 		return { kind: "invalid", message: `HTTP ${res.status}` };

@@ -325,9 +325,25 @@ describe("activateLicense (online validation)", () => {
 		expect(mod.isPro()).toBe(false);
 	});
 
-	it("treats a 404 as 'not registered yet' and activates offline", async () => {
+	it("treats a 404 as 'validate endpoint missing' and activates offline", async () => {
+		// 语义收紧（见 functions/api/license-validate.ts）：上游「key 不存在」的 404
+		// 已被 Pages Function 转成 200 + valid:false，客户端的 404 只剩一种含义 ——
+		// 端点本身没部署（邮件发售期 / 路由缺失），此时降级离线激活。
 		const mod = await loadLicenseModuleWithSite("https://example.com");
 		vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null, { status: 404 }));
+
+		const result = await mod.activateLicense("kliq-pro-1a2b3c4d");
+
+		expect(result.success).toBe(true);
+		expect(result.status?.offline).toBe(true);
+	});
+
+	it("treats a 503 as upstream outage and activates offline instead of judging the key", async () => {
+		// Lemon Squeezy 故障不是 key 的错：判成 invalid 会错杀真 key。
+		const mod = await loadLicenseModuleWithSite("https://example.com");
+		vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(JSON.stringify({ valid: false, error: "upstream down" }), { status: 503 }),
+		);
 
 		const result = await mod.activateLicense("kliq-pro-1a2b3c4d");
 

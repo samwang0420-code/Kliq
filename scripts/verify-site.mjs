@@ -181,10 +181,7 @@ export function checkSite(html, options = {}) {
 	if (!en) fail("no-en-dict", "找不到 en 文案表");
 	if (!zh) fail("no-zh-dict", "找不到 zh 文案表");
 	if (!map && !iteratesDict) {
-		fail(
-			"no-bind-map",
-			"既没有 data-bind → 文案表的映射 (map)，也没有遍历文案表的写入逻辑",
-		);
+		fail("no-bind-map", "既没有 data-bind → 文案表的映射 (map)，也没有遍历文案表的写入逻辑");
 	}
 	if (!en || !zh) return findings;
 
@@ -405,7 +402,9 @@ function main() {
 			console.log(`${f.level === "error" ? "✗" : "!"} [${f.label}::${f.code}] ${f.message}`);
 		}
 		if (findings.length === 0) {
-			const names = sitePages().map((p) => p.label).join(", ");
+			const names = sitePages()
+				.map((p) => p.label)
+				.join(", ");
 			console.log(`✓ 落地页静态校验通过（${names}）`);
 		}
 	}

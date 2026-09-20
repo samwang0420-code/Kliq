@@ -8,9 +8,15 @@
  * 契约（必须与 src/lib/license.ts → ServerValidation 一致）:
  *   POST { licenseKey } →
  *     200 { valid: true,  activatedAt, expiresAt, instanceId }
- *     200 { valid: false, error }          ← 格式合法但被判定无效
+ *     200 { valid: false, error }          ← 格式合法但被判定无效（含上游 404 = key 不存在）
  *     400 { valid: false, error }          ← body 缺 key / 前缀不对
- *     404                                   ← 该 key 未登记（客户端回退离线激活）
+ *     503                                   ← 上游 Lemon Squeezy 故障（客户端降级离线激活，不迁怒于 key）
+ *
+ * ⚠️ 为什么上游 404 必须转成 200 + valid:false：
+ *   Lemon Squeezy 对「不存在的 key」返回 404。若把 404 原样透传，客户端会把
+ *   404 解读为「校验端点未部署 → 离线激活」—— 于是任何伪造前缀的假 key 都能
+ *   拿到 Pro（这个客户端回退是给「端点根本不存在」的场景留的，不是给
+ *   「上游明确说不存在」留的）。两种 404 语义必须在这里分开。
  *
  * 注意: 客户端**同时**看 HTTP 状态与 `valid` 字段。判定无效时即使返回 200 也必须
  * 带 `valid: false`，否则无效 key 会被当成激活成功。
@@ -83,13 +89,29 @@ export const onRequestPost = async ({
 
 	if (!lsResponse.ok) {
 		const errText = await lsResponse.text();
+
+		// 上游 404 / 400 = 对这把 key 的**确定性**判定（不存在 / 请求本身有问题）
+		// → 200 + valid:false，客户端据此拒绝激活。绝不能透传 404，
+		//   否则客户端的「端点缺失 → 离线激活」回退会把假 key 放行成 Pro。
+		if (lsResponse.status === 404 || lsResponse.status === 400) {
+			return jsonResponse({
+				valid: false,
+				error:
+					lsResponse.status === 404
+						? "License key not found"
+						: `License key rejected by Lemon Squeezy (${errText.slice(0, 200)})`,
+			});
+		}
+
+		// 其余（401/403 凭据问题、429 限流、5xx 故障）= 服务暂不可用，
+		// 不是这把 key 的错 → 503，客户端降级离线激活而不是判 key 无效。
 		return jsonResponse(
 			{
 				valid: false,
 				error: `Lemon Squeezy API failed (${lsResponse.status})`,
 				detail: errText.slice(0, 200),
 			},
-			lsResponse.status,
+			503,
 		);
 	}
 
