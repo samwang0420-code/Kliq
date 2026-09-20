@@ -11,4 +11,15 @@
       <alternate hreflang="x-default" href="https://yanjingai.tech/" />
     </alternates>
   </url>
+  <url>
+    <loc>https://yanjingai.tech/refund</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <alternates>
+      <alternate hreflang="en" href="https://yanjingai.tech/refund" />
+      <alternate hreflang="zh" href="https://yanjingai.tech/refund?lang=zh" />
+      <alternate hreflang="x-default" href="https://yanjingai.tech/refund" />
+    </alternates>
+  </url>
 </urlset>
