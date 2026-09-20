@@ -1125,8 +1125,14 @@ app.whenReady().then(async () => {
 			// pre-selected (e.g. fresh session where the renderer skipped the
 			// source picker entirely). This avoids calling getSources() which
 			// would itself trigger an extra portal dialog.
+			// Only applies to Wayland: X11 has no xdg-desktop-portal, so the
+			// sentinel short-circuit would wrongly force "Entire screen" and
+			// skip getSources(), breaking window/display selection on X11.
+			const isWayland = process.env.XDG_SESSION_TYPE === "wayland";
 			const isLinuxPortalSentinel =
-				process.platform === "linux" && (sourceId === "screen:linux-portal" || !sourceId);
+				process.platform === "linux" &&
+				isWayland &&
+				(sourceId === "screen:linux-portal" || !sourceId);
 			if (isLinuxPortalSentinel) {
 				callback({ video: { id: "screen:0:0", name: "Entire screen" } });
 				return;
