@@ -1,0 +1,42 @@
+{
+	"zoom": {
+		"cannotPlace": "Nie można tu umieścić zoomu",
+		"existsOrNoSpace": "Zoom już istnieje w tym miejscu albo brakuje miejsca.",
+		"suggestHandlerUnavailable": "Procedura podpowiedzi zoomu niedostępna",
+		"noTelemetry": "Brak telemetrii kursora",
+		"recordFirst": "Najpierw nagraj screencast, aby wygenerować podpowiedzi oparte na kursorze.",
+		"noUsableTelemetry": "Brak użytecznej telemetrii kursora",
+		"notEnoughMovement": "Nagranie nie zawiera wystarczających danych o ruchu kursora.",
+		"noInteractionMoments": "Nie znaleziono wyraźnych momentów interakcji",
+		"tryRecording": "Spróbuj nagrania z pauzami lub kliknięciami przy ważnych akcjach.",
+		"noAutoZoomSlots": "Brak dostępnych miejsc autozoomu",
+		"dwellPointsOverlap": "Wykryte punkty zatrzymania nachodzą na istniejące regiony zoomu.",
+		"addedSuggestions": "Dodano podpowiedzi zoomu na bazie interakcji: {{count}}",
+		"label": "Zoom {{index}}",
+		"addZoom": "Dodaj zoom (Z)",
+		"suggestZooms": "Podpowiedz zoomy z kursora",
+		"clearAllZooms": "Wyczyść wszystkie zoomy"
+	},
+	"trim": {
+		"cannotPlace": "Nie można tu umieścić przycięcia",
+		"existsOrNoSpace": "Przycięcie już istnieje w tym miejscu albo brakuje miejsca.",
+		"label": "Przycięcie {{index}}",
+		"addTrim": "Dodaj przycięcie (T)"
+	},
+	"speed": {
+		"cannotPlace": "Nie można tu umieścić prędkości",
+		"existsOrNoSpace": "Region prędkości już istnieje w tym miejscu albo brakuje miejsca.",
+		"label": "Prędkość"
+	},
+	"annotation": {
+		"label": "Adnotacja",
+		"image": "Obraz",
+		"addAnnotation": "Dodaj adnotację (A)"
+	},
+	"audio": {
+		"label": "Audio"
+	},
+	"addSpeed": "Dodaj prędkość (S)",
+	"resizeLeft": "Zmień rozmiar z lewej",
+	"resizeRight": "Zmień rozmiar z prawej"
+}

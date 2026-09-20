@@ -39,6 +39,8 @@ const LOCALE_LABELS: Record<string, string> = {
 	"pt-BR": "Português",
 	ru: "Русский",
 	"zh-CN": "简体中文",
+	id: "Bahasa Indonesia",
+	pl: "Polski",
 	"zh-TW": "繁體中文",
 };
 
