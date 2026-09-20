@@ -28,7 +28,7 @@
 			"tagline": "AI 강화 오픈소스 화면 레코더",
 			"version": "v1.4.0-kliq"
 		},
-		
+
 		"license": {
 			"section": "许可证",
 			"free": "免费版",
@@ -60,7 +60,7 @@
 			"deactivating": "비활성화 중…",
 			"deactivated": "라이선스가 비활성화되었습니다"
 		},
-		
+
 		"account": {
 			"ai": {
 				"title": "AI 서비스",

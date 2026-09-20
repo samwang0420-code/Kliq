@@ -28,7 +28,7 @@
 			"tagline": "AI-powered open-source screen recorder",
 			"version": "v1.4.0-kliq"
 		},
-		
+
 		"license": {
 			"section": "License",
 			"free": "Free Edition",
@@ -60,7 +60,7 @@
 			"deactivating": "Deactivating…",
 			"deactivated": "License deactivated"
 		},
-		
+
 		"account": {
 			"ai": {
 				"title": "AI service",

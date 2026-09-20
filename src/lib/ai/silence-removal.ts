@@ -104,7 +104,8 @@ export async function detectSilenceRegions(
 	}
 
 	const totalSilenceMs = regions.reduce((sum, r) => sum + r.durationMs, 0);
-	const savingsPercent = totalDurationMs > 0 ? Math.round((totalSilenceMs / totalDurationMs) * 100) : 0;
+	const savingsPercent =
+		totalDurationMs > 0 ? Math.round((totalSilenceMs / totalDurationMs) * 100) : 0;
 
 	return { totalDurationMs, totalSilenceMs, silenceRegions: regions, savingsPercent };
 }

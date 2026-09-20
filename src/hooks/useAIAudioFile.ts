@@ -17,17 +17,15 @@ export type AIAudioFileState = {
 };
 
 type ElectronAI = {
-	aiReadFileAsBuffer: (filePath: string) => Promise<
-		{ ok: true; buffer: number[]; mimeType: string } | { ok: false; error: string }
-	>;
+	aiReadFileAsBuffer: (
+		filePath: string,
+	) => Promise<{ ok: true; buffer: number[]; mimeType: string } | { ok: false; error: string }>;
 	aiInferMimeType: (filePath: string) => Promise<string>;
 	openVideoFilePicker?: (options?: { includeProjects?: boolean }) => Promise<unknown>;
 };
 
 function getElectronAI(): ElectronAI | null {
-	const api = (
-		globalThis as typeof globalThis & { electronAPI?: ElectronAI }
-	).electronAPI;
+	const api = (globalThis as typeof globalThis & { electronAPI?: ElectronAI }).electronAPI;
 	if (!api || typeof api.aiReadFileAsBuffer !== "function") {
 		return null;
 	}
@@ -45,7 +43,12 @@ export function useAIAudioFile() {
 	const loadFile = useCallback(async (filePath: string) => {
 		const api = getElectronAI();
 		if (!api) {
-			setState({ file: null, filePath: null, mimeType: "", error: "AI IPC 不可用, 请检查 Electron preload 是否注入" });
+			setState({
+				file: null,
+				filePath: null,
+				mimeType: "",
+				error: "AI IPC 不可用, 请检查 Electron preload 是否注入",
+			});
 			return null;
 		}
 		const result = await api.aiReadFileAsBuffer(filePath);

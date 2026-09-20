@@ -226,7 +226,12 @@ export function registerSourceHandlers({
 						return true;
 					}
 
-					if (ALLOW_KLIQ_WINDOW_CAPTURE && (normalizedName.includes("kliq-recorder") || normalizedName.includes("yanjing") || normalizedName.includes("Kliq"))) {
+					if (
+						ALLOW_KLIQ_WINDOW_CAPTURE &&
+						(normalizedName.includes("kliq-recorder") ||
+							normalizedName.includes("yanjing") ||
+							normalizedName.includes("Kliq"))
+					) {
 						return true;
 					}
 
@@ -284,7 +289,9 @@ export function registerSourceHandlers({
 					if (
 						ALLOW_KLIQ_WINDOW_CAPTURE &&
 						(normalizedAppName === "kliq-recorder" ||
-							(normalizedWindowName?.includes("kliq-recorder") || normalizedWindowName?.includes("yanjing") || normalizedWindowName?.includes("Kliq")))
+							normalizedWindowName?.includes("kliq-recorder") ||
+							normalizedWindowName?.includes("yanjing") ||
+							normalizedWindowName?.includes("Kliq"))
 					) {
 						return true;
 					}
@@ -343,7 +350,12 @@ export function registerSourceHandlers({
 						return true;
 					}
 
-					if (ALLOW_KLIQ_WINDOW_CAPTURE && (normalizedName.includes("kliq-recorder") || normalizedName.includes("yanjing") || normalizedName.includes("Kliq"))) {
+					if (
+						ALLOW_KLIQ_WINDOW_CAPTURE &&
+						(normalizedName.includes("kliq-recorder") ||
+							normalizedName.includes("yanjing") ||
+							normalizedName.includes("Kliq"))
+					) {
 						return true;
 					}
 

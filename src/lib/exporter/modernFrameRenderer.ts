@@ -2833,9 +2833,7 @@ export class FrameRenderer {
 		return !this.webcamBackgroundBlurDisabledForExport;
 	}
 
-	private async updateWebcamOverlay(
-		referenceTimeSeconds = this.currentVideoTime,
-	): Promise<void> {
+	private async updateWebcamOverlay(referenceTimeSeconds = this.currentVideoTime): Promise<void> {
 		const webcam = this.config.webcam;
 		if (!webcam?.enabled || !this.webcamRootContainer || !this.webcamMaskGraphics) {
 			if (this.webcamRootContainer) {

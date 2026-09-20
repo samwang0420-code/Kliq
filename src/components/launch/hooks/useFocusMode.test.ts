@@ -104,7 +104,6 @@ describe("useFocusMode hook", () => {
 		stateIndex = 0;
 		effectCallbacks = [];
 		const { useFocusMode } = await import("./useFocusMode");
-		// biome-ignore lint/correctness/useHookAtTopLevel: runHook is a test-only hook runner, not a React component
 		const hookResult = useFocusMode();
 
 		// Run mounted effects

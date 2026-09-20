@@ -115,7 +115,10 @@ export async function detectFillerRegions(
 			allWords.push(...segWords);
 		} else {
 			// segment-level fallback: 整段判断
-			const segText = (seg.text ?? "").trim().toLowerCase().replace(/[，。！？、,.\!?]/g, "");
+			const segText = (seg.text ?? "")
+				.trim()
+				.toLowerCase()
+				.replace(/[，。！？、,.!?]/g, "");
 			if (segText && isFillerOnly(segText, fillers)) {
 				fillerRegions.push({
 					id: `filler-${Math.round((seg.start ?? 0) * 1000)}`,
@@ -133,7 +136,10 @@ export async function detectFillerRegions(
 	// word-level 处理
 	if (allWords.length > 0) {
 		for (const w of allWords) {
-			const text = (w.word ?? w.text ?? "").trim().toLowerCase().replace(/[，。！？、,.\!?]/g, "");
+			const text = (w.word ?? w.text ?? "")
+				.trim()
+				.toLowerCase()
+				.replace(/[，。！？、,.!?]/g, "");
 			if (!text) continue;
 			if (fillers.has(text)) {
 				fillerRegions.push({
@@ -161,7 +167,7 @@ export async function detectFillerRegions(
 function buildFillerSet(custom: string[] | undefined, language: string): Set<string> {
 	const set = new Set<string>();
 	if (custom && custom.length > 0) {
-		for (const w of custom) set.add(w.toLowerCase().replace(/[，。！？、,.\!?]/g, ""));
+		for (const w of custom) set.add(w.toLowerCase().replace(/[，。！？、,.!?]/g, ""));
 		return set;
 	}
 	if (language === "en") {
@@ -197,10 +203,7 @@ function detectLang(text: string): "zh" | "en" | "mixed" {
 export function fillerRegionsToCsv(regions: FillerRegion[]): string {
 	const header = "id,start_ms,end_ms,duration_ms,word,language\n";
 	const rows = regions
-		.map(
-			(r) =>
-				`${r.id},${r.startMs},${r.endMs},${r.durationMs},"${r.word}",${r.language}`,
-		)
+		.map((r) => `${r.id},${r.startMs},${r.endMs},${r.durationMs},"${r.word}",${r.language}`)
 		.join("\n");
 	return header + rows;
 }

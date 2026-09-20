@@ -323,7 +323,9 @@ export function CropControl({
 			{controlsAvailable && cursorFollow ? (
 				<div className="mx-auto mb-4 flex max-w-3xl flex-col gap-3 rounded-lg border border-border bg-card/40 p-4">
 					<label className="flex items-center justify-between gap-3 text-sm">
-						<span className="font-medium">{t("settings.crop.cursorFollow.trackCursor")}</span>
+						<span className="font-medium">
+							{t("settings.crop.cursorFollow.trackCursor")}
+						</span>
 						<input
 							type="checkbox"
 							checked={cursorFollow.enabled}
@@ -487,7 +489,10 @@ export function CropControl({
 				/>
 
 				{showOverlay ? (
-					<div className="absolute inset-0 pointer-events-none" style={{ transition: "none" }}>
+					<div
+						className="absolute inset-0 pointer-events-none"
+						style={{ transition: "none" }}
+					>
 						<svg
 							width="100%"
 							height="100%"

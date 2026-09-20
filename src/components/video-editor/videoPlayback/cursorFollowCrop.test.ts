@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CropRegion, CursorFollowCropSettings, CursorTelemetryPoint } from "../types";
-import {
-	computeCursorFollowCrop,
-	createCursorFollowCropState,
-} from "./cursorFollowCrop";
+import { computeCursorFollowCrop, createCursorFollowCropState } from "./cursorFollowCrop";
 
 const BASE_CROP: CropRegion = { x: 0, y: 0, width: 0.75, height: 0.75 };
 

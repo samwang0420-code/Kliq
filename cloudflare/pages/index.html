@@ -1163,12 +1163,12 @@ footer a:hover { color: #ededed; }
       b.classList.toggle('active', b.dataset.lang === lang);
     });
     document.documentElement.lang = (lang === 'zh') ? 'zh-CN' : 'en';
-    try { localStorage.setItem('yanjing.lang', lang); } catch (e) {}
+    try { localStorage.setItem('yanjing.lang', lang); } catch { /* storage may be blocked (private mode) */ }
   }
 
   function initLang() {
     let saved = null;
-    try { saved = localStorage.getItem('yanjing.lang'); } catch (e) {}
+    try { saved = localStorage.getItem('yanjing.lang'); } catch { /* storage may be blocked (private mode) */ }
     const urlLang = new URLSearchParams(location.search).get('lang');
     const navLang = (navigator.language || 'en').toLowerCase().startsWith('zh') ? 'zh' : 'en';
     applyLang(saved || urlLang || navLang);

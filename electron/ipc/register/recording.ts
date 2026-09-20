@@ -870,8 +870,7 @@ export function registerRecordingHandlers(
 					const { response } = await dialog.showMessageBox({
 						type: "warning",
 						title: "Screen Recording Permission Required",
-						message:
-							"Kliq needs screen recording permission to capture your screen.",
+						message: "Kliq needs screen recording permission to capture your screen.",
 						detail: "Please open System Settings > Privacy & Security > Screen Recording, make sure Kliq is toggled ON, then try recording again.",
 						buttons: ["Open System Settings", "Cancel"],
 						defaultId: 0,

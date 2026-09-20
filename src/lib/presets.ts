@@ -7,12 +7,7 @@
  * 用户在新建项目时选模板, 自动应用推荐配置 + AI 热词
  */
 
-export type ScenarioTemplateId =
-	| "liveStream"
-	| "teaching"
-	| "demo"
-	| "interview"
-	| "sales";
+export type ScenarioTemplateId = "liveStream" | "teaching" | "demo" | "interview" | "sales";
 
 export type PlatformPresetId =
 	| "douyin"

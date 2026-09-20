@@ -109,14 +109,119 @@ export function buildGptSystemPromptFragment(domain: HotwordDomain): string {
 export function suggestDomain(text: string): HotwordDomain {
 	const lower = text.toLowerCase();
 
-	const legalKeywords = ["原告", "被告", "诉讼", "仲裁", "判决", "法律", "合同", "民法", "刑法", "知识产权", "专利", "商标"];
-	const medicalKeywords = ["高血压", "糖尿病", "医生", "患者", "手术", "医院", "药品", "症状", "诊断", "治疗", "CT", "MRI"];
-	const ecommerceKeywords = ["淘宝", "天猫", "京东", "抖音", "直播", "带货", "SKU", "GMV", "店铺", "卖家", "买家"];
-	const educationKeywords = ["学生", "老师", "教授", "课程", "教学", "考试", "教材", "课件", "学校", "大学", "中学", "小学"];
-	const financeKeywords = ["股票", "基金", "债券", "期货", "外汇", "利率", "央行", "美联储", "IPO", "市盈率", "收益率", "止损", "杠杆"];
-	const gamingKeywords = ["MOBA", "FPS", "排位", "上分", "铭文", "出装", "走位", "打野", "团战", "五杀", "MVP", "段位", "钻石"];
-	const techKeywords = ["API", "SDK", "前端", "后端", "数据库", "缓存", "Docker", "微服务", "算法", "深度学习", "LLM", "RAG"];
-	const marketingKeywords = ["私域", "公域", "引流", "转化", "复购", "裂变", "DAU", "GMV", "ROI", "CTR", "投放", "短视频"];
+	const legalKeywords = [
+		"原告",
+		"被告",
+		"诉讼",
+		"仲裁",
+		"判决",
+		"法律",
+		"合同",
+		"民法",
+		"刑法",
+		"知识产权",
+		"专利",
+		"商标",
+	];
+	const medicalKeywords = [
+		"高血压",
+		"糖尿病",
+		"医生",
+		"患者",
+		"手术",
+		"医院",
+		"药品",
+		"症状",
+		"诊断",
+		"治疗",
+		"CT",
+		"MRI",
+	];
+	const ecommerceKeywords = [
+		"淘宝",
+		"天猫",
+		"京东",
+		"抖音",
+		"直播",
+		"带货",
+		"SKU",
+		"GMV",
+		"店铺",
+		"卖家",
+		"买家",
+	];
+	const educationKeywords = [
+		"学生",
+		"老师",
+		"教授",
+		"课程",
+		"教学",
+		"考试",
+		"教材",
+		"课件",
+		"学校",
+		"大学",
+		"中学",
+		"小学",
+	];
+	const financeKeywords = [
+		"股票",
+		"基金",
+		"债券",
+		"期货",
+		"外汇",
+		"利率",
+		"央行",
+		"美联储",
+		"IPO",
+		"市盈率",
+		"收益率",
+		"止损",
+		"杠杆",
+	];
+	const gamingKeywords = [
+		"MOBA",
+		"FPS",
+		"排位",
+		"上分",
+		"铭文",
+		"出装",
+		"走位",
+		"打野",
+		"团战",
+		"五杀",
+		"MVP",
+		"段位",
+		"钻石",
+	];
+	const techKeywords = [
+		"API",
+		"SDK",
+		"前端",
+		"后端",
+		"数据库",
+		"缓存",
+		"Docker",
+		"微服务",
+		"算法",
+		"深度学习",
+		"LLM",
+		"RAG",
+	];
+	const marketingKeywords = [
+		"私域",
+		"公域",
+		"引流",
+		"转化",
+		"复购",
+		"裂变",
+		"DAU",
+		"GMV",
+		"ROI",
+		"CTR",
+		"投放",
+		"短视频",
+	];
 
 	const scores = {
 		legal: legalKeywords.filter((k) => lower.includes(k)).length,

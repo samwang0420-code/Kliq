@@ -28,7 +28,7 @@
 			"tagline": "AI 增強的開源屏幕錄制器",
 			"version": "v1.4.0-kliq"
 		},
-		
+
 		"license": {
 			"section": "许可证",
 			"free": "免费版",
@@ -60,7 +60,7 @@
 			"deactivating": "停用中…",
 			"deactivated": "License 已停用"
 		},
-		
+
 		"account": {
 			"ai": {
 				"title": "AI 服務",
