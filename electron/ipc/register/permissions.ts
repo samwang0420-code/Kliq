@@ -1,4 +1,4 @@
-import { ipcMain, shell, systemPreferences } from "electron";
+import { desktopCapturer, ipcMain, shell, systemPreferences } from "electron";
 import { getMacPrivacySettingsUrl } from "../utils";
 
 export function registerPermissionHandlers() {
@@ -41,20 +41,41 @@ export function registerPermissionHandlers() {
 		};
 	});
 
-	ipcMain.handle("get-screen-recording-permission-status", () => {
+	ipcMain.handle("get-screen-recording-permission-status", async () => {
 		if (process.platform !== "darwin") {
 			return { success: true, status: "granted" };
 		}
 
+		// macOS 14+ (Sequoia) / 26 (Tahoe): systemPreferences.getMediaAccessStatus("screen")
+		// is unreliable — it can return "denied"/"not-determined" even when the user has
+		// granted access. Probe desktopCapturer.getSources instead: if we can enumerate
+		// screens, permission is effectively granted. Ported from the 2026-09-19 fix.
+		let systemStatus = "unknown";
 		try {
-			return {
-				success: true,
-				status: systemPreferences.getMediaAccessStatus("screen"),
-			};
+			systemStatus = systemPreferences.getMediaAccessStatus("screen");
 		} catch (error) {
-			console.error("Failed to get screen recording permission status:", error);
-			return { success: false, status: "unknown", error: String(error) };
+			console.error("Failed to get screen recording status via system API:", error);
 		}
+
+		let actualStatus: "granted" | "denied" = "denied";
+		try {
+			const sources = await desktopCapturer.getSources({ types: ["screen"] });
+			actualStatus = sources.length > 0 ? "granted" : "denied";
+		} catch (error) {
+			console.warn(
+				"desktopCapturer.getSources failed (screen recording permission may be missing):",
+				error,
+			);
+			actualStatus = "denied";
+		}
+
+		// Trust the actual probe over the (broken on macOS 14+) system API.
+		return {
+			success: true,
+			status: actualStatus === "granted" ? "granted" : "denied",
+			systemStatus,
+			actualStatus,
+		};
 	});
 
 	ipcMain.handle("open-screen-recording-preferences", async () => {
