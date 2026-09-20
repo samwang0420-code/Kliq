@@ -6,6 +6,9 @@ import {
 	activateLicense,
 	canUseFeature,
 	deactivateLicense,
+	FREE_AI_ACTIONS,
+	FREE_FEATURES,
+	isFreeAction,
 	getLicenseStatus,
 	isPro,
 	maskLicenseKey,
@@ -165,6 +168,38 @@ describe("pro gating", () => {
 		}
 	});
 
+	it("classifies every AI action as exactly one of free or Pro — no silent gap", async () => {
+		// 这条是「能力声明了却没归类」的护栏：新增一个工具栏动作时，如果
+		// 既没进 ACTION_TO_PRO_FEATURE、也没进 FREE_AI_ACTIONS，这里会红。
+		// 上一轮审查抓到的 9 个不可达动作，本质就是这类「声明了但没接线」。
+		const { AI_ACTION_IDS } = await import("./ai/action-inputs");
+		const free = new Set<string>(FREE_AI_ACTIONS);
+		const pro = new Set(Object.keys(ACTION_TO_PRO_FEATURE));
+
+		expect(AI_ACTION_IDS.filter((id) => !free.has(id) && !pro.has(id))).toEqual([]);
+		expect(AI_ACTION_IDS.filter((id) => free.has(id) && pro.has(id))).toEqual([]);
+		expect([...free, ...pro].filter((id) => !AI_ACTION_IDS.includes(id))).toEqual([]);
+		expect(free.size + pro.size).toBe(AI_ACTION_IDS.length);
+	});
+
+	it("exposes the free/Pro split through both helpers consistently", () => {
+		for (const action of FREE_AI_ACTIONS) {
+			expect(isFreeAction(action)).toBe(true);
+			expect(actionRequiresPro(action)).toBe(false);
+		}
+		for (const action of Object.keys(ACTION_TO_PRO_FEATURE)) {
+			expect(isFreeAction(action)).toBe(false);
+			expect(actionRequiresPro(action)).toBe(true);
+		}
+	});
+
+	it("keeps the free feature groups non-empty and disjoint from the Pro groups", () => {
+		expect(FREE_FEATURES.length).toBeGreaterThan(0);
+		for (const feature of FREE_FEATURES) {
+			expect(PRO_FEATURES).not.toContain(feature);
+		}
+	});
+
 	it("maps every gated action onto a declared feature group", () => {
 		for (const [action, feature] of Object.entries(ACTION_TO_PRO_FEATURE)) {
 			expect(PRO_FEATURES).toContain(feature);
@@ -290,9 +325,25 @@ describe("activateLicense (online validation)", () => {
 		expect(mod.isPro()).toBe(false);
 	});
 
-	it("treats a 404 as 'not registered yet' and activates offline", async () => {
+	it("treats a 404 as 'validate endpoint missing' and activates offline", async () => {
+		// 语义收紧（见 functions/api/license-validate.ts）：上游「key 不存在」的 404
+		// 已被 Pages Function 转成 200 + valid:false，客户端的 404 只剩一种含义 ——
+		// 端点本身没部署（邮件发售期 / 路由缺失），此时降级离线激活。
 		const mod = await loadLicenseModuleWithSite("https://example.com");
 		vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null, { status: 404 }));
+
+		const result = await mod.activateLicense("kliq-pro-1a2b3c4d");
+
+		expect(result.success).toBe(true);
+		expect(result.status?.offline).toBe(true);
+	});
+
+	it("treats a 503 as upstream outage and activates offline instead of judging the key", async () => {
+		// Lemon Squeezy 故障不是 key 的错：判成 invalid 会错杀真 key。
+		const mod = await loadLicenseModuleWithSite("https://example.com");
+		vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(JSON.stringify({ valid: false, error: "upstream down" }), { status: 503 }),
+		);
 
 		const result = await mod.activateLicense("kliq-pro-1a2b3c4d");
 

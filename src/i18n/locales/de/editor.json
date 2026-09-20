@@ -205,7 +205,39 @@
 			"proActive": "Pro",
 			"proEntryHint": "Lizenz und Pro-Leistungen verwalten",
 			"proBadge": "PRO",
-			"proLocked": "Pro-Funktion"
+			"proLocked": "Pro-Funktion",
+			"inputsTitle": "KI-Eingaben",
+			"transcriptLabel": "Transkript",
+			"transcriptPlaceholder": "„KI-Transkription“ starten oder Text einfügen",
+			"segmentReady": "{{count}} zeitcodierte Untertitel bereit",
+			"queryLabel": "Suchbegriff",
+			"queryPlaceholder": "z. B. wo lief es schief",
+			"sourceTextLabel": "Zu überarbeitender Text",
+			"sourceTextPlaceholder": "Fügen Sie den zu überarbeitenden Text ein",
+			"resultsTitle": "KI-Ergebnisse",
+			"useTranscript": "Als Eingabe nutzen",
+			"copy": "Kopieren",
+			"copied": "Kopiert",
+			"itemCount": "{{count}} Eintrag/Einträge",
+			"scoreLabel": "Treffer",
+			"noResults": "Keine Treffer",
+			"inputHints": {
+				"file": "Zuerst eine Video-/Audiodatei auswählen",
+				"duration": "Mediendauer erforderlich (zuerst Datei wählen)",
+				"transcript": "Transkript erforderlich: „KI-Transkription“ starten oder Text einfügen",
+				"segments": "Zeitcodierte Untertitel erforderlich: zuerst „KI-Transkription“ starten",
+				"query": "Suchbegriff eingeben",
+				"sourceText": "Zu überarbeitenden Text eingeben"
+			},
+			"scenarioLabel": "Szenario:",
+			"scenarioNone": "Keine Vorlage",
+			"scenario": {
+				"liveStream": "Livestream",
+				"teaching": "Unterricht",
+				"demo": "Produktdemo",
+				"interview": "Interview",
+				"sales": "Vertriebsgespräch"
+			}
 		}
 	}
 }

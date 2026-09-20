@@ -54,9 +54,7 @@ export default function App() {
 
 	useEffect(() => {
 		document.title =
-			windowType === "editor"
-				? t("app.editorTitle", "Kliq 编辑器")
-				: t("app.name", "Kliq");
+			windowType === "editor" ? t("app.editorTitle", "Kliq 编辑器") : t("app.name", "Kliq");
 	}, [windowType, t]);
 
 	let content;

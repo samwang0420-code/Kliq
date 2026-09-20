@@ -43,7 +43,16 @@ export type SocialCopy = {
 /**
  * 生成视频章节
  */
-export async function generateChapters(transcript: string, videoDuration: number): Promise<Chapter[]> {
+export async function generateChapters(
+	transcript: string,
+	videoDuration: number,
+): Promise<Chapter[]> {
+	// 章节时间轴与 Whisper segment 同单位（秒）。此前调用方传的是毫秒，
+	// 且在缺时长时直接走到下面的 toFixed 抛 TypeError（无法阅读的报错）。
+	// 这里显式校验，把问题变成可执行的提示。
+	if (!Number.isFinite(videoDuration) || videoDuration <= 0) {
+		throw new Error("章节生成需要视频时长（秒），请先完成 AI 转录或选择媒体文件");
+	}
 	const domain = suggestDomain(transcript);
 	const content = await chatCompletion({
 		hotwordDomain: domain,
@@ -82,7 +91,9 @@ function parseChapters(content: string): Chapter[] {
 		if (jsonMatch) {
 			return JSON.parse(jsonMatch[0]);
 		}
-	} catch {}
+	} catch {
+		// Model may not return a JSON array; fall through to the empty result.
+	}
 	return [];
 }
 
@@ -128,7 +139,9 @@ export async function generateSummary(transcript: string): Promise<Summary> {
 				timestamp: Date.now(),
 			};
 		}
-	} catch {}
+	} catch {
+		// Model may not return a JSON object; fall through to the empty summary.
+	}
 
 	return { brief: "", highlights: [], timestamp: Date.now() };
 }
@@ -173,7 +186,9 @@ export async function generateTitles(transcript: string): Promise<TitleCandidate
 		if (jsonMatch) {
 			return JSON.parse(jsonMatch[0]);
 		}
-	} catch {}
+	} catch {
+		// Model may not return a JSON array; fall through to the empty list.
+	}
 
 	return [];
 }
@@ -212,10 +227,15 @@ export async function generateTags(transcript: string): Promise<string[]> {
 		if (jsonMatch) {
 			const tags = JSON.parse(jsonMatch[0]);
 			if (Array.isArray(tags)) {
-				return tags.map((t: unknown) => String(t).replace(/^#/, "")).filter((t: string) => t.length > 0).slice(0, 10);
+				return tags
+					.map((t: unknown) => String(t).replace(/^#/, ""))
+					.filter((t: string) => t.length > 0)
+					.slice(0, 10);
 			}
 		}
-	} catch {}
+	} catch {
+		// Model may not return a valid JSON array; fall through to the empty list.
+	}
 
 	return [];
 }
@@ -259,7 +279,9 @@ export async function generateSocialCopy(transcript: string): Promise<SocialCopy
 		if (jsonMatch) {
 			return JSON.parse(jsonMatch[0]);
 		}
-	} catch {}
+	} catch {
+		// Model may not return a JSON object; fall through to the empty copy.
+	}
 
 	return { twitter: "", xiaohongshu: "", wechat: "", bilibili: "" };
 }

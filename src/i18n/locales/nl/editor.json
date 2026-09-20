@@ -205,7 +205,39 @@
 			"proActive": "Pro",
 			"proEntryHint": "Beheer licentie en Pro-voordelen",
 			"proBadge": "PRO",
-			"proLocked": "Pro-functie"
+			"proLocked": "Pro-functie",
+			"inputsTitle": "AI-invoer",
+			"transcriptLabel": "Transcript",
+			"transcriptPlaceholder": "Start “AI Transcribe” of plak hier de tekst",
+			"segmentReady": "{{count}} getimede ondertitels gereed",
+			"queryLabel": "Zoekopdracht",
+			"queryPlaceholder": "bijv. waar ging het mis",
+			"sourceTextLabel": "Bij te schaven tekst",
+			"sourceTextPlaceholder": "Plak de tekst die je wilt bijschaven",
+			"resultsTitle": "AI-resultaten",
+			"useTranscript": "Als invoer gebruiken",
+			"copy": "Kopiëren",
+			"copied": "Gekopieerd",
+			"itemCount": "{{count}} item(s)",
+			"scoreLabel": "score",
+			"noResults": "Geen resultaten",
+			"inputHints": {
+				"file": "Selecteer eerst een video-/audiobestand",
+				"duration": "Mediaduur vereist (kies eerst een bestand)",
+				"transcript": "Transcript vereist: start “AI Transcribe” of plak de tekst",
+				"segments": "Getimede ondertitels vereist: start eerst “AI Transcribe”",
+				"query": "Voer een zoekopdracht in",
+				"sourceText": "Voer de bij te schaven tekst in"
+			},
+			"scenarioLabel": "Scenario:",
+			"scenarioNone": "Geen sjabloon",
+			"scenario": {
+				"liveStream": "Livestream",
+				"teaching": "Onderwijs",
+				"demo": "Productdemo",
+				"interview": "Interview",
+				"sales": "Verkoopgesprek"
+			}
 		}
 	}
 }

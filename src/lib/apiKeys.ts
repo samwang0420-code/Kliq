@@ -27,15 +27,11 @@ export type ApiKeyEntry = {
 	updatedAt: number;
 };
 
-type ElectronSettingsApi = Pick<
-	Window["electronAPI"],
-	"getAppSetting" | "setAppSetting"
->;
+type ElectronSettingsApi = Pick<Window["electronAPI"], "getAppSetting" | "setAppSetting">;
 
 function getElectronSettingsApi(): ElectronSettingsApi | null {
-	const api = (
-		globalThis as typeof globalThis & { electronAPI?: ElectronSettingsApi }
-	).electronAPI;
+	const api = (globalThis as typeof globalThis & { electronAPI?: ElectronSettingsApi })
+		.electronAPI;
 	if (
 		!api ||
 		typeof api.getAppSetting !== "function" ||

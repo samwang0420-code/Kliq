@@ -260,7 +260,9 @@
 		"saveProject": "프로젝트 저장",
 		"exportVideo": "{{format}} 내보내기",
 		"reportBug": "버그 신고",
-		"starOnGithub": "GitHub에서 별표 주기"
+		"starOnGithub": "GitHub에서 별표 주기",
+		"pickFile": "동영상/오디오 선택",
+		"clearFile": "파일 제거"
 	},
 	"audio": {
 		"title": "오디오",

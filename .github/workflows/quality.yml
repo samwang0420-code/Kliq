@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
   push:
-    branches: [main]
+    branches: [main, dev]
   workflow_dispatch:
 
 permissions:
@@ -56,10 +56,16 @@ jobs:
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm test
 
-      # Main currently has known locale-parity debt covered by PR #710. Keep the
-      # check visible without blocking unrelated PRs; make it required once that
-      # existing translation PR (or an equivalent fix) lands.
-      - name: Check translations (advisory)
+      # i18n-check 曾经是 advisory，原因是脚本扫目录取语言列表，被未注册的残留目录
+      # 搞成一直 exit 1（门禁形同虚设）。现已改为从 src/i18n/config.ts 的
+      # SUPPORTED_LOCALES 读取并做双向对齐，通过后即改为阻塞。
+      - name: Check translations
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
-        continue-on-error: true
         run: npm run i18n:check
+
+      # 落地页是手写单文件 HTML，走自己的 data-bind + 内嵌文案表，不经过任何
+      # 构建期校验：一个漏登记的绑定、一个空 href 的购买按钮、一段写错的内嵌脚本，
+      # 都能在「应用里一切正常」的情况下悄悄上线。这条门禁就是补这个盲区。
+      - name: Check landing site
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run verify:site

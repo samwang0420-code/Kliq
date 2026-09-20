@@ -1,5 +1,6 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import type { ModernVideoExporter as ModernVideoExporterClass } from "./modernVideoExporter";
+import { AudioProcessor } from "./audioEncoder";
 
 const mocks = vi.hoisted(() => {
 	const videoInfo = {
@@ -364,6 +365,71 @@ describe("ModernVideoExporter native fallback routing", () => {
 		]);
 		expect(mocks.streamingDecoderDecodeAll).toHaveBeenCalledTimes(2);
 		expect(mocks.muxerFinalize).toHaveBeenCalledTimes(1);
+	});
+
+	/**
+	 * #984 的接线测试：决策逻辑本身在 sourceAudioFallback.test.ts 里锁，
+	 * 这里只锁「浏览器 WebCodecs 路径**确实**用了归一化后的列表」。
+	 *
+	 * 修之前这里拿到的实参是 config 原始列表（只有 mic），内嵌桌面音频丢失。
+	 */
+	it("mixes embedded desktop audio with a microphone sidecar on the browser route", async () => {
+		const micPath = "C:\\recordly\\recording.mic.wav";
+		// 没有 AAC 编码器时导出会改走 FFmpeg 音频兜底（本环境没有），
+		// 那就绕过了要验证的 JS 混音路径 —— 所以先把编码器能力桩上。
+		vi.stubGlobal("AudioEncoder", {
+			isConfigSupported: vi.fn(async () => ({ supported: true })),
+		});
+		mocks.streamingDecoderGetEffectiveDuration.mockReturnValue(1);
+		mocks.streamingDecoderLoadMetadata.mockResolvedValue({
+			...mocks.videoInfo,
+			hasAudio: true,
+			audioCodec: "aac",
+			audioSampleRate: 48_000,
+		});
+		const processSpy = vi
+			.spyOn(AudioProcessor.prototype, "process")
+			.mockResolvedValue(true as never);
+
+		try {
+			const exporter = new ModernVideoExporter({
+				videoUrl: "file:///C:/recordly/recording.mp4",
+				width: 1920,
+				height: 1080,
+				frameRate: 30,
+				bitrate: 8_000_000,
+				wallpaper: "#101010",
+				padding: 0,
+				borderRadius: 0,
+				backgroundBlur: 0,
+				shadowIntensity: 0,
+				showShadow: false,
+				cropRegion: { x: 0, y: 0, width: 1, height: 1 },
+				backendPreference: "webcodecs",
+				sourceAudioFallbackPaths: [micPath],
+			} as never) as unknown as {
+				export: () => Promise<{ success: boolean; error?: string }>;
+				initializeEncoder: () => Promise<unknown>;
+			};
+
+			vi.spyOn(exporter, "initializeEncoder").mockResolvedValue({
+				codec: "avc1.640034",
+				hardwareAcceleration: "prefer-hardware",
+			});
+
+			const result = await exporter.export();
+
+			expect(result.success, result.error).toBe(true);
+			expect(processSpy).toHaveBeenCalledTimes(1);
+			// 第 8 个实参 = sourceAudioFallbackPaths
+			const pathsArg = processSpy.mock.calls[0]?.[7] as unknown as string[];
+			expect(pathsArg).toHaveLength(2);
+			expect(pathsArg[0]).toMatch(/recording\.mp4$/i);
+			expect(pathsArg[1]).toBe(micPath);
+		} finally {
+			processSpy.mockRestore();
+			mocks.streamingDecoderLoadMetadata.mockImplementation(async () => mocks.videoInfo);
+		}
 	});
 
 	it("builds actionable diagnostics for input decoder failures", () => {

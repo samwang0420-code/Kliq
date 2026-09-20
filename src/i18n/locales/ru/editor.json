@@ -205,7 +205,39 @@
 			"proActive": "Pro",
 			"proEntryHint": "Управление лицензией и возможностями Pro",
 			"proBadge": "PRO",
-			"proLocked": "Функция Pro"
+			"proLocked": "Функция Pro",
+			"inputsTitle": "Ввод ИИ",
+			"transcriptLabel": "Транскрипт",
+			"transcriptPlaceholder": "Запустите «AI Transcribe» или вставьте текст",
+			"segmentReady": "Готово субтитров с таймкодами: {{count}}",
+			"queryLabel": "Поисковый запрос",
+			"queryPlaceholder": "напр. где всё пошло не так",
+			"sourceTextLabel": "Текст для доработки",
+			"sourceTextPlaceholder": "Вставьте текст для доработки",
+			"resultsTitle": "Результаты ИИ",
+			"useTranscript": "Использовать как ввод",
+			"copy": "Копировать",
+			"copied": "Скопировано",
+			"itemCount": "{{count}} элемент(ов)",
+			"scoreLabel": "оценка",
+			"noResults": "Совпадений нет",
+			"inputHints": {
+				"file": "Сначала выберите видео- или аудиофайл",
+				"duration": "Нужна длительность медиа (сначала выберите файл)",
+				"transcript": "Нужен транскрипт: запустите «AI Transcribe» или вставьте текст",
+				"segments": "Нужны субтитры с таймкодами: сначала запустите «AI Transcribe»",
+				"query": "Введите поисковый запрос",
+				"sourceText": "Введите текст для доработки"
+			},
+			"scenarioLabel": "Сценарий:",
+			"scenarioNone": "Без шаблона",
+			"scenario": {
+				"liveStream": "Стрим",
+				"teaching": "Обучение",
+				"demo": "Демо продукта",
+				"interview": "Интервью",
+				"sales": "Звонок продаж"
+			}
 		}
 	}
 }

@@ -8,8 +8,8 @@
  *       本地存储最近 50 个 transcript 的 embeddings (localStorage)
  */
 
-import { chatCompletion } from "./openai-client";
 import type { TranscribeSegment } from "./openai-client";
+import { chatCompletion } from "./openai-client";
 
 const EMBEDDING_MODEL = "text-embedding-3-small";
 const EMBEDDING_DIM = 1536;
@@ -96,10 +96,13 @@ export async function indexTranscript(
 	videoTitle: string,
 	segments: Pick<TranscribeSegment, "id" | "start" | "end" | "text">[],
 ): Promise<IndexedTranscript> {
-	// 取 API key (复用 openai-client 的逻辑)
+	// 语义搜索依赖 OpenAI 的 embeddings 端点（DeepSeek 没有 embeddings API），
+	// 所以这里固定读 openai 凭据，不走文本后端偏好。
 	const entry = await import("../apiKeys").then((m) => m.getApiKey("openai"));
 	if (!entry) {
-		throw new Error("OpenAI API key 未配置, 无法建立索引");
+		throw new Error(
+			"语义搜索需要 OpenAI API key（embeddings 端点）。请到「个人中心 → AI 服务」配置。",
+		);
 	}
 
 	// 并发生成 embedding
@@ -109,7 +112,11 @@ export async function indexTranscript(
 			startMs: Math.round((s.start ?? 0) * 1000),
 			endMs: Math.round((s.end ?? 0) * 1000),
 			text: s.text ?? "",
-			embedding: await embed(s.text ?? "", entry.apiKey, entry.baseUrl ?? "https://api.openai.com/v1"),
+			embedding: await embed(
+				s.text ?? "",
+				entry.apiKey,
+				entry.baseUrl ?? "https://api.openai.com/v1",
+			),
 		})),
 	);
 
@@ -128,7 +135,9 @@ export async function indexTranscript(
 export async function semanticSearch(options: SearchOptions): Promise<SearchHit[]> {
 	const entry = await import("../apiKeys").then((m) => m.getApiKey("openai"));
 	if (!entry) {
-		throw new Error("OpenAI API key 未配置, 无法搜索");
+		throw new Error(
+			"语义搜索需要 OpenAI API key（embeddings 端点）。请到「个人中心 → AI 服务」配置。",
+		);
 	}
 
 	const transcripts = options.transcripts ?? loadFromCache();

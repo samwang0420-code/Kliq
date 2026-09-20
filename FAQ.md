@@ -155,7 +155,7 @@ transcribeWithWhisper({
 
 ## Q10: Cloudflare Pages 部署失败 "Module not found"
 
-**A**: `cloudflare/api/license-validate.ts` 用了 TypeScript 语法,Cloudflare 需要 esbuild。
+**A**: `functions/api/license-validate.ts` 用了 TypeScript 语法,Cloudflare 需要 esbuild。
 
 **解决**: 在项目根目录加 `_routes.json`:
 ```json

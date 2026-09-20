@@ -57,9 +57,7 @@ export type ProofreadResult = {
 	highSeverityCount: number;
 };
 
-export async function proofreadCaptions(
-	options: ProofreadOptions,
-): Promise<ProofreadResult> {
+export async function proofreadCaptions(options: ProofreadOptions): Promise<ProofreadResult> {
 	const { captions, hotwordDomain, strictness = "medium" } = options;
 	if (captions.length === 0) {
 		return { issues: [], correctedCaptions: [], totalIssues: 0, highSeverityCount: 0 };
@@ -85,9 +83,7 @@ export async function proofreadCaptions(
 - reason: 简短原因 (≤ 30 字)
 
 字幕列表:
-${captions
-	.map((c) => `[${c.id}] ${c.start}-${c.end}s: "${c.text}" | "${c.text}"`)
-	.join("\n")}`;
+${captions.map((c) => `[${c.id}] ${c.start}-${c.end}s: "${c.text}" | "${c.text}"`).join("\n")}`;
 
 	try {
 		const response = await chatCompletion({
@@ -101,10 +97,17 @@ ${captions
 
 		const jsonMatch = response.match(/\[[\s\S]*\]/);
 		if (!jsonMatch) {
-			return { issues: [], correctedCaptions: captions, totalIssues: 0, highSeverityCount: 0 };
+			return {
+				issues: [],
+				correctedCaptions: captions,
+				totalIssues: 0,
+				highSeverityCount: 0,
+			};
 		}
 
-		const parsed = JSON.parse(jsonMatch[0]) as Array<Omit<ProofreadIssue, "captionId"> & { id: string }>;
+		const parsed = JSON.parse(jsonMatch[0]) as Array<
+			Omit<ProofreadIssue, "captionId"> & { id: string }
+		>;
 		const issues: ProofreadIssue[] = parsed.map((p) => ({
 			captionId: String(p.id),
 			originalText: p.originalText,

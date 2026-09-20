@@ -205,7 +205,39 @@
 			"proActive": "Pro",
 			"proEntryHint": "管理许可证与 Pro 权益",
 			"proBadge": "PRO",
-			"proLocked": "Pro 功能"
+			"proLocked": "Pro 功能",
+			"inputsTitle": "AI 输入",
+			"transcriptLabel": "转录文本",
+			"transcriptPlaceholder": "先点「AI 转录」，或直接粘贴文本",
+			"segmentReady": "已有 {{count}} 条带时间轴的字幕",
+			"queryLabel": "搜索关键词",
+			"queryPlaceholder": "例如：讲的什么坑",
+			"sourceTextLabel": "待润色文案",
+			"sourceTextPlaceholder": "粘贴你想润色的文案",
+			"resultsTitle": "AI 结果",
+			"useTranscript": "填入输入区",
+			"copy": "复制",
+			"copied": "已复制",
+			"itemCount": "{{count}} 条",
+			"scoreLabel": "匹配度",
+			"noResults": "没有匹配结果",
+			"inputHints": {
+				"file": "请先选择视频 / 音频文件",
+				"duration": "需要媒体时长（先选择文件）",
+				"transcript": "需要转录文本：先运行「AI 转录」或粘贴文本",
+				"segments": "需要带时间轴的字幕：先运行「AI 转录」",
+				"query": "需要填写搜索关键词",
+				"sourceText": "需要填写待润色文案"
+			},
+			"scenarioLabel": "场景：",
+			"scenarioNone": "不使用模板",
+			"scenario": {
+				"liveStream": "直播切片",
+				"teaching": "在线教学",
+				"demo": "产品演示",
+				"interview": "面试录制",
+				"sales": "销售通话"
+			}
 		}
 	}
 }

@@ -1,0 +1,17 @@
+{
+	"actions": {
+		"addZoom": "Tambah Zum",
+		"addTrim": "Tambah Potongan",
+		"addSpeed": "Tambah Kecepatan",
+		"addAnnotation": "Tambah Anotasi",
+		"addKeyframe": "Tambah Keyframe",
+		"deleteSelected": "Hapus yang Dipilih",
+		"duplicateSelected": "Duplikat yang Dipilih",
+		"playPause": "Putar / Jeda",
+		"cycleForward": "Berpindah Anotasi ke Depan",
+		"cycleBackward": "Berpindah Anotasi ke Belakang",
+		"deleteSelectedAlt": "Hapus yang Dipilih (alt)",
+		"panTimeline": "Geser Lini Masa",
+		"zoomTimeline": "Zum Lini Masa"
+	}
+}

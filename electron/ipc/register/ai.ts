@@ -18,7 +18,12 @@ export function registerAIHandlers(): void {
 	 */
 	ipcMain.handle(
 		"ai-read-file-as-buffer",
-		async (_event, filePath: string): Promise<{ ok: true; buffer: number[]; mimeType: string } | { ok: false; error: string }> => {
+		async (
+			_event,
+			filePath: string,
+		): Promise<
+			{ ok: true; buffer: number[]; mimeType: string } | { ok: false; error: string }
+		> => {
 			try {
 				if (!filePath) return { ok: false, error: "empty path" };
 				const buffer = await readFile(filePath);
@@ -35,13 +40,10 @@ export function registerAIHandlers(): void {
 	/**
 	 * 推断文件 mime type
 	 */
-	ipcMain.handle(
-		"ai-infer-mime-type",
-		async (_event, filePath: string): Promise<string> => {
-			const ext = path.extname(filePath).toLowerCase().replace(/^\./, "");
-			return inferMimeType(ext);
-		},
-	);
+	ipcMain.handle("ai-infer-mime-type", async (_event, filePath: string): Promise<string> => {
+		const ext = path.extname(filePath).toLowerCase().replace(/^\./, "");
+		return inferMimeType(ext);
+	});
 }
 
 function inferMimeType(ext: string): string {

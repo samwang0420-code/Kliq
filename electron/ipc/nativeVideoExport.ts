@@ -154,6 +154,24 @@ function getLibx264ModeArgs(encodingMode: NativeExportEncodingMode): string[] {
 	}
 }
 
+/**
+ * 静态布局导出的全部 FFmpeg 渲染分支（precomposited / cuda-overlay /
+ * cuda-scale-cpu-pad）都硬编码 `-c:v h264_nvenc` 与 nvenc 专属参数
+ * （`-rc`、`-rc-lookahead`、`-surfaces`…）。在没有 nvenc 的机器上
+ * （macOS 全部、无 NVIDIA 的 Windows/Linux），ffmpeg 在解析 `-rc` 时就会
+ * 报 "Unrecognized option 'rc'" 直接退出 —— 渲染层虽然会回退 WebCodecs，
+ * 但每次导出都要白付一次失败成本，且日志里是一条难以定位的密码式报错。
+ * 在进入这些分支**之前**用本函数把门，把回退变成有明确原因的主动决策。
+ */
+export function getNativeStaticLayoutCudaMissingReason(
+	availableEncoders: ReadonlySet<string>,
+): string | null {
+	if (availableEncoders.has("h264_nvenc")) {
+		return null;
+	}
+	return "h264_nvenc encoder is not available in this FFmpeg build; NVIDIA CUDA static-layout export requires an NVIDIA GPU";
+}
+
 function getBitrateArgs(bitrate: number): string[] {
 	const effectiveBitrate = Math.max(1_500_000, Math.round(bitrate));
 	const maxRate = Math.max(effectiveBitrate, Math.round(effectiveBitrate * 1.2));

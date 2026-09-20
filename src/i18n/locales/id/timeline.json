@@ -1,0 +1,42 @@
+{
+	"zoom": {
+		"cannotPlace": "Tidak bisa menempatkan zum di sini",
+		"existsOrNoSpace": "Zum sudah ada di lokasi ini atau ruang tidak cukup.",
+		"suggestHandlerUnavailable": "Penangan saran zum tidak tersedia",
+		"noTelemetry": "Tidak ada telemetri kursor",
+		"recordFirst": "Rekam screencast dulu untuk menghasilkan saran berbasis kursor.",
+		"noUsableTelemetry": "Tidak ada telemetri kursor yang bisa dipakai",
+		"notEnoughMovement": "Rekaman tidak memuat data gerakan kursor yang cukup.",
+		"noInteractionMoments": "Tidak ditemukan momen interaksi yang jelas",
+		"tryRecording": "Coba rekaman dengan jeda atau klik di sekitar aksi penting.",
+		"noAutoZoomSlots": "Tidak ada slot zum otomatis tersedia",
+		"dwellPointsOverlap": "Titik jeda yang terdeteksi tumpang tindih dengan wilayah zum yang ada.",
+		"addedSuggestions": "Menambahkan {{count}} saran zum berbasis interaksi",
+		"label": "Zum {{index}}",
+		"addZoom": "Tambah Zum (Z)",
+		"suggestZooms": "Sarankan Zum dari Kursor",
+		"clearAllZooms": "Hapus Semua Zum"
+	},
+	"trim": {
+		"cannotPlace": "Tidak bisa menempatkan potongan di sini",
+		"existsOrNoSpace": "Potongan sudah ada di lokasi ini atau ruang tidak cukup.",
+		"label": "Potong {{index}}",
+		"addTrim": "Tambah Potongan (T)"
+	},
+	"speed": {
+		"cannotPlace": "Tidak bisa menempatkan kecepatan di sini",
+		"existsOrNoSpace": "Wilayah kecepatan sudah ada di lokasi ini atau ruang tidak cukup.",
+		"label": "Kecepatan"
+	},
+	"annotation": {
+		"label": "Anotasi",
+		"image": "Gambar",
+		"addAnnotation": "Tambah Anotasi (A)"
+	},
+	"audio": {
+		"label": "Audio"
+	},
+	"addSpeed": "Tambah Kecepatan (S)",
+	"resizeLeft": "Ubah ukuran kiri",
+	"resizeRight": "Ubah ukuran kanan"
+}

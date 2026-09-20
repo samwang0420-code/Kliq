@@ -56,8 +56,17 @@ export async function detectSpeedRegions(options: SmartEditOptions): Promise<Spe
 
 	const segments = whisperResult.segments ?? [];
 	const waitKeywords = [
-		"稍等", "等一下", "等待", "加载", "loading", "请稍候",
-		"等我", "我看看", "我看一下", "我看一眼", "打开",
+		"稍等",
+		"等一下",
+		"等待",
+		"加载",
+		"loading",
+		"请稍候",
+		"等我",
+		"我看看",
+		"我看一下",
+		"我看一眼",
+		"打开",
 	];
 
 	const speedRegions: SpeedRegion[] = [];
@@ -101,7 +110,10 @@ export async function detectZoomRegions(options: SmartEditOptions): Promise<Zoom
 	if (segments.length === 0) return [];
 
 	const fullText = segments
-		.map((s, i) => `[${i}] ${(s.start ?? 0).toFixed(1)}-${(s.end ?? 0).toFixed(1)}s: ${s.text ?? ""}`)
+		.map(
+			(s, i) =>
+				`[${i}] ${(s.start ?? 0).toFixed(1)}-${(s.end ?? 0).toFixed(1)}s: ${s.text ?? ""}`,
+		)
 		.join("\n");
 
 	// GPT-4 标重点句 (返回 JSON 数组)
@@ -166,9 +178,7 @@ export type OneClickEditResult = SmartEditResult & {
 	fillerCount: number;
 };
 
-export async function oneClickEdit(
-	options: OneClickEditOptions,
-): Promise<OneClickEditResult> {
+export async function oneClickEdit(options: OneClickEditOptions): Promise<OneClickEditResult> {
 	const includeSilence = options.includeSilence ?? true;
 	const includeFillers = options.includeFillers ?? true;
 	const includeSpeed = options.includeSpeed ?? true;
@@ -185,9 +195,7 @@ export async function oneClickEdit(
 	const thresholdMs = options.thresholdSilenceMs ?? 1500;
 
 	// 复用 detectSilenceRegions 算法
-	const silenceCount = includeSilence
-		? countSilenceGaps(segments, thresholdMs)
-		: 0;
+	const silenceCount = includeSilence ? countSilenceGaps(segments, thresholdMs) : 0;
 	const fillerCount = includeFillers
 		? countFillerSegments(segments, options.language ?? "zh")
 		: 0;
@@ -229,10 +237,7 @@ function countSilenceGaps(
 	return count;
 }
 
-function countFillerSegments(
-	segments: { text?: string }[],
-	language: string,
-): number {
+function countFillerSegments(segments: { text?: string }[], language: string): number {
 	const fillers =
 		language === "en"
 			? ["um", "uh", "like", "you know"]

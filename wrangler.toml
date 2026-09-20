@@ -1,0 +1,17 @@
+# Kliq — Cloudflare Pages 部署配置（站点 + 许可证校验 API）
+#
+# 为什么放在仓库根：Pages 只会自动发现「部署目录同级的 functions/」。
+# 之前把静态页放在 cloudflare/pages 却从该子目录部署，导致 functions/api/license-validate.ts
+# 从未被上传 —— /api/license-validate 一直 404，在线激活形同不存在。
+# 现在从仓库根执行 `npx wrangler pages deploy`，静态页与 Functions 一起上线。
+#
+# 部署：npx wrangler pages deploy --project-name yanjingai-tech
+# 需先在 Pages 项目里配置环境变量（见 .env.example）：
+#   LEMON_SQUEEZY_API_KEY / LEMON_SQUEEZY_STORE / LEMON_SQUEEZY_PRODUCT_ID
+
+name = "yanjingai-tech"
+compatibility_date = "2024-07-01"
+pages_build_output_dir = "cloudflare/pages"
+
+[observability]
+enabled = true

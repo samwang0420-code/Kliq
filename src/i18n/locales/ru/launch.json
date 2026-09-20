@@ -77,7 +77,9 @@
 			"toggle": "Начать / Остановить",
 			"pauseResume": "Пауза / Продолжить",
 			"stop": "Стоп"
-		}
+		},
+		"screenSourceName": "Экран {{n}}",
+		"screenSourcePrimary": "(Основной)"
 	},
 	"sourceSelector": {
 		"loadingSources": "Загрузка источников...",

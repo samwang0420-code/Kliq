@@ -11,8 +11,9 @@
  */
 
 import { getApiKey } from "../apiKeys";
-import { buildWhisperPrompt, buildGptSystemPromptFragment } from "../hotwords";
 import type { HotwordDomain } from "../hotwords";
+import { buildGptSystemPromptFragment, buildWhisperPrompt } from "../hotwords";
+import { resolveActiveChatBackend } from "./provider";
 
 const OPENAI_DEFAULT_BASE_URL = "https://api.openai.com/v1";
 
@@ -56,7 +57,9 @@ export type TranscribeResult = {
 export async function transcribeWithWhisper(options: TranscribeOptions): Promise<TranscribeResult> {
 	const client = getOpenAIClient();
 	if (!client) {
-		throw new Error("OpenAI API key 未配置。请先在 AI 设置中配置 OpenAI API key。");
+		throw new Error(
+			"Whisper 转录需要 OpenAI API key（DeepSeek 等兼容端点没有 audio/transcriptions）。请到「个人中心 → AI 服务」配置。",
+		);
 	}
 
 	const formData = new FormData();
@@ -69,11 +72,14 @@ export async function transcribeWithWhisper(options: TranscribeOptions): Promise
 		formData.append("response_format", options.responseFormat);
 	}
 
-	// Whisper prompt 长度限制 224 tokens
+	// Whisper prompt 上限 224 tokens —— 预算由 buildWhisperPrompt 内部保证
+	// （它按 token 估算挑词，绝不超限）。这里**不再**按字符 slice：此前那句
+	// `prompt.slice(0, 1000)` 是按字符截断，而限额单位是 token，中文下 1000 字符
+	// ≈ 1000 token，是上限的 4 倍多 —— 那层「保护」其实从未生效。
 	if (options.hotwordDomain) {
 		const prompt = buildWhisperPrompt(options.hotwordDomain);
 		if (prompt) {
-			formData.append("prompt", prompt.slice(0, 1000));
+			formData.append("prompt", prompt);
 		}
 	}
 
@@ -127,9 +133,18 @@ export type ChatOptions = {
 };
 
 export async function chatCompletion(options: ChatOptions): Promise<string> {
+	// 文本类动作按用户在「个人中心 → AI 服务」选择的后端路由（见 ./provider）。
+	// 偏好 DeepSeek 但只配了 OpenAI 时会自动回退，避免因为缺一项配置就全废。
+	const backend = resolveActiveChatBackend();
+	if (backend === "deepseek") {
+		return deepseekChatCompletion(options);
+	}
+
 	const client = getOpenAIClient();
 	if (!client) {
-		throw new Error("OpenAI API key 未配置。请先在 AI 设置中配置 OpenAI API key。");
+		throw new Error(
+			"未配置 AI 文本服务：请到「个人中心 → AI 服务」填入 OpenAI 或 DeepSeek 的 API key。",
+		);
 	}
 
 	const messages = [...options.messages];
@@ -140,7 +155,9 @@ export async function chatCompletion(options: ChatOptions): Promise<string> {
 		if (lastSystemIdx >= 0) {
 			messages[lastSystemIdx] = {
 				...messages[lastSystemIdx],
-				content: messages[lastSystemIdx].content + buildGptSystemPromptFragment(options.hotwordDomain),
+				content:
+					messages[lastSystemIdx].content +
+					buildGptSystemPromptFragment(options.hotwordDomain),
 			};
 		} else {
 			messages.unshift({
@@ -264,7 +281,9 @@ function getDeepSeekClient(): { apiKey: string; baseUrl: string; model: string }
 export async function deepseekChatCompletion(options: ChatOptions): Promise<string> {
 	const client = getDeepSeekClient();
 	if (!client) {
-		throw new Error("DeepSeek API key 未配置。请先在 AI 设置中配置 DeepSeek API key。");
+		throw new Error(
+			"未配置 DeepSeek API key：请到「个人中心 → AI 服务」填入 DeepSeek API key，或把文本后端切回 OpenAI。",
+		);
 	}
 
 	const messages = [...options.messages];
@@ -273,7 +292,9 @@ export async function deepseekChatCompletion(options: ChatOptions): Promise<stri
 		if (lastSystemIdx >= 0) {
 			messages[lastSystemIdx] = {
 				...messages[lastSystemIdx],
-				content: messages[lastSystemIdx].content + buildGptSystemPromptFragment(options.hotwordDomain),
+				content:
+					messages[lastSystemIdx].content +
+					buildGptSystemPromptFragment(options.hotwordDomain),
 			};
 		} else {
 			messages.unshift({

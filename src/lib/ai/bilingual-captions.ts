@@ -71,9 +71,7 @@ export function captionsToSrt(captions: BilingualCaption[]): string {
 		.map((cap, idx) => {
 			const start = formatSrtTimestamp(cap.start);
 			const end = formatSrtTimestamp(cap.end);
-			const text = cap.targetText
-				? `${cap.sourceText}\n${cap.targetText}`
-				: cap.sourceText;
+			const text = cap.targetText ? `${cap.sourceText}\n${cap.targetText}` : cap.sourceText;
 			return `${idx + 1}\n${start} --> ${end}\n${text}\n`;
 		})
 		.join("\n");
@@ -88,9 +86,7 @@ export function captionsToVtt(captions: BilingualCaption[]): string {
 		.map((cap, idx) => {
 			const start = formatVttTimestamp(cap.start);
 			const end = formatVttTimestamp(cap.end);
-			const text = cap.targetText
-				? `${cap.sourceText}\n${cap.targetText}`
-				: cap.sourceText;
+			const text = cap.targetText ? `${cap.sourceText}\n${cap.targetText}` : cap.sourceText;
 			return `${idx + 1}\n${start} --> ${end}\n${text}\n`;
 		})
 		.join("\n");

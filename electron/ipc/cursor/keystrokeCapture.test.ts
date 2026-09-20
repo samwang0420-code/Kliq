@@ -58,14 +58,22 @@ describe("normalizeKeystrokeLabel", () => {
 	});
 
 	it("prefixes modifiers in canonical order Ctrl/Meta/Alt/Shift", () => {
-		expect(
-			normalizeKeystrokeLabel({
-				key: "P",
-				ctrlKey: true,
-				shiftKey: true,
-				metaKey: true,
-			}),
-		).toBe("Ctrl+Cmd+Shift+P");
+		// The assertion is about modifier *order*, so pin the platform on both
+		// sides: the Meta key renders as Cmd on macOS and Meta elsewhere, and a
+		// hard-coded "Cmd" here made this test fail on Linux CI runners.
+		const origPlatform = process.platform;
+		const combo = { key: "P", ctrlKey: true, shiftKey: true, metaKey: true };
+		try {
+			Object.defineProperty(process, "platform", { value: "darwin", configurable: true });
+			expect(normalizeKeystrokeLabel(combo)).toBe("Ctrl+Cmd+Shift+P");
+			Object.defineProperty(process, "platform", { value: "linux", configurable: true });
+			expect(normalizeKeystrokeLabel(combo)).toBe("Ctrl+Meta+Shift+P");
+		} finally {
+			Object.defineProperty(process, "platform", {
+				value: origPlatform,
+				configurable: true,
+			});
+		}
 	});
 
 	it("uses Cmd on macOS and Meta elsewhere", () => {

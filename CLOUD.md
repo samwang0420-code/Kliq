@@ -36,28 +36,35 @@ wrangler pages project create yanjingai-tech
 
 ### 4. 部署
 
-#### 部署静态页 (无 API)
+**从仓库根执行一条命令**（`wrangler.toml` 已声明 `pages_build_output_dir = "cloudflare/pages"`，
+Pages 会自动发现根目录的 `functions/`）：
 
 ```bash
-cd cloudflare/pages
-wrangler pages deploy . --project-name yanjingai-tech
+npx wrangler pages deploy --project-name yanjingai-tech
 ```
 
-#### 部署完整应用 (含 API Function)
+> 历史坑：早期文档让人 `cd cloudflare/pages` 再部署，看似成功，但 Pages **只会发现部署目录同级的
+> `functions/`** —— 于是 `functions/api/license-validate.ts` 从未被上传，
+> `/api/license-validate` 一直 404，客户端只能退化成离线激活。不要再用子目录部署。
+> 早期还有一份「把 pages 和 api 拷进 deploy-tmp 合并」的写法，同样已废弃。
 
-合并 `cloudflare/pages/` 和 `cloudflare/api/` 为一个目录:
+> 只想要静态页、不要 API 时：`npx wrangler pages deploy cloudflare/pages --project-name yanjingai-tech`
+
+### 5. 绑定自定义域名（当前**尚未完成**）
 
 ```bash
-mkdir -p deploy-tmp
-cp -r cloudflare/pages/* deploy-tmp/
-mkdir -p deploy-tmp/api
-cp cloudflare/api/license-validate.ts deploy-tmp/api/
-
-cd deploy-tmp
-wrangler pages deploy . --project-name yanjingai-tech
+npx wrangler pages project domain add yanjingai-tech yanjingai.tech
 ```
 
-部署后访问: `https://yanjingai.tech`
+现状（2026-09-20 实测）：
+- `https://yanjingai-tech.pages.dev` 在线，HTTP 200
+- `https://yanjingai.tech` **不解析** —— 域名 NS 已在 Cloudflare（wilson/kristin.ns.cloudflare.com），
+  但没有 A / CNAME 记录指向 Pages，自定义域名未绑定
+
+在没有绑定域名之前，`VITE_KLQ_SITE_URL` 指向 `https://yanjingai.tech` 会让
+`/api/license-validate` 直接连接失败（客户端会自动回退离线激活，不会卡住用户），
+但个人中心会显示「已连接」—— 这是 `isLicenseServiceConfigured()` 只看变量有没有配导致的，
+绑定域名 + 部署 Functions 后才是真的连上。
 
 ### 5. 绑定自定义域名
 
@@ -90,8 +97,8 @@ CNAME  www     yanjingai-tech.pages.dev    Auto
 
 1. https://lemonsqueezy.com → New Store
 2. Products → New Product:
-   - Name: Kliq Pro
-   - Price: $29
+   - Name: Kliq Pro（一次性买断 / License Key）
+   - Price: $9.9
    - License Key: Enable
 3. 保存 → 复制 Product ID
 

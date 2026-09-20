@@ -77,7 +77,9 @@
 			"toggle": "Iniciar / Parar",
 			"pauseResume": "Pausar / Retomar",
 			"stop": "Parar"
-		}
+		},
+		"screenSourceName": "Tela {{n}}",
+		"screenSourcePrimary": "(Principal)"
 	},
 	"sourceSelector": {
 		"loadingSources": "Carregando fontes...",

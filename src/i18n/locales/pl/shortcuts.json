@@ -1,0 +1,17 @@
+{
+	"actions": {
+		"addZoom": "Dodaj zoom",
+		"addTrim": "Dodaj przycięcie",
+		"addSpeed": "Dodaj prędkość",
+		"addAnnotation": "Dodaj adnotację",
+		"addKeyframe": "Dodaj klatkę kluczową",
+		"deleteSelected": "Usuń zaznaczone",
+		"duplicateSelected": "Duplikuj zaznaczone",
+		"playPause": "Odtwórz / pauza",
+		"cycleForward": "Przełącz adnotacje w przód",
+		"cycleBackward": "Przełącz adnotacje w tył",
+		"deleteSelectedAlt": "Usuń zaznaczone (alt)",
+		"panTimeline": "Przesuwanie osi czasu",
+		"zoomTimeline": "Zoom osi czasu"
+	}
+}

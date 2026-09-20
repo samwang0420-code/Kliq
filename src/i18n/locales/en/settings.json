@@ -266,7 +266,9 @@
 		"saveProject": "Save Project",
 		"exportVideo": "Export {{format}}",
 		"reportBug": "Report Bug",
-		"starOnGithub": "Star on GitHub"
+		"starOnGithub": "Star on GitHub",
+		"pickFile": "Select video / audio",
+		"clearFile": "Clear file"
 	},
 	"audio": {
 		"title": "Audio",

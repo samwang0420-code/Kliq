@@ -205,7 +205,39 @@
 			"proActive": "Pro",
 			"proEntryHint": "Gérer la licence et les avantages Pro",
 			"proBadge": "PRO",
-			"proLocked": "Fonction Pro"
+			"proLocked": "Fonction Pro",
+			"inputsTitle": "Entrées IA",
+			"transcriptLabel": "Transcription",
+			"transcriptPlaceholder": "Lancez « AI Transcribe » ou collez le texte ici",
+			"segmentReady": "{{count}} sous-titres horodatés prêts",
+			"queryLabel": "Requête de recherche",
+			"queryPlaceholder": "ex. où ça a échoué",
+			"sourceTextLabel": "Texte à peaufiner",
+			"sourceTextPlaceholder": "Collez le texte à peaufiner",
+			"resultsTitle": "Résultats IA",
+			"useTranscript": "Utiliser comme entrée",
+			"copy": "Copier",
+			"copied": "Copié",
+			"itemCount": "{{count}} élément(s)",
+			"scoreLabel": "score",
+			"noResults": "Aucun résultat",
+			"inputHints": {
+				"file": "Sélectionnez d’abord un fichier vidéo/audio",
+				"duration": "Durée du média requise (choisissez un fichier)",
+				"transcript": "Transcription requise : lancez « AI Transcribe » ou collez le texte",
+				"segments": "Sous-titres horodatés requis : lancez d’abord « AI Transcribe »",
+				"query": "Saisissez une requête de recherche",
+				"sourceText": "Saisissez le texte à peaufiner"
+			},
+			"scenarioLabel": "Scénario :",
+			"scenarioNone": "Aucun modèle",
+			"scenario": {
+				"liveStream": "Direct",
+				"teaching": "Cours",
+				"demo": "Démo produit",
+				"interview": "Entretien",
+				"sales": "Appel commercial"
+			}
 		}
 	}
 }

@@ -77,7 +77,9 @@
 			"toggle": "Avvia / Ferma",
 			"pauseResume": "Pausa / Riprendi",
 			"stop": "Ferma"
-		}
+		},
+		"screenSourceName": "Schermo {{n}}",
+		"screenSourcePrimary": "(Principale)"
 	},
 	"sourceSelector": {
 		"loadingSources": "Caricamento sorgenti...",

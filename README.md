@@ -11,12 +11,12 @@ Language: EN | [简中](README.zh-CN.md)
 </p>
 
 ### Create polished demo videos with AI — 在几分钟内做出精致的演示视频
-**Kliq (Kliq)** 是一款基于 [Recordly](https://github.com/webadderallorg/Recordly) 的开源屏幕录制器,加入了 **AI 双语字幕、智能剪辑、行业热词、AI 章节摘要**。  
+**Kliq** 是一款基于 [Recordly](https://github.com/webadderallorg/Recordly) 的开源屏幕录制器,加入了 **AI 双语字幕、智能剪辑、行业热词、AI 章节摘要**。  
 **Open source.** [yanjingai.tech](https://yanjingai.tech) · [hi@yanjingai.tech](mailto:hi@yanjingai.tech) · [ATTRIBUTION](./ATTRIBUTION.md)
 
 > 本软件是基于 Recordly 修改而来的衍生作品 (AGPL 3.0)。感谢 [@webadderall](https://github.com/webadderall) 的开源贡献。
 
-## What is Kliq (Kliq)?
+## What is Kliq?
 
 Kliq 是一款桌面应用,用于录制和编辑屏幕内容,内置面向演示视频的动态呈现工具。基于上游 Recordly,我们加入了 **AI 增强**: 双语字幕、行业热词、智能章节、标题生成、社媒文案。原始的屏幕录制、动态缩放、光标润色、样式化背景等核心功能全部保留。
 
@@ -190,7 +190,7 @@ Browse and install community extensions from the [Recordly Marketplace](https://
 
 Prebuilt releases are available at:
 
-https://github.com/webadderallorg/Recordly/releases
+https://github.com/samwang0420-code/Kliq/releases
 
 ---
 
@@ -223,7 +223,7 @@ sudo apt install build-essential cmake libx11-dev libxtst-dev libxrandr-dev libx
 ### Steps
 
 ```bash
-git clone https://github.com/webadderallorg/Recordly.git recordly
+git clone https://github.com/samwang0420-code/Kliq.git kliq
 cd recordly
 npm install
 npm run dev
@@ -380,31 +380,11 @@ See `CONTRIBUTING.md` for guidelines.
 
 Bug reports and feature requests:
 
-https://github.com/webadderallorg/Recordly/issues
+https://github.com/samwang0420-code/Kliq/issues
 
 Pull requests are welcome.
 
 ---
-
-# Hall of Supporters
-
-[![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/webadderall)
-
-- Tom Egan @tomegan on X
-- Robin Ebers @robinebers on X
-- Tadees
-- buildwithfur
-- piccinato
-- Tobias
-- Anonymous Supporter
-- Tandava Appadoo
-- Digitalfastmind
-- Roberto Marcelino
-- Tony
-- Rajan RK
-- Francesco
-- Erwan
-- Anonymous supporter
 
 ---
 
@@ -421,7 +401,9 @@ Recordly is licensed under the **AGPL 3.0**.
 Recordly originally started as a fork of [OpenScreen](https://github.com/siddharthvaddem/openscreen). Over 80% of code has diverged since.
 Many features of OpenScreen such as its zoom animations are directly ported from early versions of Recordly.
 
-Created by  
+Recordly was created by  
 [@webadderall](https://x.com/webadderall)
+
+Kliq is maintained independently — see [ATTRIBUTION](./ATTRIBUTION.md).
 
 ---

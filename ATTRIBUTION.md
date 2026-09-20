@@ -1,6 +1,6 @@
 # Attribution / 来源声明
 
-本软件 **Kliq (Kliq)** 是基于 [Recordly](https://github.com/webadderallorg/Recordly) 修改而来的衍生作品。
+本软件 **Kliq** 是基于 [Recordly](https://github.com/webadderallorg/Recordly) 修改而来的衍生作品。
 
 ## 上游信息
 
@@ -11,13 +11,15 @@
 
 ## 修改内容
 
+本 fork 仓库：<https://github.com/samwang0420-code/Kliq>
+
 本 fork 在上游 Recordly 之上添加了以下特性（详见 [CHANGELOG.md](./CHANGELOG.md)）：
 
 1. **AI 双语字幕**（Whisper API + GPT-4 翻译）
 2. **AI 章节、摘要、标题、标签**
 3. **AI 行业热词**（法律 / 医疗 / 电商 / 教育）
 4. **中文 UI 优化**（沿用上游 zh-CN 翻译 + 增强）
-5. **支付集成**（Lemon Squeezy $29 一次性 / Stripe $49 年订阅）
+5. **支付集成**（Lemon Squeezy，$9.9 一次性买断 Pro）
 6. **品牌重塑**（Kliq / yanjingai.tech）
 7. **§213 极简风设计**（纯黑 #0a0a0a + 绿点 #22c55e）
 

@@ -550,9 +550,7 @@ const VideoPlayback = forwardRef<VideoPlaybackRef, VideoPlaybackProps>(
 		const cursorFollowCropStateRef = useRef<CursorFollowCropState>(
 			createCursorFollowCropState(),
 		);
-		const cursorTextZoomStateRef = useRef<CursorTextZoomState>(
-			createCursorTextZoomState(),
-		);
+		const cursorTextZoomStateRef = useRef<CursorTextZoomState>(createCursorTextZoomState());
 		const baseCropRegionRef = useRef(cropRegion);
 		/** Requests one exact composition after an output-affecting edit while paused. */
 		const requestPausedFrameRefresh = useCallback(() => {
@@ -1460,10 +1458,7 @@ const VideoPlayback = forwardRef<VideoPlaybackRef, VideoPlaybackProps>(
 			resetCursorFollowCropState(cursorFollowCropStateRef.current);
 			resetCursorTextZoomState(cursorTextZoomStateRef.current);
 			requestPausedFrameRefresh();
-		}, [
-			cursorFollowCrop,
-			requestPausedFrameRefresh,
-		]);
+		}, [cursorFollowCrop, requestPausedFrameRefresh]);
 
 		useEffect(() => {
 			baseCropRegionRef.current = cropRegion ?? { x: 0, y: 0, width: 1, height: 1 };
@@ -1764,6 +1759,7 @@ const VideoPlayback = forwardRef<VideoPlaybackRef, VideoPlaybackProps>(
 			overlayEl.style.pointerEvents = isPlaying ? "none" : "auto";
 		}, [selectedZoom, isPlaying]);
 
+		// biome-ignore lint/correctness/useExhaustiveDependencies: rendererGeneration is a forced-recreate trigger. It is bumped on `webglcontextlost` and after long visibility gaps so this effect tears down and rebuilds the Pixi renderer; it is deliberately not read inside the effect body.
 		useEffect(() => {
 			const container = containerRef.current;
 			if (!container) return;
@@ -2140,10 +2136,7 @@ const VideoPlayback = forwardRef<VideoPlaybackRef, VideoPlaybackProps>(
 					const fullVideoDisplayHeight = lockedDims.height * baseScaleRef.current;
 					const dx = (effectiveCrop.x - baseCrop.x) * fullVideoDisplayWidth;
 					const dy = (effectiveCrop.y - baseCrop.y) * fullVideoDisplayHeight;
-					sprite.position.set(
-						baseOffsetRef.current.x - dx,
-						baseOffsetRef.current.y - dy,
-					);
+					sprite.position.set(baseOffsetRef.current.x - dx, baseOffsetRef.current.y - dy);
 					cropBoundsRef.current = {
 						startX: effectiveCrop.x * lockedDims.width,
 						endX:

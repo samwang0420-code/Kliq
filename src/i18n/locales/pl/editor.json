@@ -1,0 +1,243 @@
+{
+	"playback": {
+		"play": "Odtwórz",
+		"pause": "Pauza",
+		"skipBack": "Wstecz",
+		"skipForward": "Do przodu",
+		"muteUnmute": "Wycisz / włącz dźwięk",
+		"volume": "Głośność podglądu"
+	},
+	"annotations": {
+		"settings": "Ustawienia adnotacji",
+		"active": "Aktywne",
+		"text": "Tekst",
+		"image": "Obraz",
+		"arrow": "Strzałka",
+		"blur": "Rozmycie",
+		"textContent": "Treść tekstu",
+		"textPlaceholder": "Wpisz swój tekst...",
+		"fontStyle": "Styl czcionki",
+		"selectStyle": "Wybierz styl",
+		"size": "Rozmiar",
+		"toggleBold": "Pogrubienie",
+		"toggleItalic": "Kursywa",
+		"toggleUnderline": "Podkreślenie",
+		"alignLeft": "Wyrównaj do lewej",
+		"alignCenter": "Wyśrodkuj",
+		"alignRight": "Wyrównaj do prawej",
+		"textColor": "Kolor tekstu",
+		"background": "Tło",
+		"none": "Brak",
+		"clearBackground": "Wyczyść tło",
+		"uploadImage": "Prześlij obraz",
+		"supportedFormats": "Obsługiwane formaty: JPG, PNG, GIF, WebP",
+		"arrowDirection": "Kierunek strzałki",
+		"strokeWidth": "Grubość linii: {{width}}px",
+		"arrowColor": "Kolor strzałki",
+		"deleteAnnotation": "Usuń adnotację",
+		"shortcutsAndTips": "Skróty i wskazówki",
+		"tipSelectAnnotation": "Przesuń playhead na nakładającą się sekcję adnotacji i wybierz element.",
+		"tipCycleForward": "Użyj Tab, aby przechodzić przez nakładające się elementy.",
+		"tipCycleBackward": "Użyj Shift+Tab, aby przechodzić wstecz.",
+		"imageUploadSuccess": "Obraz przesłany pomyślnie!",
+		"imageUploadError": "Prześlij plik obrazu JPG, PNG, GIF lub WebP.",
+		"blurStrength": "Siła rozmycia: {{strength}}",
+		"solidColor": "Pełny kolor (cenzura)",
+		"borderRadius": "Zaokrąglenie narożników",
+		"spotlight": "Reflektor",
+		"spotlightOpacity": "Krycie reflektora: {{opacity}}%",
+		"resetSpotlightOpacity": "Przywróć",
+		"applySpotlightOpacityToAll": "Zastosuj do wszystkich reflektorów",
+		"focusSpotlightStart": "Przeskocz do początku reflektora",
+		"disableSpotlight": "Wyłącz",
+		"disableSpotlightDescription": "Po wyłączeniu reflektor nie jest renderowany, ale zostaje na osi czasu."
+	},
+	"fontStyles": {
+		"classic": "Klasyczny",
+		"editor": "Edytor",
+		"strong": "Mocny",
+		"typewriter": "Maszyna do pisania",
+		"deco": "Deko",
+		"simple": "Prosty",
+		"modern": "Nowoczesny",
+		"clean": "Czysty"
+	},
+	"format": {
+		"mp4Video": "Wideo MP4",
+		"mp4Description": "Plik wideo wysokiej jakości",
+		"gifAnimation": "Animacja GIF",
+		"gifDescription": "Animowany obraz do udostępniania"
+	},
+	"gifOptions": {
+		"frameRate": "Liczba klatek",
+		"outputSize": "Rozmiar wyjściowy",
+		"outputDimensions": "Wyjście: {{width}} × {{height}}px",
+		"loopAnimation": "Zapętlona animacja",
+		"loopDescription": "GIF będzie odtwarzany w pętli"
+	},
+	"tutorial": {
+		"howTrimmingWorks": "Jak działa przycinanie",
+		"title": "Jak działa przycinanie",
+		"understanding": "Zrozum, jak wycinać niechciane fragmenty wideo.",
+		"descriptionP1": "Narzędzie przycinania działa przez zdefiniowanie segmentów, które chcesz",
+		"descriptionRemove": "usunąć",
+		"descriptionP2": "ze swojego wideo.",
+		"descriptionP3": "Każda część osi czasu przykryta czerwonym segmentem przycięcia zostanie wycięta przy eksporcie.",
+		"visualExample": "Przykład wizualny",
+		"removed": "USUNIĘTO",
+		"kept": "Zachowano",
+		"finalVideo": "Wideo końcowe",
+		"part": "Część {{number}}",
+		"addTrimStep": "1. Dodaj przycięcie",
+		"addTrimDesc": "Naciśnij T lub kliknij ikonę nożyczek, aby oznaczyć sekcję do usunięcia.",
+		"adjustStep": "2. Dostosuj",
+		"adjustDesc": "Przeciągnij krawędzie czerwonego obszaru tak, aby obejmował dokładnie to, co chcesz wyciąć."
+	},
+	"feedback": {
+		"trigger": "Opinia",
+		"title": "Opinie i kontakt",
+		"description": "Napisz bezpośrednio lub otwórz issue, jeśli coś jest zepsute lub czegoś brakuje.",
+		"emailLabel": "E-mail",
+		"xLabel": "X",
+		"reportIssue": "Zgłoś problem / wyślij opinię",
+		"openFailed": "Nie udało się otworzyć linku."
+	},
+	"keyboardShortcuts": {
+		"trigger": "Skróty",
+		"title": "Skróty klawiszowe",
+		"description": "Ściąga skrótów osi czasu i kontrolek edytora.",
+		"customizeTooltip": "Dostosuj skróty",
+		"customize": "Dostosuj",
+		"panTimeline": "Przesuwanie osi czasu",
+		"zoomTimeline": "Zoom osi czasu",
+		"cycleAnnotations": "Przełączanie adnotacji",
+		"tab": "Tab"
+	},
+	"actions": {
+		"saveAgain": "Zapisz ponownie",
+		"showInFolder": "Pokaż w folderze"
+	},
+	"project": {
+		"untitled": "Bez tytułu",
+		"unsavedChangesTitle": "Niezapisane zmiany",
+		"unsavedChangesDescription": "Zapisać bieżący projekt przed {{action}}?",
+		"discardChanges": "Odrzuć zmiany",
+		"saveProject": "Zapisz projekt"
+	},
+	"exportTips": {
+		"autoZooms": "Wskazówka: wyłącz automatyczne zoomy w ustawieniach",
+		"experimentalBuilds": "Wskazówka: wypróbuj buildy eksperymentalne, włączając dostęp w ustawieniach",
+		"cursorAppearance": "Wskazówka: możesz dostosować wygląd kursora"
+	},
+	"account": {
+		"title": "Konto",
+		"comingSoon": "Konto wkrótce"
+	},
+	"nativeCaptureUnavailable": {
+		"title": "Nic się nie zepsuło, ale nie będziemy w stanie wyrenderować animowanej nakładki kursora.",
+		"description": "Twoje urządzenie nie obsługuje natywnego przechwytywania. Może to mieć różne przyczyny, których jeszcze nie ustaliliśmy. Nie psuje to Kliqa, ale uniemożliwia wygładzanie kursora.",
+		"confirm": "Okej"
+	},
+	"exportStatus": {
+		"exporting": "Eksportowanie",
+		"renderingFile": "Renderowanie Twojego pliku.",
+		"preparing": "Przygotowywanie eksportu...",
+		"completePercent": "{{percent}}% ukończono",
+		"issue": "Problem z eksportem",
+		"complete": "Eksport ukończony",
+		"savedSuccessfully": "Twój plik został pomyślnie zapisany."
+	},
+	"export": {
+		"processingAudioEdits": "Przetwarzanie dźwięku z edycjami prędkości/nakładki"
+	},
+	"toolbar": {
+		"addLayer": "Dodaj warstwę",
+		"splitClip": "Podziel klip (C)"
+	},
+	"timeline": {
+		"expand": "Rozwiń oś czasu",
+		"collapse": "Zwiń oś czasu"
+	},
+	"openRecordingsFolder": "Otwórz folder nagrań",
+	"yanjing": {
+		"ai": {
+			"toolbarTitle": "Ulepszanie AI",
+			"toolbarHotwords": "Słowa kluczowe:",
+			"toolbarExpand": "Rozwiń",
+			"toolbarCollapse": "Zwiń",
+			"actions": {
+				"transcribe": "Transkrypcja AI",
+				"bilingual": "Dwujęzyczne napisy AI",
+				"translateMulti": "Wielojęzyczne napisy AI",
+				"proofread": "Korekta napisów AI",
+				"silence": "Usuwanie ciszy AI",
+				"fillers": "Usuwanie wypełniaczy AI",
+				"speed": "Sprytna prędkość AI",
+				"zoom": "Autozoom AI",
+				"oneclick": "Montaż jednym kliknięciem AI",
+				"chapters": "Rozdziały AI",
+				"summary": "Streszczenie AI",
+				"titles": "Tytuły AI",
+				"tags": "Tagi AI",
+				"social": "Treści social AI",
+				"search": "Wyszukiwanie semantyczne AI",
+				"uiPolish": "Szlifowanie tekstu"
+			},
+			"groups": {
+				"transcribe": "Transkrypcja",
+				"edit": "Montaż",
+				"generate": "Generowanie",
+				"translate": "Tłumaczenie",
+				"search": "Wyszukiwanie"
+			},
+			"domains": {
+				"general": "Ogólne",
+				"legal": "Prawo",
+				"medical": "Medycyna",
+				"ecommerce": "E-commerce",
+				"education": "Edukacja",
+				"finance": "Finanse",
+				"gaming": "Gaming",
+				"tech": "Technologia",
+				"marketing": "Marketing"
+			},
+			"proEntry": "Pro / Konto",
+			"proActive": "Pro",
+			"proEntryHint": "Zarządzaj licencją i korzyściami Pro",
+			"proBadge": "PRO",
+			"proLocked": "Funkcja Pro",
+			"inputsTitle": "Wejścia AI",
+			"transcriptLabel": "Transkrypcja",
+			"transcriptPlaceholder": "Uruchom „Transkrypcję AI” lub wklej tu tekst",
+			"segmentReady": "Gotowych napisów z timingiem: {{count}}",
+			"queryLabel": "Zapytanie",
+			"queryPlaceholder": "np. gdzie poszło nie tak",
+			"sourceTextLabel": "Tekst do szlifowania",
+			"sourceTextPlaceholder": "Wklej tekst, który chcesz szlifować",
+			"resultsTitle": "Wyniki AI",
+			"useTranscript": "Użyj jako wejścia",
+			"copy": "Kopiuj",
+			"copied": "Skopiowano",
+			"itemCount": "Elementów: {{count}}",
+			"scoreLabel": "wynik",
+			"noResults": "Brak dopasowań",
+			"inputHints": {
+				"file": "Najpierw wybierz plik wideo / audio",
+				"duration": "Wymagany czas trwania multimediów (najpierw wybierz plik)",
+				"transcript": "Wymagana transkrypcja: uruchom „Transkrypcję AI” lub wklej tekst",
+				"segments": "Wymagane napisy z timingiem: najpierw uruchom „Transkrypcję AI”",
+				"query": "Wpisz zapytanie",
+				"sourceText": "Wpisz tekst do szlifowania"
+			},
+			"scenarioLabel": "Scenariusz:",
+			"scenarioNone": "Bez szablonu",
+			"scenario": {
+				"liveStream": "Transmisja na żywo",
+				"teaching": "Nauczanie",
+				"demo": "Demo produktu",
+				"interview": "Rozmowa kwalifikacyjna",
+				"sales": "Rozmowa handlowa"
+			}
+		}
+	}
+}

@@ -64,12 +64,33 @@ import nlSettings from "@/i18n/locales/nl/settings.json";
 import nlShortcuts from "@/i18n/locales/nl/shortcuts.json";
 import nlTimeline from "@/i18n/locales/nl/timeline.json";
 import ptBRCommon from "@/i18n/locales/pt-BR/common.json";
+import idCommon from "@/i18n/locales/id/common.json";
+import plCommon from "@/i18n/locales/pl/common.json";
 import ptBRDialogs from "@/i18n/locales/pt-BR/dialogs.json";
+import idDialogs from "@/i18n/locales/id/dialogs.json";
+import plDialogs from "@/i18n/locales/pl/dialogs.json";
 import ptBREditor from "@/i18n/locales/pt-BR/editor.json";
+import idEditor from "@/i18n/locales/id/editor.json";
+import plEditor from "@/i18n/locales/pl/editor.json";
 import ptBRLaunch from "@/i18n/locales/pt-BR/launch.json";
+import idLaunch from "@/i18n/locales/id/launch.json";
+import plLaunch from "@/i18n/locales/pl/launch.json";
 import ptBRSettings from "@/i18n/locales/pt-BR/settings.json";
+import idSettings from "@/i18n/locales/id/settings.json";
+import plSettings from "@/i18n/locales/pl/settings.json";
 import ptBRShortcuts from "@/i18n/locales/pt-BR/shortcuts.json";
+import idShortcuts from "@/i18n/locales/id/shortcuts.json";
+import plShortcuts from "@/i18n/locales/pl/shortcuts.json";
 import ptBRTimeline from "@/i18n/locales/pt-BR/timeline.json";
+import idTimeline from "@/i18n/locales/id/timeline.json";
+import plTimeline from "@/i18n/locales/pl/timeline.json";
+import ruCommon from "@/i18n/locales/ru/common.json";
+import ruDialogs from "@/i18n/locales/ru/dialogs.json";
+import ruEditor from "@/i18n/locales/ru/editor.json";
+import ruLaunch from "@/i18n/locales/ru/launch.json";
+import ruSettings from "@/i18n/locales/ru/settings.json";
+import ruShortcuts from "@/i18n/locales/ru/shortcuts.json";
+import ruTimeline from "@/i18n/locales/ru/timeline.json";
 import zhCNCommon from "@/i18n/locales/zh-CN/common.json";
 import zhCNDialogs from "@/i18n/locales/zh-CN/dialogs.json";
 import zhCNEditor from "@/i18n/locales/zh-CN/editor.json";
@@ -161,6 +182,33 @@ const messages: Record<AppLocale, LocaleBundle> = {
 		settings: ptBRSettings,
 		dialogs: ptBRDialogs,
 		shortcuts: ptBRShortcuts,
+	},
+	id: {
+		common: idCommon,
+		launch: idLaunch,
+		editor: idEditor,
+		timeline: idTimeline,
+		settings: idSettings,
+		dialogs: idDialogs,
+		shortcuts: idShortcuts,
+	},
+	pl: {
+		common: plCommon,
+		launch: plLaunch,
+		editor: plEditor,
+		timeline: plTimeline,
+		settings: plSettings,
+		dialogs: plDialogs,
+		shortcuts: plShortcuts,
+	},
+	ru: {
+		common: ruCommon,
+		launch: ruLaunch,
+		editor: ruEditor,
+		timeline: ruTimeline,
+		settings: ruSettings,
+		dialogs: ruDialogs,
+		shortcuts: ruShortcuts,
 	},
 	"zh-CN": {
 		common: zhCNCommon,

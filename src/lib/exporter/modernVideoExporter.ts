@@ -80,7 +80,7 @@ import { VideoMuxer } from "./muxer";
 import { roundNativeStaticLayoutContentSize } from "./nativeStaticLayoutGeometry";
 import { buildNativeStaticLayoutCursorTelemetry } from "./nativeStaticLayoutTelemetry";
 import { getWebcamShadowStrength } from "./shadowProfile";
-import { resolveSourceAudioFallbackPaths } from "./sourceAudioFallback";
+import { buildSourceAudioFallbackPaths } from "./sourceAudioFallback";
 import { type DecodedVideoInfo, StreamingVideoDecoder } from "./streamingDecoder";
 import type {
 	ExportConfig,
@@ -839,10 +839,15 @@ export class ModernVideoExporter {
 					!this.cancelled
 				) {
 					const demuxer = this.streamingDecoder.getDemuxer();
+					// 与 native 计划走同一个归一化函数：源视频**内嵌**了桌面音频、又存在
+					// mic sidecar 时，必须把本地视频源本身也放进回退列表，否则这里只把
+					// sidecar 交给 AudioProcessor，内嵌的桌面音频会被静默丢掉。
+					const sourceAudioFallbackPaths =
+						this.getNormalizedAudioFallbackPaths(videoInfo);
 					if (
 						demuxer ||
 						(this.config.audioRegions ?? []).length > 0 ||
-						(this.config.sourceAudioFallbackPaths ?? []).length > 0
+						sourceAudioFallbackPaths.length > 0
 					) {
 						this.audioProcessor = new AudioProcessor();
 						this.audioProcessor.setOnProgress((progress) => {
@@ -859,7 +864,7 @@ export class ModernVideoExporter {
 									this.config.speedRegions,
 									undefined,
 									this.config.audioRegions,
-									this.config.sourceAudioFallbackPaths,
+									sourceAudioFallbackPaths,
 									this.config.sourceAudioFallbackStartDelayMsByPath,
 									this.config.sourceAudioTrackSettings,
 									this.config.clipRegions,
@@ -1446,24 +1451,16 @@ export class ModernVideoExporter {
 		return buildNativeStaticLayoutTimelineSegments(sourceSegments);
 	}
 
-	private getNativeAudioFallbackPaths(videoInfo: DecodedVideoInfo): string[] {
-		const sourceAudioFallbackPaths = (this.config.sourceAudioFallbackPaths ?? []).filter(
-			(audioPath) => typeof audioPath === "string" && audioPath.trim().length > 0,
-		);
-		const localVideoSourcePath = this.getNativeVideoSourcePath();
-		if (!videoInfo.hasAudio || !localVideoSourcePath) {
-			return sourceAudioFallbackPaths;
-		}
-
-		const { externalAudioPaths } = resolveSourceAudioFallbackPaths(
-			localVideoSourcePath,
-			sourceAudioFallbackPaths,
-		);
-		if (externalAudioPaths.length === 0) {
-			return sourceAudioFallbackPaths;
-		}
-
-		return [localVideoSourcePath, ...externalAudioPaths];
+	/**
+	 * native 计划与浏览器导出**共用**这一处归一化（实现在 sourceAudioFallback.ts，
+	 * 有独立纯函数测试）。浏览器路径此前直接传 config 原始列表，会丢掉内嵌桌面音频。
+	 */
+	private getNormalizedAudioFallbackPaths(videoInfo: DecodedVideoInfo): string[] {
+		return buildSourceAudioFallbackPaths({
+			videoSourcePath: this.getNativeVideoSourcePath(),
+			hasVideoAudio: videoInfo.hasAudio,
+			sourceAudioFallbackPaths: this.config.sourceAudioFallbackPaths,
+		});
 	}
 
 	private shouldUseNativeStaticLayoutTimelineMap(
@@ -1485,7 +1482,7 @@ export class ModernVideoExporter {
 	private buildNativeAudioPlan(videoInfo: DecodedVideoInfo): NativeAudioPlan {
 		const speedRegions = this.config.speedRegions ?? [];
 		const audioRegions = this.config.audioRegions ?? [];
-		const sourceAudioFallbackPaths = this.getNativeAudioFallbackPaths(videoInfo);
+		const sourceAudioFallbackPaths = this.getNormalizedAudioFallbackPaths(videoInfo);
 		const hasTimedSourceAudioFallback = sourceAudioFallbackPaths.some(
 			(audioPath) =>
 				(this.config.sourceAudioFallbackStartDelayMsByPath?.[audioPath] ?? 0) > 0,

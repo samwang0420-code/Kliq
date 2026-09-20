@@ -77,7 +77,9 @@
 			"toggle": "Iniciar / Detener",
 			"pauseResume": "Pausar / Reanudar",
 			"stop": "Detener"
-		}
+		},
+		"screenSourceName": "Pantalla {{n}}",
+		"screenSourcePrimary": "(Principal)"
 	},
 	"sourceSelector": {
 		"loadingSources": "Cargando fuentes...",
