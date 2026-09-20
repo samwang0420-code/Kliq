@@ -26,7 +26,7 @@
 	"yanjing": {
 		"app": {
 			"tagline": "AI 강화 오픈소스 화면 레코더",
-			"version": "v1.4.0-kliq"
+			"version": "v0.1.0"
 		},
 
 		"license": {
