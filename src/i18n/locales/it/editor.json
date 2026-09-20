@@ -52,7 +52,6 @@
 		"disableSpotlight": "Disattiva",
 		"disableSpotlightDescription": "Se disattivato, il riflettore non viene renderizzato ma resta nella timeline."
 	},
-
 	"fontStyles": {
 		"classic": "Classico",
 		"editor": "Editor",
@@ -130,7 +129,10 @@
 		"experimentalBuilds": "Suggerimento: Attiva l’accesso alle build sperimentali nelle impostazioni",
 		"cursorAppearance": "Suggerimento: Puoi personalizzare l’aspetto del cursore"
 	},
-	"account": { "title": "Account", "comingSoon": "Account in arrivo" },
+	"account": {
+		"title": "Account",
+		"comingSoon": "Account in arrivo"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "Niente è rotto, ma non sarà possibile renderizzare un overlay del cursore animato.",
 		"description": "Il tuo dispositivo non supporta la cattura nativa. Le cause possono essere varie e non ancora identificate. Yanjing funziona comunque, ma non è possibile applicare lo smoothing del cursore.",
@@ -156,5 +158,49 @@
 		"expand": "Espandi timeline",
 		"collapse": "Comprimi timeline"
 	},
-	"openRecordingsFolder": "Apri cartella registrazioni"
+	"openRecordingsFolder": "Apri cartella registrazioni",
+	"yanjing": {
+		"ai": {
+			"toolbarTitle": "Miglioramento IA",
+			"toolbarHotwords": "Parole chiave:",
+			"toolbarExpand": "Espandi",
+			"toolbarCollapse": "Comprimi",
+			"actions": {
+				"transcribe": "Trascrizione IA",
+				"bilingual": "Sottotitoli bilingue IA",
+				"translateMulti": "Sottotitoli multilingue IA",
+				"proofread": "Revisione sottotitoli IA",
+				"silence": "Rimozione silenzi IA",
+				"fillers": "Rimozione intercalari IA",
+				"speed": "Velocità intelligente IA",
+				"zoom": "Zoom automatico IA",
+				"oneclick": "Modifica con un clic IA",
+				"chapters": "Capitoli IA",
+				"summary": "Riepilogo IA",
+				"titles": "Titoli IA",
+				"tags": "Tag IA",
+				"social": "Testo social IA",
+				"search": "Ricerca semantica IA",
+				"uiPolish": "Rifinitura interfaccia"
+			},
+			"groups": {
+				"transcribe": "Trascrivi",
+				"edit": "Modifica",
+				"generate": "Genera",
+				"translate": "Traduci",
+				"search": "Cerca"
+			},
+			"domains": {
+				"general": "Generale",
+				"legal": "Legale",
+				"medical": "Medicina",
+				"ecommerce": "E-commerce",
+				"education": "Istruzione",
+				"finance": "Finanza",
+				"gaming": "Videogiochi",
+				"tech": "Tecnologia",
+				"marketing": "Marketing"
+			}
+		}
+	}
 }

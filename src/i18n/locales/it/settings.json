@@ -6,7 +6,9 @@
 		"modeAuto": "Auto",
 		"modeManual": "Manuale",
 		"modeManualDescription": "Imposta un punto focale fisso per questo zoom",
-		"modeAutoDescription": "La camera si ricentra quando il cursore si avvicina al bordo della vista zoomata"
+		"modeAutoDescription": "La camera si ricentra quando il cursore si avvicina al bordo della vista zoomata",
+		"duplicateZoom": "Duplica zoom",
+		"clearAllZooms": "Cancella tutti gli zoom"
 	},
 	"trim": {
 		"deleteRegion": "Elimina regione di taglio"
@@ -250,7 +252,8 @@
 		"systemLabel": "Sorgente sistema",
 		"micLabel": "Sorgente microfono",
 		"mixedLabel": "Sorgente",
-		"deleteRegion": "Elimina audio"
+		"deleteRegion": "Elimina audio",
+		"duplicateRegion": "Duplica audio"
 	},
 	"updates": {
 		"experimentalDescription": "Hai attivato gli aggiornamenti sperimentali, quindi puoi scegliere di provare l'ultimo aggiornamento di Yanjing Recorder prima che sia disponibile per tutti.",

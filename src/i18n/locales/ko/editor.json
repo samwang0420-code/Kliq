@@ -15,7 +15,6 @@
 		"arrow": "화살표",
 		"blur": "흐리게",
 		"textContent": "텍스트 내용",
-
 		"textPlaceholder": "텍스트를 입력하세요...",
 		"fontStyle": "글꼴 스타일",
 		"selectStyle": "스타일 선택",
@@ -53,7 +52,6 @@
 		"disableSpotlight": "비활성화",
 		"disableSpotlightDescription": "비활성화하면 스포트라이트가 렌더링되지 않지만 타임라인에는 남아 있습니다."
 	},
-
 	"fontStyles": {
 		"classic": "클래식",
 		"editor": "에디터",
@@ -131,7 +129,10 @@
 		"experimentalBuilds": "팁: 설정에서 실험적 빌드 액세스를 켜 보세요",
 		"cursorAppearance": "팁: 커서 모양을 사용자 지정할 수 있습니다"
 	},
-	"account": { "title": "계정", "comingSoon": "계정 기능 준비 중" },
+	"account": {
+		"title": "계정",
+		"comingSoon": "계정 기능 준비 중"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "문제가 생긴 것은 아니지만, 애니메이션 커서 오버레이를 렌더링할 수 없습니다.",
 		"description": "이 장치는 네이티브 캡처를 지원하지 않습니다. 아직 확인하지 못한 여러 이유가 있을 수 있습니다. Yanjing는 계속 작동하지만 커서 스무딩은 사용할 수 없습니다.",
@@ -157,5 +158,49 @@
 		"expand": "타임라인 펼치기",
 		"collapse": "타임라인 접기"
 	},
-	"openRecordingsFolder": "녹화 폴더 열기"
+	"openRecordingsFolder": "녹화 폴더 열기",
+	"yanjing": {
+		"ai": {
+			"toolbarTitle": "AI 향상",
+			"toolbarHotwords": "핵심 단어:",
+			"toolbarExpand": "펼치기",
+			"toolbarCollapse": "접기",
+			"actions": {
+				"transcribe": "AI 전사",
+				"bilingual": "AI 이중 언어 자막",
+				"translateMulti": "AI 다국어 자막",
+				"proofread": "AI 자막 교정",
+				"silence": "AI 무음 제거",
+				"fillers": "AI 불필요한 말 제거",
+				"speed": "AI 스마트 속도",
+				"zoom": "AI 자동 줌",
+				"oneclick": "AI 원클릭 편집",
+				"chapters": "AI 챕터",
+				"summary": "AI 요약",
+				"titles": "AI 제목",
+				"tags": "AI 태그",
+				"social": "AI 소셜 문구",
+				"search": "AI 시맨틱 검색",
+				"uiPolish": "UI 다듬기"
+			},
+			"groups": {
+				"transcribe": "전사",
+				"edit": "편집",
+				"generate": "생성",
+				"translate": "번역",
+				"search": "검색"
+			},
+			"domains": {
+				"general": "일반",
+				"legal": "법률",
+				"medical": "의료",
+				"ecommerce": "이커머스",
+				"education": "교육",
+				"finance": "금융",
+				"gaming": "게임",
+				"tech": "기술",
+				"marketing": "마케팅"
+			}
+		}
+	}
 }

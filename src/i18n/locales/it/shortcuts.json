@@ -11,6 +11,7 @@
 		"cycleBackward": "Scorri annotazioni indietro",
 		"deleteSelectedAlt": "Elimina selezionato (alt)",
 		"panTimeline": "Sposta timeline",
-		"zoomTimeline": "Zoom timeline"
+		"zoomTimeline": "Zoom timeline",
+		"duplicateSelected": "Duplica selezione"
 	}
 }

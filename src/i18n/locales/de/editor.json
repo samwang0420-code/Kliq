@@ -129,7 +129,10 @@
 		"experimentalBuilds": "Tipp: Aktiviere den Zugriff auf experimentelle Builds in den Einstellungen",
 		"cursorAppearance": "Tipp: Du kannst das Aussehen deines Cursors anpassen"
 	},
-	"account": { "title": "Konto", "comingSoon": "Konto demnächst verfügbar" },
+	"account": {
+		"title": "Konto",
+		"comingSoon": "Konto demnächst verfügbar"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "Es ist nichts kaputt, aber wir können kein animiertes Cursor-Overlay rendern.",
 		"description": "Ihr Gerät unterstützt keine native Erfassung. Dies kann verschiedene Gründe haben, die wir noch nicht ermittelt haben. Yanjing funktioniert weiterhin, aber eine Cursor-Glättung ist nicht möglich.",
@@ -155,5 +158,49 @@
 		"expand": "Zeitleiste erweitern",
 		"collapse": "Zeitleiste reduzieren"
 	},
-	"openRecordingsFolder": "Aufnahmeordner öffnen"
+	"openRecordingsFolder": "Aufnahmeordner öffnen",
+	"yanjing": {
+		"ai": {
+			"toolbarTitle": "KI-Verbesserung",
+			"toolbarHotwords": "Schlüsselwörter:",
+			"toolbarExpand": "Erweitern",
+			"toolbarCollapse": "Einklappen",
+			"actions": {
+				"transcribe": "KI-Transkription",
+				"bilingual": "KI-Zweisprachige Untertitel",
+				"translateMulti": "KI-Mehrsprachige Untertitel",
+				"proofread": "KI-Untertitel-Korrektur",
+				"silence": "KI-Stille entfernen",
+				"fillers": "KI-Füllwörter entfernen",
+				"speed": "KI-Smart-Speed",
+				"zoom": "KI-Auto-Zoom",
+				"oneclick": "KI-Ein-Klick-Bearbeitung",
+				"chapters": "KI-Kapitel",
+				"summary": "KI-Zusammenfassung",
+				"titles": "KI-Titel",
+				"tags": "KI-Tags",
+				"social": "KI-Social-Text",
+				"search": "KI-Semantische Suche",
+				"uiPolish": "UI-Feinschliff"
+			},
+			"groups": {
+				"transcribe": "Transkribieren",
+				"edit": "Bearbeiten",
+				"generate": "Generieren",
+				"translate": "Übersetzen",
+				"search": "Suchen"
+			},
+			"domains": {
+				"general": "Allgemein",
+				"legal": "Recht",
+				"medical": "Medizin",
+				"ecommerce": "E-Commerce",
+				"education": "Bildung",
+				"finance": "Finanzen",
+				"gaming": "Gaming",
+				"tech": "Technik",
+				"marketing": "Marketing"
+			}
+		}
+	}
 }

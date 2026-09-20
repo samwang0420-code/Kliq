@@ -22,5 +22,33 @@
 		"invalidFileType": "Ungültiger Dateityp",
 		"failedToUploadImage": "Bild konnte nicht hochgeladen werden",
 		"fileReadError": "Beim Lesen der Datei ist ein Fehler aufgetreten."
+	},
+	"yanjing": {
+		"app": {
+			"tagline": "KI-gestützter Open-Source-Bildschirmrekorder",
+			"version": "v1.4.0-yanjing"
+		},
+		"license": {
+			"section": "Lizenz",
+			"free": "Kostenlose Version",
+			"pro": "Pro-Version",
+			"activated": "Aktiviert",
+			"notActivated": "Nicht aktiviert",
+			"activatePrompt": "Pro-Version aktivieren, um alle KI-Funktionen freizuschalten",
+			"buyPro": "Pro kaufen",
+			"enterLicenseKey": "Lizenzschlüssel eingeben",
+			"activate": "Aktivieren",
+			"deactivate": "Deaktivieren",
+			"activatedSuccess": "Aktivierung erfolgreich!",
+			"invalidKey": "Ungültiger Lizenzschlüssel",
+			"expiresAt": "Läuft ab am: {{date}}",
+			"subscriptionManagement": "Abonnement verwalten"
+		},
+		"settings": {
+			"title": "Yanjing-Einstellungen",
+			"save": "Speichern",
+			"saved": "Gespeichert",
+			"reset": "Auf Standard zurücksetzen"
+		}
 	}
 }

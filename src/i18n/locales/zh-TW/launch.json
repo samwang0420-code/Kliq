@@ -66,6 +66,12 @@
 			"upToDateTitle": "Yanjing {{version}} 已是最新版本。",
 			"availableTitle": "Yanjing {{version}} 已推出新版本。",
 			"availableGenericTitle": "有可用更新。"
+		},
+		"shortcuts": "錄製快捷鍵",
+		"shortcut": {
+			"toggle": "開始 / 停止",
+			"pauseResume": "暫停 / 繼續",
+			"stop": "停止"
 		}
 	},
 	"sourceSelector": {

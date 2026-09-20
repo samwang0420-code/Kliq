@@ -6,7 +6,9 @@
 		"modeAuto": "自动",
 		"modeManual": "手动",
 		"modeManualDescription": "为此缩放设置固定焦点",
-		"modeAutoDescription": "镜头会自动跟随光标"
+		"modeAutoDescription": "镜头会自动跟随光标",
+		"duplicateZoom": "复制缩放",
+		"clearAllZooms": "清除所有缩放"
 	},
 	"trim": {
 		"deleteRegion": "删除修剪区域"
@@ -82,7 +84,7 @@
 		"connectedZoomDuration": "连接缩放时长",
 		"connectedZoomEasing": "连接平移曲线",
 		"zoomEasingOptions": {
-			"yanjing": "言镜 (Yanjing Recorder)",
+			"recordly": "言镜 (Yanjing Recorder)",
 			"glide": "滑行",
 			"smooth": "平滑",
 			"snappy": "利落",
@@ -250,7 +252,8 @@
 		"systemLabel": "系统声音",
 		"micLabel": "麦克风",
 		"mixedLabel": "来源",
-		"deleteRegion": "删除音频"
+		"deleteRegion": "删除音频",
+		"duplicateRegion": "复制音频"
 	},
 	"updates": {
 		"experimentalDescription": "你已选择接收实验性更新，因此可以在 言镜 最新更新广泛发布之前选择先行测试。",

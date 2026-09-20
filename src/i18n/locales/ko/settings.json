@@ -6,7 +6,9 @@
 		"modeAuto": "자동",
 		"modeManual": "수동",
 		"modeManualDescription": "이 확대에 고정 초점을 설정합니다",
-		"modeAutoDescription": "카메라가 커서를 자동으로 따라갑니다"
+		"modeAutoDescription": "카메라가 커서를 자동으로 따라갑니다",
+		"duplicateZoom": "줌 복제",
+		"clearAllZooms": "모든 줌 지우기"
 	},
 	"trim": {
 		"deleteRegion": "트림 구간 삭제"
@@ -250,7 +252,8 @@
 		"systemLabel": "시스템 소스",
 		"micLabel": "마이크 소스",
 		"mixedLabel": "소스",
-		"deleteRegion": "오디오 삭제"
+		"deleteRegion": "오디오 삭제",
+		"duplicateRegion": "오디오 복제"
 	},
 	"updates": {
 		"experimentalDescription": "실험적 업데이트를 선택했으므로 Yanjing의 최신 업데이트가 널리 제공되기 전에 먼저 테스트해 볼 수 있습니다.",

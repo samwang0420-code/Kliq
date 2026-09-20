@@ -22,5 +22,33 @@
 		"invalidFileType": "Type de fichier invalide",
 		"failedToUploadImage": "Échec du téléchargement de l’image",
 		"fileReadError": "Une erreur s’est produite lors de la lecture du fichier."
+	},
+	"yanjing": {
+		"app": {
+			"tagline": "Enregistreur d'écran open source propulsé par l'IA",
+			"version": "v1.4.0-yanjing"
+		},
+		"license": {
+			"section": "Licence",
+			"free": "Édition gratuite",
+			"pro": "Édition Pro",
+			"activated": "Activé",
+			"notActivated": "Non activé",
+			"activatePrompt": "Activez l'édition Pro pour débloquer toutes les fonctionnalités IA",
+			"buyPro": "Acheter Pro",
+			"enterLicenseKey": "Saisir la clé de licence",
+			"activate": "Activer",
+			"deactivate": "Désactiver",
+			"activatedSuccess": "Activation réussie !",
+			"invalidKey": "Clé de licence invalide",
+			"expiresAt": "Expire le : {{date}}",
+			"subscriptionManagement": "Gérer l'abonnement"
+		},
+		"settings": {
+			"title": "Paramètres Yanjing",
+			"save": "Enregistrer",
+			"saved": "Enregistré",
+			"reset": "Rétablir les valeurs par défaut"
+		}
 	}
 }

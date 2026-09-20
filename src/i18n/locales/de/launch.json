@@ -57,7 +57,22 @@
 			"upToDateTitle": "Yanjing {{version}} ist auf dem neuesten Stand.",
 			"availableTitle": "Yanjing {{version}} ist verfügbar.",
 			"availableGenericTitle": "Ein Update ist verfügbar."
-		}
+		},
+		"shortcuts": "Aufnahme-Shortcuts",
+		"shortcut": {
+			"toggle": "Start / Stopp",
+			"pauseResume": "Pause / Fortsetzen",
+			"stop": "Stopp"
+		},
+		"noiseSuppression": "Rauschunterdrückung",
+		"noiseSuppressionRnnoise": "RNNoise - Bessere Qualität",
+		"noiseSuppressionRnnoiseDescription": "Bessere Hintergrundgeräusch-Entfernung, höhere CPU-Auslastung.",
+		"noiseSuppressionSpeex": "Speex - Geringere CPU-Auslastung",
+		"noiseSuppressionSpeexDescription": "Geringere CPU-Auslastung, aber reduzierte Sprachqualität.",
+		"noiseSuppressionDisabled": "Deaktiviert",
+		"noiseSuppressionDisabledDescription": "Nimmt das Original-Mikrofon-Audio auf.",
+		"noiseSuppressionUnavailableWarning": "Rauschunterdrückung ist auf diesem Gerät nicht verfügbar. Die Aufnahme wird ohne sie fortgesetzt.",
+		"noiseSuppressionFallbackWarning": "Rauschunterdrückung ist auf {{mode}} zurückgefallen."
 	},
 	"sourceSelector": {
 		"loadingSources": "Quellen werden geladen...",

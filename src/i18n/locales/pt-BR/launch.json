@@ -66,6 +66,12 @@
 			"upToDateTitle": "Yanjing {{version}} está atualizado.",
 			"availableTitle": "Yanjing {{version}} está disponível.",
 			"availableGenericTitle": "Há uma atualização disponível."
+		},
+		"shortcuts": "Atalhos de gravação",
+		"shortcut": {
+			"toggle": "Iniciar / Parar",
+			"pauseResume": "Pausar / Retomar",
+			"stop": "Parar"
 		}
 	},
 	"sourceSelector": {

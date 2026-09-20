@@ -22,5 +22,33 @@
 		"invalidFileType": "Ongeldig bestandstype",
 		"failedToUploadImage": "Afbeelding uploaden mislukt",
 		"fileReadError": "Er is een fout opgetreden bij het lezen van het bestand."
+	},
+	"yanjing": {
+		"app": {
+			"tagline": "AI-gestuurde open-source schermrecorder",
+			"version": "v1.4.0-yanjing"
+		},
+		"license": {
+			"section": "Licentie",
+			"free": "Gratis editie",
+			"pro": "Pro-editie",
+			"activated": "Geactiveerd",
+			"notActivated": "Niet geactiveerd",
+			"activatePrompt": "Activeer de Pro-editie om alle AI-functies te ontgrendelen",
+			"buyPro": "Pro kopen",
+			"enterLicenseKey": "Licentiesleutel invoeren",
+			"activate": "Activeren",
+			"deactivate": "Deactiveren",
+			"activatedSuccess": "Activering gelukt!",
+			"invalidKey": "Ongeldige licentiesleutel",
+			"expiresAt": "Verloopt op: {{date}}",
+			"subscriptionManagement": "Abonnement beheren"
+		},
+		"settings": {
+			"title": "Yanjing-instellingen",
+			"save": "Opslaan",
+			"saved": "Opgeslagen",
+			"reset": "Herstel standaardwaarden"
+		}
 	}
 }

@@ -52,7 +52,6 @@
 		"disableSpotlight": "Désactiver",
 		"disableSpotlightDescription": "Lorsqu’il est désactivé, le projecteur n’est pas rendu mais reste sur la timeline."
 	},
-
 	"fontStyles": {
 		"classic": "Classique",
 		"editor": "Éditeur",
@@ -130,7 +129,10 @@
 		"experimentalBuilds": "Astuce : Activez l’accès aux versions expérimentales dans les paramètres",
 		"cursorAppearance": "Astuce : Vous pouvez personnaliser l’apparence du curseur"
 	},
-	"account": { "title": "Compte", "comingSoon": "Compte bientôt disponible" },
+	"account": {
+		"title": "Compte",
+		"comingSoon": "Compte bientôt disponible"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "Rien n'est cassé, mais nous ne pourrons pas afficher une superposition animée du curseur.",
 		"description": "Votre appareil ne prend pas en charge la capture native. Cela peut arriver pour plusieurs raisons que nous n'avons pas encore identifiées. Yanjing continuera de fonctionner, mais le lissage du curseur sera impossible.",
@@ -156,5 +158,49 @@
 		"expand": "Développer la timeline",
 		"collapse": "Réduire la timeline"
 	},
-	"openRecordingsFolder": "Ouvrir le dossier des enregistrements"
+	"openRecordingsFolder": "Ouvrir le dossier des enregistrements",
+	"yanjing": {
+		"ai": {
+			"toolbarTitle": "Amélioration IA",
+			"toolbarHotwords": "Mots-clés :",
+			"toolbarExpand": "Développer",
+			"toolbarCollapse": "Réduire",
+			"actions": {
+				"transcribe": "Transcription IA",
+				"bilingual": "Sous-titres bilingues IA",
+				"translateMulti": "Sous-titres multilingues IA",
+				"proofread": "Relecture des sous-titres IA",
+				"silence": "Suppression des silences IA",
+				"fillers": "Suppression des tics de langage IA",
+				"speed": "Vitesse intelligente IA",
+				"zoom": "Zoom automatique IA",
+				"oneclick": "Montage en un clic IA",
+				"chapters": "Chapitres IA",
+				"summary": "Résumé IA",
+				"titles": "Titres IA",
+				"tags": "Étiquettes IA",
+				"social": "Texte réseaux sociaux IA",
+				"search": "Recherche sémantique IA",
+				"uiPolish": "Peaufinage de l'interface"
+			},
+			"groups": {
+				"transcribe": "Transcrire",
+				"edit": "Modifier",
+				"generate": "Générer",
+				"translate": "Traduire",
+				"search": "Rechercher"
+			},
+			"domains": {
+				"general": "Général",
+				"legal": "Juridique",
+				"medical": "Médical",
+				"ecommerce": "E-commerce",
+				"education": "Éducation",
+				"finance": "Finance",
+				"gaming": "Jeux vidéo",
+				"tech": "Technologie",
+				"marketing": "Marketing"
+			}
+		}
+	}
 }

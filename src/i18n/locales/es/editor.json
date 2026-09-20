@@ -52,7 +52,6 @@
 		"disableSpotlight": "Desactivar",
 		"disableSpotlightDescription": "Si está desactivado, el foco no se renderiza, pero permanece en la línea de tiempo."
 	},
-
 	"fontStyles": {
 		"classic": "Clásico",
 		"editor": "Editor",
@@ -130,7 +129,10 @@
 		"experimentalBuilds": "Consejo: Activa el acceso a versiones experimentales en la configuración",
 		"cursorAppearance": "Consejo: Puedes personalizar la apariencia del cursor"
 	},
-	"account": { "title": "Cuenta", "comingSoon": "Cuenta próximamente" },
+	"account": {
+		"title": "Cuenta",
+		"comingSoon": "Cuenta próximamente"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "Nada está roto, pero no podremos renderizar una superposición de cursor animada.",
 		"description": "Tu dispositivo no es compatible con la captura nativa. Esto puede deberse a varias razones que todavía no hemos identificado. Yanjing seguirá funcionando, pero hará imposible el suavizado del cursor.",
@@ -156,5 +158,49 @@
 		"expand": "Expandir línea de tiempo",
 		"collapse": "Contraer línea de tiempo"
 	},
-	"openRecordingsFolder": "Abrir carpeta de grabaciones"
+	"openRecordingsFolder": "Abrir carpeta de grabaciones",
+	"yanjing": {
+		"ai": {
+			"toolbarTitle": "Mejora IA",
+			"toolbarHotwords": "Palabras clave:",
+			"toolbarExpand": "Expandir",
+			"toolbarCollapse": "Contraer",
+			"actions": {
+				"transcribe": "Transcripción IA",
+				"bilingual": "Subtítulos bilingües IA",
+				"translateMulti": "Subtítulos multilingües IA",
+				"proofread": "Revisión de subtítulos IA",
+				"silence": "Eliminación de silencios IA",
+				"fillers": "Eliminación de muletillas IA",
+				"speed": "Velocidad inteligente IA",
+				"zoom": "Zoom automático IA",
+				"oneclick": "Edición con un clic IA",
+				"chapters": "Capítulos IA",
+				"summary": "Resumen IA",
+				"titles": "Títulos IA",
+				"tags": "Etiquetas IA",
+				"social": "Texto para redes IA",
+				"search": "Búsqueda semántica IA",
+				"uiPolish": "Pulido de interfaz"
+			},
+			"groups": {
+				"transcribe": "Transcribir",
+				"edit": "Editar",
+				"generate": "Generar",
+				"translate": "Traducir",
+				"search": "Buscar"
+			},
+			"domains": {
+				"general": "General",
+				"legal": "Legal",
+				"medical": "Medicina",
+				"ecommerce": "Comercio electrónico",
+				"education": "Educación",
+				"finance": "Finanzas",
+				"gaming": "Videojuegos",
+				"tech": "Tecnología",
+				"marketing": "Marketing"
+			}
+		}
+	}
 }

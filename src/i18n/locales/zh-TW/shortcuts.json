@@ -11,6 +11,7 @@
 		"cycleBackward": "往後切換註解",
 		"deleteSelectedAlt": "刪除所選項目（Alt）",
 		"panTimeline": "平移時間軸",
-		"zoomTimeline": "縮放時間軸"
+		"zoomTimeline": "縮放時間軸",
+		"duplicateSelected": "複製所選"
 	}
 }

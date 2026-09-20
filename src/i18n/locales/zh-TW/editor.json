@@ -52,7 +52,6 @@
 		"disableSpotlight": "停用",
 		"disableSpotlightDescription": "停用後不會渲染聚光燈，但仍保留在時間軸上。"
 	},
-
 	"fontStyles": {
 		"classic": "經典",
 		"editor": "編輯器",
@@ -130,7 +129,10 @@
 		"experimentalBuilds": "提示：可在設定中開啟實驗版本存取權",
 		"cursorAppearance": "提示：你可以自訂游標外觀"
 	},
-	"account": { "title": "帳號", "comingSoon": "帳號功能即將推出" },
+	"account": {
+		"title": "帳號",
+		"comingSoon": "帳號功能即將推出"
+	},
 	"nativeCaptureUnavailable": {
 		"title": "沒有出錯，但我們無法轉譯動畫游標覆蓋層。",
 		"description": "你的裝置不支援原生擷取。這可能是由我們尚未釐清的多種原因造成的。Yanjing 仍可繼續運作，但無法進行游標平滑處理。",
@@ -156,5 +158,49 @@
 		"expand": "展開時間軸",
 		"collapse": "摺疊時間軸"
 	},
-	"openRecordingsFolder": "打開錄製資料夾"
+	"openRecordingsFolder": "打開錄製資料夾",
+	"yanjing": {
+		"ai": {
+			"toolbarTitle": "AI 增強",
+			"toolbarHotwords": "熱詞：",
+			"toolbarExpand": "展開",
+			"toolbarCollapse": "收合",
+			"actions": {
+				"transcribe": "AI 轉錄",
+				"bilingual": "AI 雙語字幕",
+				"translateMulti": "AI 多語字幕",
+				"proofread": "AI 字幕校對",
+				"silence": "AI 去除靜音",
+				"fillers": "AI 去除贅詞",
+				"speed": "AI 智慧變速",
+				"zoom": "AI 自動縮放",
+				"oneclick": "AI 一鍵剪輯",
+				"chapters": "AI 章節",
+				"summary": "AI 摘要",
+				"titles": "AI 標題",
+				"tags": "AI 標籤",
+				"social": "AI 社群文案",
+				"search": "AI 語意搜尋",
+				"uiPolish": "介面美化"
+			},
+			"groups": {
+				"transcribe": "轉錄",
+				"edit": "剪輯",
+				"generate": "生成",
+				"translate": "翻譯",
+				"search": "搜尋"
+			},
+			"domains": {
+				"general": "通用",
+				"legal": "法律",
+				"medical": "醫療",
+				"ecommerce": "電商",
+				"education": "教育",
+				"finance": "金融",
+				"gaming": "遊戲",
+				"tech": "科技",
+				"marketing": "行銷"
+			}
+		}
+	}
 }

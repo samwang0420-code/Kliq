@@ -66,6 +66,12 @@
 			"upToDateTitle": "Yanjing {{version}}은(는) 최신 버전입니다.",
 			"availableTitle": "Yanjing {{version}}을(를) 사용할 수 있습니다.",
 			"availableGenericTitle": "업데이트를 사용할 수 있습니다."
+		},
+		"shortcuts": "녹화 단축키",
+		"shortcut": {
+			"toggle": "시작 / 중지",
+			"pauseResume": "일시정지 / 재개",
+			"stop": "중지"
 		}
 	},
 	"sourceSelector": {

@@ -66,6 +66,12 @@
 			"upToDateTitle": "Yanjing {{version}} is up-to-date.",
 			"availableTitle": "Yanjing {{version}} is beschikbaar.",
 			"availableGenericTitle": "Er is een update beschikbaar."
+		},
+		"shortcuts": "Opname-sneltoetsen",
+		"shortcut": {
+			"toggle": "Starten / Stoppen",
+			"pauseResume": "Pauzeren / Hervatten",
+			"stop": "Stoppen"
 		}
 	},
 	"sourceSelector": {

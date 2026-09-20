@@ -14,7 +14,8 @@
 		"addedSuggestions": "{{count}} sugestão(ões) de zoom por interação adicionada(s)",
 		"label": "Zoom {{index}}",
 		"addZoom": "Adicionar zoom (Z)",
-		"suggestZooms": "Sugerir zooms pelo cursor"
+		"suggestZooms": "Sugerir zooms pelo cursor",
+		"clearAllZooms": "Limpar todos os zooms (Ctrl+Shift+Backspace)"
 	},
 	"trim": {
 		"cannotPlace": "Não é possível inserir corte aqui",

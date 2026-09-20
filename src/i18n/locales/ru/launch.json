@@ -66,6 +66,12 @@
 			"upToDateTitle": "У вас актуальная версия Yanjing {{version}}.",
 			"availableTitle": "Доступна новая версия Yanjing {{version}}.",
 			"availableGenericTitle": "Доступно обновление."
+		},
+		"shortcuts": "Горячие клавиши записи",
+		"shortcut": {
+			"toggle": "Начать / Остановить",
+			"pauseResume": "Пауза / Продолжить",
+			"stop": "Стоп"
 		}
 	},
 	"sourceSelector": {

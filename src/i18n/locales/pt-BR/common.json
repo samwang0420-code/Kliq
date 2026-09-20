@@ -22,5 +22,33 @@
 		"invalidFileType": "Tipo de arquivo inválido",
 		"failedToUploadImage": "Falha ao enviar imagem",
 		"fileReadError": "Ocorreu um erro ao ler o arquivo."
+	},
+	"yanjing": {
+		"app": {
+			"tagline": "Gravador de tela de código aberto com IA",
+			"version": "v1.4.0-yanjing"
+		},
+		"license": {
+			"section": "Licença",
+			"free": "Edição gratuita",
+			"pro": "Edição Pro",
+			"activated": "Ativado",
+			"notActivated": "Não ativado",
+			"activatePrompt": "Ative a edição Pro para desbloquear todos os recursos de IA",
+			"buyPro": "Comprar Pro",
+			"enterLicenseKey": "Insira a chave de licença",
+			"activate": "Ativar",
+			"deactivate": "Desativar",
+			"activatedSuccess": "Ativação bem-sucedida!",
+			"invalidKey": "Chave de licença inválida",
+			"expiresAt": "Expira em: {{date}}",
+			"subscriptionManagement": "Gerenciar assinatura"
+		},
+		"settings": {
+			"title": "Configurações do Yanjing",
+			"save": "Salvar",
+			"saved": "Salvo",
+			"reset": "Restaurar padrão"
+		}
 	}
 }

@@ -6,7 +6,9 @@
 		"modeAuto": "自動",
 		"modeManual": "手動",
 		"modeManualDescription": "為此縮放設定固定的對焦點",
-		"modeAutoDescription": "相機會自動跟隨游標"
+		"modeAutoDescription": "相機會自動跟隨游標",
+		"duplicateZoom": "複製縮放",
+		"clearAllZooms": "清除所有縮放"
 	},
 	"trim": {
 		"deleteRegion": "刪除修剪區域"
@@ -250,7 +252,8 @@
 		"systemLabel": "系統源",
 		"micLabel": "麥克風源",
 		"mixedLabel": "源",
-		"deleteRegion": "刪除音訊"
+		"deleteRegion": "刪除音訊",
+		"duplicateRegion": "複製音訊"
 	},
 	"updates": {
 		"experimentalDescription": "你已選擇接收實驗性更新，因此可以在 Yanjing 最新更新廣泛推出之前選擇先行測試。",

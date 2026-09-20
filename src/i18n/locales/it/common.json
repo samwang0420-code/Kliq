@@ -22,5 +22,33 @@
 		"invalidFileType": "Tipo di file non valido",
 		"failedToUploadImage": "Caricamento immagine non riuscito",
 		"fileReadError": "Si è verificato un errore durante la lettura del file."
+	},
+	"yanjing": {
+		"app": {
+			"tagline": "Registratore dello schermo open source con IA",
+			"version": "v1.4.0-yanjing"
+		},
+		"license": {
+			"section": "Licenza",
+			"free": "Edizione gratuita",
+			"pro": "Edizione Pro",
+			"activated": "Attivato",
+			"notActivated": "Non attivato",
+			"activatePrompt": "Attiva l'edizione Pro per sbloccare tutte le funzioni IA",
+			"buyPro": "Acquista Pro",
+			"enterLicenseKey": "Inserisci la chiave di licenza",
+			"activate": "Attiva",
+			"deactivate": "Disattiva",
+			"activatedSuccess": "Attivazione riuscita!",
+			"invalidKey": "Chiave di licenza non valida",
+			"expiresAt": "Scade il: {{date}}",
+			"subscriptionManagement": "Gestisci abbonamento"
+		},
+		"settings": {
+			"title": "Impostazioni Yanjing",
+			"save": "Salva",
+			"saved": "Salvato",
+			"reset": "Ripristina predefiniti"
+		}
 	}
 }

@@ -11,6 +11,7 @@
 		"cycleBackward": "向后循环切换注释",
 		"deleteSelectedAlt": "删除选中（替代）",
 		"panTimeline": "平移时间线",
-		"zoomTimeline": "缩放时间线"
+		"zoomTimeline": "缩放时间线",
+		"duplicateSelected": "复制所选"
 	}
 }

@@ -6,7 +6,9 @@
 		"modeAuto": "Automatisch",
 		"modeManual": "Manuell",
 		"modeManualDescription": "Legen Sie einen festen Fokuspunkt für diesen Zoom fest",
-		"modeAutoDescription": "Die Kamera zentriert sich neu, wenn sich der Cursor dem Rand der gezoomten Ansicht nähert"
+		"modeAutoDescription": "Die Kamera zentriert sich neu, wenn sich der Cursor dem Rand der gezoomten Ansicht nähert",
+		"duplicateZoom": "Zoom duplizieren",
+		"clearAllZooms": "Alle Zooms löschen"
 	},
 	"trim": {
 		"deleteRegion": "Trimmbereich löschen"
@@ -250,7 +252,8 @@
 		"systemLabel": "Quellsystem",
 		"micLabel": "Quellmikrofon",
 		"mixedLabel": "Quelle",
-		"deleteRegion": "Audio löschen"
+		"deleteRegion": "Audio löschen",
+		"duplicateRegion": "Audio duplizieren"
 	},
 	"updates": {
 		"experimentalDescription": "Sie haben experimentelle Updates aktiviert und können daher das neueste Update von Yanjing Recorder testen, bevor es allgemein verfügbar ist.",

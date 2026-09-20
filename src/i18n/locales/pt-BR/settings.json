@@ -6,7 +6,9 @@
 		"modeAuto": "Auto",
 		"modeManual": "Manual",
 		"modeManualDescription": "Defina um ponto de foco fixo para este zoom",
-		"modeAutoDescription": "A câmera segue o cursor automaticamente"
+		"modeAutoDescription": "A câmera segue o cursor automaticamente",
+		"duplicateZoom": "Duplicar zoom",
+		"clearAllZooms": "Limpar todos os zooms"
 	},
 	"trim": {
 		"deleteRegion": "Excluir região de corte"
@@ -250,7 +252,8 @@
 		"systemLabel": "Sistema",
 		"micLabel": "Microfone",
 		"mixedLabel": "Fonte",
-		"deleteRegion": "Excluir áudio"
+		"deleteRegion": "Excluir áudio",
+		"duplicateRegion": "Duplicar áudio"
 	},
 	"updates": {
 		"experimentalDescription": "Você ativou atualizações experimentais, então pode testar a atualização mais recente do Yanjing Recorder antes que ela esteja disponível para todos.",

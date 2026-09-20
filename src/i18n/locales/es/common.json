@@ -22,5 +22,33 @@
 		"invalidFileType": "Tipo de archivo inválido",
 		"failedToUploadImage": "Error al subir la imagen",
 		"fileReadError": "Hubo un error al leer el archivo."
+	},
+	"yanjing": {
+		"app": {
+			"tagline": "Grabador de pantalla de código abierto con IA",
+			"version": "v1.4.0-yanjing"
+		},
+		"license": {
+			"section": "Licencia",
+			"free": "Edición gratuita",
+			"pro": "Edición Pro",
+			"activated": "Activado",
+			"notActivated": "No activado",
+			"activatePrompt": "Activa la edición Pro para desbloquear todas las funciones de IA",
+			"buyPro": "Comprar Pro",
+			"enterLicenseKey": "Introduce la clave de licencia",
+			"activate": "Activar",
+			"deactivate": "Desactivar",
+			"activatedSuccess": "¡Activación exitosa!",
+			"invalidKey": "Clave de licencia no válida",
+			"expiresAt": "Caduca el: {{date}}",
+			"subscriptionManagement": "Gestionar suscripción"
+		},
+		"settings": {
+			"title": "Ajustes de Yanjing",
+			"save": "Guardar",
+			"saved": "Guardado",
+			"reset": "Restablecer valores predeterminados"
+		}
 	}
 }

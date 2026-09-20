@@ -22,5 +22,33 @@
 		"invalidFileType": "Неверный формат файла",
 		"failedToUploadImage": "Не удалось загрузить изображение",
 		"fileReadError": "Произошла ошибка при чтении файла."
+	},
+	"yanjing": {
+		"app": {
+			"tagline": "Программа записи экрана с открытым кодом и ИИ",
+			"version": "v1.4.0-yanjing"
+		},
+		"license": {
+			"section": "Лицензия",
+			"free": "Бесплатная версия",
+			"pro": "Pro-версия",
+			"activated": "Активировано",
+			"notActivated": "Не активировано",
+			"activatePrompt": "Активируйте Pro-версию, чтобы разблокировать все функции ИИ",
+			"buyPro": "Купить Pro",
+			"enterLicenseKey": "Введите лицензионный ключ",
+			"activate": "Активировать",
+			"deactivate": "Деактивировать",
+			"activatedSuccess": "Активация выполнена!",
+			"invalidKey": "Недействительный лицензионный ключ",
+			"expiresAt": "Истекает: {{date}}",
+			"subscriptionManagement": "Управление подпиской"
+		},
+		"settings": {
+			"title": "Настройки Yanjing",
+			"save": "Сохранить",
+			"saved": "Сохранено",
+			"reset": "Сбросить по умолчанию"
+		}
 	}
 }

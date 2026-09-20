@@ -11,6 +11,7 @@
 		"cycleBackward": "Предыдущая аннотация",
 		"deleteSelectedAlt": "Удалить выбранное (alt)",
 		"panTimeline": "Прокрутка таймлайна",
-		"zoomTimeline": "Масштабирование таймлайна"
+		"zoomTimeline": "Масштабирование таймлайна",
+		"duplicateSelected": "Дублировать выбранное"
 	}
 }

@@ -66,6 +66,12 @@
 			"upToDateTitle": "言镜 {{version}} 已是最新版本。",
 			"availableTitle": "言镜 {{version}} 可更新。",
 			"availableGenericTitle": "有可用更新。"
+		},
+		"shortcuts": "录制快捷键",
+		"shortcut": {
+			"toggle": "开始 / 停止",
+			"pauseResume": "暂停 / 继续",
+			"stop": "停止"
 		}
 	},
 	"sourceSelector": {

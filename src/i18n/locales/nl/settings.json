@@ -6,7 +6,9 @@
 		"modeAuto": "Auto",
 		"modeManual": "Handmatig",
 		"modeManualDescription": "Stel een vast focuspunt in voor deze zoom",
-		"modeAutoDescription": "De camera volgt de cursor automatisch"
+		"modeAutoDescription": "De camera volgt de cursor automatisch",
+		"duplicateZoom": "Zoom dupliceren",
+		"clearAllZooms": "Alle zooms wissen"
 	},
 	"trim": {
 		"deleteRegion": "Trimgebied verwijderen"
@@ -250,7 +252,8 @@
 		"systemLabel": "Systeemaudio",
 		"micLabel": "Microfoon",
 		"mixedLabel": "Bron",
-		"deleteRegion": "Audio verwijderen"
+		"deleteRegion": "Audio verwijderen",
+		"duplicateRegion": "Audio dupliceren"
 	},
 	"updates": {
 		"experimentalDescription": "Je hebt experimentele updates ingeschakeld, dus je kunt de nieuwste update van Yanjing Recorder testen voordat deze algemeen beschikbaar is.",

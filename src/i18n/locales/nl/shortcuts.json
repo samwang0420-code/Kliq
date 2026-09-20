@@ -11,6 +11,7 @@
 		"cycleBackward": "Annotaties achteruit doorlopen",
 		"deleteSelectedAlt": "Selectie verwijderen (alt)",
 		"panTimeline": "Tijdlijn verschuiven",
-		"zoomTimeline": "Tijdlijn zoomen"
+		"zoomTimeline": "Tijdlijn zoomen",
+		"duplicateSelected": "Selectie dupliceren"
 	}
 }
