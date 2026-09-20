@@ -102,6 +102,7 @@ interface VideoExporterConfig extends ExportConfig {
 	showShadow: boolean;
 	shadowIntensity: number;
 	backgroundBlur: number;
+	onWebcamBackgroundBlurWarning?: (message: string) => void;
 	zoomMotionBlur?: number;
 	zoomMotionBlurTuning?: ZoomMotionBlurTuning;
 	connectZooms?: boolean;
@@ -674,8 +675,10 @@ export class ModernVideoExporter {
 					cursorSway: this.config.cursorSway,
 					zoomSmoothness: this.config.zoomSmoothness,
 					zoomClassicMode: this.config.zoomClassicMode,
+					onWebcamBackgroundBlurWarning: this.config.onWebcamBackgroundBlurWarning,
 				});
 				await this.renderer.initialize();
+				await this.renderer.preflightWebcamBackgroundBlur();
 				this.rendererInitTimeMs = this.getNowMs() - stageStartedAt;
 				this.renderBackend = this.renderer.getRendererBackend();
 				console.log(`[VideoExporter] Using ${this.renderBackend} render backend`);
@@ -1773,6 +1776,12 @@ export class ModernVideoExporter {
 		}
 		if ((this.config.autoCaptions ?? []).length > 0) {
 			reasons.push("unsupported-caption-overlay");
+		}
+		if (this.config.webcam?.enabled && this.config.webcam.backgroundBlur?.enabled) {
+			// Background blur needs the async segmentation pass, which the native
+			// static-layout compositor cannot run. Report it before the generic
+			// webcam reason so the skip cause stays actionable.
+			reasons.push("unsupported-webcam-background-blur");
 		}
 		if (this.config.webcam?.enabled) {
 			// Native GPU compositors use a different corner and shadow model.

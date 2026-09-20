@@ -18,6 +18,7 @@ type BuildExportRenderOptionsInput = {
 	previewHeight: number;
 	shadowIntensity: number;
 	onProgress: (progress: ExportProgress) => void;
+	onWebcamBackgroundBlurWarning?: (message: string) => void;
 };
 
 export function buildExportRenderOptions({
@@ -31,6 +32,7 @@ export function buildExportRenderOptions({
 	previewHeight,
 	shadowIntensity,
 	onProgress,
+	onWebcamBackgroundBlurWarning,
 }: BuildExportRenderOptionsInput) {
 	return {
 		clipRegions: timeline.clipRegions,
@@ -87,5 +89,6 @@ export function buildExportRenderOptions({
 		previewWidth,
 		previewHeight,
 		onProgress,
+		onWebcamBackgroundBlurWarning,
 	};
 }

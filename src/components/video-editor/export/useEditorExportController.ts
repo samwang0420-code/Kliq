@@ -46,6 +46,7 @@ type Input = {
 
 export function useEditorExportController(input: Input) {
 	const runner = useExportRunner({
+		t: input.t,
 		videoPath: input.videoPath,
 		videoPlaybackRef: input.videoPlaybackRef,
 		isPlaying: input.isPlaying,

@@ -1,3 +1,8 @@
+import {
+	DEFAULT_WEBCAM_BACKGROUND_BLUR,
+	type WebcamBackgroundBlurSettings,
+} from "@/lib/webcamBackgroundBlur";
+
 export type ZoomDepth = 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface ZoomFocus {
@@ -152,6 +157,7 @@ export interface WebcamOverlaySettings {
 	cornerRadius?: number;
 	shadow: number;
 	margin: number;
+	backgroundBlur: WebcamBackgroundBlurSettings;
 }
 
 export const DEFAULT_CURSOR_SIZE = 3.0;
@@ -216,6 +222,7 @@ export const DEFAULT_WEBCAM_OVERLAY: WebcamOverlaySettings = {
 	roundness: DEFAULT_WEBCAM_ROUNDNESS,
 	shadow: DEFAULT_WEBCAM_SHADOW,
 	margin: DEFAULT_WEBCAM_MARGIN,
+	backgroundBlur: { ...DEFAULT_WEBCAM_BACKGROUND_BLUR },
 };
 
 export interface TrimRegion {

@@ -7,6 +7,7 @@ import {
 	useEffect,
 } from "react";
 import { toast } from "@/lib/toast";
+import { DEFAULT_WEBCAM_BACKGROUND_BLUR } from "@/lib/webcamBackgroundBlur";
 import { fromFileUrl, resolveVideoUrl } from "../projectPersistence";
 import type { useAppearanceState } from "../state/useAppearanceState";
 import type { useProjectState } from "../state/useProjectState";
@@ -135,6 +136,7 @@ export function useProjectOpenActions({
 			enabled: false,
 			sourcePath: null,
 			timeOffsetMs: DEFAULT_WEBCAM_TIME_OFFSET_MS,
+			backgroundBlur: { ...DEFAULT_WEBCAM_BACKGROUND_BLUR },
 		}));
 		applySessionPresentation(null);
 		project.setProjectBrowserOpen(false);

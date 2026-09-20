@@ -1,7 +1,8 @@
 import type { RefObject } from "react";
 import { useCallback } from "react";
-import { toast } from "@/lib/toast";
+import type { useI18n } from "@/contexts/I18nContext";
 import type { SupportedMp4Dimensions } from "@/lib/exporter";
+import { toast } from "@/lib/toast";
 import type { useVideoEditorAudio } from "../audio/useVideoEditorAudio";
 import type { getSmokeExportConfig } from "../smokeExportConfig";
 import type { useAppearanceState } from "../state/useAppearanceState";
@@ -14,6 +15,7 @@ import type { useExportSession } from "./useExportSession";
 import type { useExportSettings } from "./useExportSettings";
 
 export type ExportRunnerInput = {
+	t: ReturnType<typeof useI18n>["t"];
 	videoPath: string | null;
 	videoPlaybackRef: RefObject<VideoPlaybackRef | null>;
 	isPlaying: boolean;

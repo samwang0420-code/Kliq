@@ -65,6 +65,22 @@ describe("normalizeProjectEditor", () => {
 		expect(legacyBorderRadiusPixelsToPercent(54)).toBe(5);
 	});
 
+	it("defaults legacy webcam settings to background blur off", () => {
+		const editor = normalizeProjectEditor({ webcam: { enabled: true } });
+
+		expect(editor.webcam.backgroundBlur).toEqual({ enabled: false, amount: 12 });
+	});
+
+	it("normalizes persisted webcam background blur settings", () => {
+		const editor = normalizeProjectEditor({
+			webcam: {
+				backgroundBlur: { enabled: true, amount: 99 },
+			},
+		});
+
+		expect(editor.webcam.backgroundBlur).toEqual({ enabled: true, amount: 20 });
+	});
+
 	it("preserves the extended advanced vertical padding range", () => {
 		const editor = normalizeProjectEditor({
 			padding: {

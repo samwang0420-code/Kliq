@@ -98,6 +98,7 @@ interface VideoExporterConfig extends ExportConfig {
 	previewHeight?: number;
 	onProgress?: (progress: ExportProgress) => void;
 	preferredEncoderPath?: SupportedMp4EncoderPath | null;
+	onWebcamBackgroundBlurWarning?: (message: string) => void;
 }
 
 type NativeAudioPlan =
@@ -263,8 +264,10 @@ export class VideoExporter {
 				cursorClickBounceDuration: this.config.cursorClickBounceDuration,
 				cursorSway: this.config.cursorSway,
 				zoomSmoothness: this.config.zoomSmoothness,
+				onWebcamBackgroundBlurWarning: this.config.onWebcamBackgroundBlurWarning,
 			});
 			await this.renderer.initialize();
+			await this.renderer.preflightWebcamBackgroundBlur();
 
 			const hasAudioRegions = (this.config.audioRegions ?? []).length > 0;
 			const hasSourceAudioFallback = (this.config.sourceAudioFallbackPaths ?? []).length > 0;

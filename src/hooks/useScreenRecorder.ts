@@ -11,6 +11,11 @@ import {
 	type NoiseSuppressionMode,
 	normalizeNoiseSuppressionMode,
 } from "@/lib/audio/noiseSuppression";
+import {
+	DEFAULT_WEBCAM_BACKGROUND_BLUR,
+	normalizeWebcamBackgroundBlurSettings,
+	type WebcamBackgroundBlurSettings,
+} from "@/lib/webcamBackgroundBlur";
 import { getEffectiveRecordingDurationMs } from "@/lib/mediaTiming";
 import { dispatchRecordingShortcut } from "@/lib/recordingShortcuts";
 import {
@@ -164,6 +169,8 @@ type UseScreenRecorderReturn = {
 	setWebcamEnabled: (enabled: boolean) => void;
 	webcamDeviceId: string | undefined;
 	setWebcamDeviceId: (deviceId: string | undefined) => void;
+	webcamBackgroundBlur: WebcamBackgroundBlurSettings;
+	setWebcamBackgroundBlur: (settings: WebcamBackgroundBlurSettings) => void;
 	countdownDelay: number;
 	setCountdownDelay: (delay: number) => void;
 };
@@ -411,6 +418,9 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 	const [systemAudioEnabled, setSystemAudioEnabled] = useState(false);
 	const [webcamEnabled, setWebcamEnabled] = useState(false);
 	const [webcamDeviceId, setWebcamDeviceId] = useState<string | undefined>(undefined);
+	const [webcamBackgroundBlur, setWebcamBackgroundBlur] = useState<WebcamBackgroundBlurSettings>({
+		...DEFAULT_WEBCAM_BACKGROUND_BLUR,
+	});
 	const [countdownDelay, setCountdownDelayState] = useState(3);
 	const mediaRecorder = useRef<MediaRecorder | null>(null);
 	const webcamRecorder = useRef<MediaRecorder | null>(null);
@@ -868,6 +878,7 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 						webcamPath,
 						timeOffsetMs: webcamTimeOffsetMs.current,
 						hideOverlayCursorByDefault: shouldHideOverlayCursor,
+						webcamBackgroundBlur,
 					});
 				} else {
 					await window.electronAPI.setCurrentVideoPath(videoPath, {
@@ -892,7 +903,7 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 				`[PERF:RENDERER] Finalize Session & Switch to Editor: COMPLETED in ${(performance.now() - start).toFixed(2)}ms`,
 			);
 		},
-		[],
+		[webcamBackgroundBlur],
 	);
 
 	const closeMicFallbackPauseInterval = useCallback((now = performance.now()) => {
@@ -1596,6 +1607,7 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 							webcamPath,
 							timeOffsetMs: webcamTimeOffsetMs.current,
 							hideOverlayCursorByDefault: hideEditorOverlayCursorByDefault.current,
+							webcamBackgroundBlur,
 						});
 
 						console.log(
@@ -1758,6 +1770,9 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 				if (result.webcamDeviceId) {
 					setWebcamDeviceId(result.webcamDeviceId);
 				}
+				setWebcamBackgroundBlur(
+					normalizeWebcamBackgroundBlurSettings(result.webcamBackgroundBlur),
+				);
 			}
 		})();
 	}, []);
@@ -1793,6 +1808,12 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 	const persistWebcamDeviceId = useCallback((deviceId: string | undefined) => {
 		setWebcamDeviceId(deviceId);
 		void window.electronAPI.setRecordingPreferences({ webcamDeviceId: deviceId });
+	}, []);
+
+	const persistWebcamBackgroundBlur = useCallback((settings: WebcamBackgroundBlurSettings) => {
+		const normalized = normalizeWebcamBackgroundBlurSettings(settings);
+		setWebcamBackgroundBlur(normalized);
+		void window.electronAPI.setRecordingPreferences({ webcamBackgroundBlur: normalized });
 	}, []);
 
 	useEffect(() => {
@@ -2542,6 +2563,7 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 										timeOffsetMs: webcamTimeOffsetMs.current,
 										hideOverlayCursorByDefault:
 											hideEditorOverlayCursorByDefault.current,
+										webcamBackgroundBlur,
 									});
 								}
 							} finally {
@@ -2802,6 +2824,8 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 		setWebcamEnabled: persistWebcamEnabled,
 		webcamDeviceId,
 		setWebcamDeviceId: persistWebcamDeviceId,
+		webcamBackgroundBlur,
+		setWebcamBackgroundBlur: persistWebcamBackgroundBlur,
 		countdownDelay,
 		setCountdownDelay,
 	};

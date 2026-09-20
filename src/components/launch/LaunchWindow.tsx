@@ -44,6 +44,7 @@ import { MorePopover } from "./popovers/MorePopover";
 import { ProjectPopover } from "./popovers/ProjectPopover";
 import { SourcePopover } from "./popovers/SourcePopover";
 import { WebcamPopover } from "./popovers/WebcamPopover";
+import { WebcamBackgroundBlurPreview } from "@/components/webcam/WebcamBackgroundBlurPreview";
 import { RecordingControls } from "./RecordingControls";
 
 const SHOW_DEV_UPDATE_PREVIEW = import.meta.env.DEV;
@@ -81,6 +82,8 @@ function LaunchWindowContent() {
 		setWebcamEnabled,
 		webcamDeviceId,
 		setWebcamDeviceId,
+		webcamBackgroundBlur,
+		setWebcamBackgroundBlur,
 		countdownDelay,
 		setCountdownDelay,
 		preparePermissions,
@@ -327,6 +330,8 @@ function LaunchWindowContent() {
 				videoDevices={videoDevices}
 				webcamDeviceId={webcamDeviceId}
 				selectedVideoDeviceId={selectedVideoDeviceId}
+				backgroundBlur={webcamBackgroundBlur}
+				onBackgroundBlurChange={setWebcamBackgroundBlur}
 				onSelectVideoDevice={(deviceId) => {
 					setWebcamEnabled(true);
 					setSelectedVideoDeviceId(deviceId);
@@ -596,8 +601,10 @@ function LaunchWindowContent() {
 								onPointerUp={handleWebcamPreviewPointerUp}
 								onPointerCancel={handleWebcamPreviewPointerUp}
 							>
-								<video
-									ref={setRecordingWebcamPreviewNode}
+								<WebcamBackgroundBlurPreview
+									videoRef={setRecordingWebcamPreviewNode}
+									backgroundBlur={webcamBackgroundBlur}
+									sourceKey={`launch:${webcamDeviceId ?? selectedVideoDeviceId ?? "default"}`}
 									className={styles.recordingWebcamPreviewVideo}
 									muted
 									playsInline

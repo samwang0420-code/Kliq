@@ -1,12 +1,15 @@
 import fs from "node:fs/promises";
+import type { WebcamBackgroundBlurSettings } from "../../../src/lib/webcamBackgroundBlur";
 import { parseJsonWithByteOrderMark } from "../utils";
 
 export interface RecordingPreferencesPatch {
 	microphoneEnabled?: boolean;
 	microphoneDeviceId?: string;
+	noiseSuppressionMode?: string;
 	systemAudioEnabled?: boolean;
 	webcamEnabled?: boolean;
 	webcamDeviceId?: string;
+	webcamBackgroundBlur?: WebcamBackgroundBlurSettings;
 }
 
 export function createRecordingPreferencesStore(filePath: string) {

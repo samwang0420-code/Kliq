@@ -1,5 +1,9 @@
 /* biome-ignore-all lint/correctness/useExhaustiveDependencies: editor state setters are stable and initial source loading intentionally runs once per launch configuration. */
 import { type MutableRefObject, useEffect, useRef } from "react";
+import {
+	DEFAULT_WEBCAM_BACKGROUND_BLUR,
+	normalizeWebcamBackgroundBlurSettings,
+} from "@/lib/webcamBackgroundBlur";
 import { fromFileUrl, resolveVideoUrl } from "../projectPersistence";
 import type { getDevOpenRecordingConfig, getSmokeExportConfig } from "../smokeExportConfig";
 import type { useAppearanceState } from "../state/useAppearanceState";
@@ -101,6 +105,7 @@ export function useInitialEditorSource({
 						enabled: Boolean(webcamPath),
 						sourcePath: webcamPath,
 						timeOffsetMs: DEFAULT_WEBCAM_TIME_OFFSET_MS,
+						backgroundBlur: { ...DEFAULT_WEBCAM_BACKGROUND_BLUR },
 					}));
 					project.setError(null);
 					return;
@@ -136,6 +141,7 @@ export function useInitialEditorSource({
 						enabled: Boolean(webcamPath),
 						sourcePath: webcamPath,
 						timeOffsetMs: DEFAULT_WEBCAM_TIME_OFFSET_MS,
+						backgroundBlur: { ...DEFAULT_WEBCAM_BACKGROUND_BLUR },
 						shadow: smokeConfig.webcamShadow ?? previous.shadow,
 						size: smokeConfig.webcamSize ?? previous.size,
 						width: smokeConfig.webcamSize ?? previous.width ?? previous.size,
@@ -172,6 +178,9 @@ export function useInitialEditorSource({
 						sourcePath: sessionResult.session?.webcamPath ?? null,
 						timeOffsetMs:
 							sessionResult.session?.timeOffsetMs ?? DEFAULT_WEBCAM_TIME_OFFSET_MS,
+						backgroundBlur: normalizeWebcamBackgroundBlurSettings(
+							sessionResult.session?.webcamBackgroundBlur,
+						),
 					}));
 					return;
 				}
@@ -194,6 +203,7 @@ export function useInitialEditorSource({
 					enabled: false,
 					sourcePath: null,
 					timeOffsetMs: DEFAULT_WEBCAM_TIME_OFFSET_MS,
+					backgroundBlur: { ...DEFAULT_WEBCAM_BACKGROUND_BLUR },
 				}));
 			} catch (error) {
 				project.setError(`Error loading video: ${String(error)}`);
@@ -223,6 +233,7 @@ export function useInitialEditorSource({
 				timeOffsetMs: webcamPath
 					? (session.timeOffsetMs ?? previous.timeOffsetMs)
 					: DEFAULT_WEBCAM_TIME_OFFSET_MS,
+				backgroundBlur: normalizeWebcamBackgroundBlurSettings(session.webcamBackgroundBlur),
 			}));
 			timeline.setSourceAudioFallbackRefreshKey((key) => key + 1);
 		});
