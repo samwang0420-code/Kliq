@@ -542,6 +542,38 @@ final class ScreenCaptureRecorder: NSObject, SCStreamOutput, SCStreamDelegate {
 	func stream(_ stream: SCStream, didStopWithError error: Error) {
 		fputs("Error: \(error.localizedDescription)\n", stderr)
 		fflush(stderr)
+
+		// ScreenCaptureKit killed the stream mid-capture (display reconfiguration,
+		// permission revocation, system pressure…). No further samples will ever
+		// arrive, yet the writers are still open and the parent process still
+		// believes the recording is live — the UI would keep "recording" air for
+		// the rest of the take and the user only discovers the truncation in the
+		// editor (issue #983). Finalize immediately so the file gets a valid moov
+		// atom at the truncation point, then exit so the parent can surface the
+		// interruption and recover the partial recording.
+		queue.async { [weak self] in
+			guard let self, self.isRecording, !self.isFinalizing else { return }
+			print("CAPTURE_STREAM_INTERRUPTED: \(error.localizedDescription)")
+			fflush(stdout)
+			Task {
+				let finalization = await self.finalizeCapture(interactive: false)
+				if finalization.interactiveStopParticipated {
+					// A manual stop joined (or won) the finalization race; let the
+					// interactive stop path print the result and exit the process.
+					return
+				}
+				do {
+					let outputPath = try finalization.outputResult.get()
+					print("Recording stopped. Output path: \(outputPath)")
+					fflush(stdout)
+					exit(0)
+				} catch {
+					fputs("Error stopping capture: \(error.localizedDescription)\n", stderr)
+					fflush(stderr)
+					exit(1)
+				}
+			}
+		}
 	}
 
 	/// Starts one finalization operation after all previously delivered samples on

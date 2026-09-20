@@ -218,11 +218,15 @@ export function attachNativeCaptureLifecycle(process: ChildProcessWithoutNullStr
 
 		const reason = nativeCaptureOutputBuffer.includes("WINDOW_UNAVAILABLE")
 			? "window-unavailable"
-			: "capture-stopped";
+			: nativeCaptureOutputBuffer.includes("CAPTURE_STREAM_INTERRUPTED")
+				? "capture-stream-interrupted"
+				: "capture-stopped";
 		const message =
 			reason === "window-unavailable"
 				? "The selected window is no longer capturable. Please reselect a window."
-				: "Recording stopped unexpectedly.";
+				: reason === "capture-stream-interrupted"
+					? "Screen capture was interrupted by the system, so the recording stopped early. The captured portion has been saved."
+					: "Recording stopped unexpectedly.";
 
 		emitRecordingInterrupted(reason, message);
 	});

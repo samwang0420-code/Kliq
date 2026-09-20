@@ -22,6 +22,17 @@ describe("ScreenCaptureKitRecorder finalization coordination", () => {
 			/if finalization\.interactiveStopParticipated\s*\{\s*return\s*\}/,
 		);
 	});
+
+	it("finalizes and exits when ScreenCaptureKit kills the stream mid-capture", () => {
+		const didStop = recorderSource.slice(
+			recorderSource.indexOf("func stream(_ stream: SCStream, didStopWithError"),
+		);
+		expect(didStop).toContain("CAPTURE_STREAM_INTERRUPTED");
+		expect(didStop).toContain("self.isRecording, !self.isFinalizing");
+		expect(didStop).toContain("await self.finalizeCapture(interactive: false)");
+		expect(didStop).toContain("Recording stopped. Output path: \\(outputPath)");
+		expect(didStop).toContain("exit(0)");
+	});
 });
 
 describe("ScreenCaptureKitRecorder resume timing", () => {

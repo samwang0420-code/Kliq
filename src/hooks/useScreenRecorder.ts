@@ -1825,6 +1825,10 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 						try {
 							const recoveredPath = await recoverNativeRecordingSession();
 							if (recoveredPath) {
+								// The native stream died mid-capture and the partial file was
+								// recovered. Tell the user the take is truncated instead of
+								// letting them find out in the editor (#983).
+								toast.warning(state.message, { duration: 10000 });
 								return;
 							}
 						} catch (recoveryError) {
