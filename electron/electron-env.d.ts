@@ -667,6 +667,12 @@ interface Window {
 		getScreenRecordingPermissionStatus: () => Promise<{
 			success: boolean;
 			status: string;
+			/** Raw `systemPreferences.getMediaAccessStatus("screen")` value (unreliable on macOS 14+). */
+			systemStatus?: string;
+			/** Result of the live `desktopCapturer.getSources` probe. */
+			actualStatus?: string;
+			/** Why the current run location breaks permission grants, if it does. */
+			runLocation?: "mounted-volume" | "app-translocation" | null;
 			error?: string;
 		}>;
 		openScreenRecordingPreferences: () => Promise<{ success: boolean; error?: string }>;

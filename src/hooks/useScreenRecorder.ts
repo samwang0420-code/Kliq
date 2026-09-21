@@ -11,13 +11,13 @@ import {
 	type NoiseSuppressionMode,
 	normalizeNoiseSuppressionMode,
 } from "@/lib/audio/noiseSuppression";
+import { getEffectiveRecordingDurationMs } from "@/lib/mediaTiming";
+import { dispatchRecordingShortcut } from "@/lib/recordingShortcuts";
 import {
 	DEFAULT_WEBCAM_BACKGROUND_BLUR,
 	normalizeWebcamBackgroundBlurSettings,
 	type WebcamBackgroundBlurSettings,
 } from "@/lib/webcamBackgroundBlur";
-import { getEffectiveRecordingDurationMs } from "@/lib/mediaTiming";
-import { dispatchRecordingShortcut } from "@/lib/recordingShortcuts";
 import {
 	getVideoExtensionForMimeType,
 	isWebmMimeType,
@@ -636,10 +636,24 @@ export function useScreenRecorder(): UseScreenRecorderReturn {
 		const screenPermission = await window.electronAPI.getScreenRecordingPermissionStatus();
 		if (!screenPermission.success || screenPermission.status !== "granted") {
 			await window.electronAPI.openScreenRecordingPreferences();
+			// Diagnostics in the message itself: a screenshot of this alert is enough to
+			// tell which signal failed, without reading any system log.
+			const diag = `(api=${screenPermission.systemStatus ?? "?"}, probe=${screenPermission.actualStatus ?? "?"})`;
+			// A bad run location invalidates every permission grant, so it must be reported
+			// before the generic "go grant it again" advice: with a DMG/translocated copy,
+			// re-granting can never work.
+			const runLocationMessage =
+				screenPermission.runLocation === "app-translocation"
+					? "Kliq is running from a macOS translocated copy, so permissions cannot stick. Move Kliq to Applications, then run `xattr -cr /Applications/Kliq.app` and open it from there."
+					: screenPermission.runLocation === "mounted-volume"
+						? "Kliq is running from a disk image (/Volumes), which is usually an older build whose permissions do not apply. Drag Kliq into Applications, eject the disk image, then open Kliq from Applications."
+						: null;
 			alert(
-				options.startup
-					? "Kliq needs Screen Recording permission before you start. System Settings has been opened. After enabling it, quit and reopen Kliq."
-					: "Screen Recording permission is still missing. System Settings has been opened again. Enable it, then quit and reopen Kliq before recording.",
+				runLocationMessage
+					? `${runLocationMessage} ${diag}`
+					: options.startup
+						? `Kliq needs Screen Recording permission before you start. System Settings has been opened. After enabling it, quit and reopen Kliq. ${diag}`
+						: `Screen Recording permission is still missing. System Settings has been opened again. Enable it, then quit and reopen Kliq before recording. ${diag}`,
 			);
 			return false;
 		}

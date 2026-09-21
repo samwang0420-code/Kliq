@@ -46,6 +46,7 @@
   "publish": null,
 
   "mac": {
+    "identity": "Kliq Dev",
     "hardenedRuntime": true,
     "entitlements": "build/entitlements.mac.plist",
     "entitlementsInherit": "build/entitlements.mac.inherit.plist",
