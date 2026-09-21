@@ -89,3 +89,25 @@ still missing"。
 
 **用户侧正确做法**：只保留 `/Applications/Kliq.app`，推出所有 DMG，然后在
 设置里把两个开关**关掉再打开**，完全退出重开 Kliq。
+
+## 本地开发签名（Kliq Dev）与 `errSecInternalComponent`
+
+`electron-builder.json5` 的 `mac.identity` 指向本机自签证书 **Kliq Dev**
+（专用钥匙串 `~/Library/Keychains/kliq-dev.keychain-db`）。它的作用是让 app 的
+**签名身份稳定**：ad-hoc 签名每次构建 cdhash 都变，TCC 授权随即失效（权限循环
+弹窗的根因）；用固定证书后，授权一次即可跨构建保留。
+
+**症状**：`npm run build:mac` 报
+`codesign ... errSecInternalComponent`。
+**原因**：该钥匙串默认「睡眠 5 分钟后锁定」，构建期间机器一睡，签名就失败。
+**修复**：
+
+```bash
+zsh scripts/unlock-dev-signing.sh        # 密码见本机密码管理/项目记忆，未入库
+```
+
+脚本同时把钥匙串设为「不随睡眠锁定、空闲 24 小时后锁定」。密码刻意不写进仓库，
+用 `KLQ_KEYCHAIN_PASSWORD` 环境变量传入，或按提示交互输入。
+
+> 正式对外分发仍需 Apple Developer ID（$99/年）签名 + 公证；本地证书只解决
+> 「重新构建后权限失效」这一个问题，不解决 Gatekeeper 拦截。

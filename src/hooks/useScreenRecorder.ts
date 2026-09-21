@@ -11,13 +11,13 @@ import {
 	type NoiseSuppressionMode,
 	normalizeNoiseSuppressionMode,
 } from "@/lib/audio/noiseSuppression";
+import { getEffectiveRecordingDurationMs } from "@/lib/mediaTiming";
+import { dispatchRecordingShortcut } from "@/lib/recordingShortcuts";
 import {
 	DEFAULT_WEBCAM_BACKGROUND_BLUR,
 	normalizeWebcamBackgroundBlurSettings,
 	type WebcamBackgroundBlurSettings,
 } from "@/lib/webcamBackgroundBlur";
-import { getEffectiveRecordingDurationMs } from "@/lib/mediaTiming";
-import { dispatchRecordingShortcut } from "@/lib/recordingShortcuts";
 import {
 	getVideoExtensionForMimeType,
 	isWebmMimeType,

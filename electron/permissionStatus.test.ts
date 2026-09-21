@@ -37,7 +37,9 @@ describe("resolveScreenRecordingStatus", () => {
 describe("isRunningFromMountedVolumePath", () => {
 	it("detects a bundle launched from a mounted disk image", () => {
 		expect(
-			isRunningFromMountedVolumePath("/Volumes/Kliq 0.1.0-arm64/Kliq.app/Contents/MacOS/Kliq"),
+			isRunningFromMountedVolumePath(
+				"/Volumes/Kliq 0.1.0-arm64/Kliq.app/Contents/MacOS/Kliq",
+			),
 		).toBe(true);
 	});
 
@@ -89,9 +91,11 @@ describe("run location issues", () => {
 
 describe("isRunningFromAppTranslocation", () => {
 	it("detects the AppTranslocation marker", () => {
-		expect(isRunningFromAppTranslocation("/private/var/folders/x/AppTranslocation/y/Kliq")).toBe(
-			true,
+		expect(
+			isRunningFromAppTranslocation("/private/var/folders/x/AppTranslocation/y/Kliq"),
+		).toBe(true);
+		expect(isRunningFromAppTranslocation("/Applications/Kliq.app/Contents/MacOS/Kliq")).toBe(
+			false,
 		);
-		expect(isRunningFromAppTranslocation("/Applications/Kliq.app/Contents/MacOS/Kliq")).toBe(false);
 	});
 });
