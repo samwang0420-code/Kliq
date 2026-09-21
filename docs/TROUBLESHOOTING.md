@@ -34,3 +34,22 @@
 killall Dock
 ```
 （App 本体的 icon.icns 已确认打进 bundle，见 `icons/src/build-icons.py` 产物链。）
+
+## 案例 2（2026-09-21）：开关显示已开、但仍弹权限提示（陈旧 TCC 条目）
+
+**症状**：系统设置里「录屏」和「辅助功能」的 Kliq 开关都是开的，
+但录制时仍弹"Screen Recording permission is still missing"，
+且"想使用辅助功能"系统弹窗反复出现。
+
+**根因**：TCC 条目绑定的是**旧构建的签名身份**（ad-hoc 每次构建都变）。
+重新构建安装后，设置页里的开关还是旧条目的残影——显示"开"，实际对当前
+二进制无效。图标总是显示当前 app 的图标，所以从设置页看不出区别。
+
+**判别方法**（代码层面）：
+- `preparePermissions`（useScreenRecorder.ts）顺序：先查录屏 → 再查辅助功能；
+- 如果「辅助功能」弹窗出现了，说明**录屏探测已通过**，卡住的只是辅助功能；
+- 弹窗文本来自 `src/hooks/useScreenRecorder.ts:642/665`。
+
+**修复**：对应服务**关掉开关再打开**（强制刷新绑定），或：
+`zsh scripts/reset-macos-tcc.sh`（杀进程 + 双服务重置 + 缓存刷新），
+然后完全退出重开 Kliq 重新授权。
