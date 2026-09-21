@@ -4,19 +4,28 @@
 > 分支已清理（见 [VERSIONING.md](./VERSIONING.md) 第 3 节），此处保留结论供后续取用。
 > 台账截止：2026-09-20。
 
+> [!warning] SHA 已于 2026-09-20 重新映射
+> 本表原先记录的是**历史修复之前**的 SHA。那次修复重放了整条提交链（blob 内容
+> 一字未改，只有 SHA 变了），旧值在本仓库中**已全部失效**，`git show <旧SHA>` 会直接报
+> `unknown revision`。已按 `VERSIONING.md` §4.1 的映射逐条换成本仓库现存 SHA，
+> 并逐条用 `git merge-base --is-ancestor` 验证均在 `main` 上。
+>
+> 若在别处（含 Obsidian 归档）看到 `89d29eea` / `870d97b0` / `d7caab17` / `19bd7cae`
+> 等旧值，一律视为**无效**，按本表新值取用。
+
 ## 一、已落地进 main（9 条）
 
 | PR | 内容 | main 中的落地提交 |
 |---|---|---|
-| #421 / #422 | Windows 窗口级原生捕获 | `cf573843` |
-| #518 | Linux X11 recording overlay 输入 | `635a9166` |
-| #640 | 跟随光标裁剪 + 文字焦点 / text-zoom | `89d29eea` |
-| #672 | 导出渐变背景渲染错误 | `2cb98ba4` |
-| #767 | Linux 不再强制 `use-gl=egl`（AppImage GPU 崩溃） | `978aab66` |
-| #835 | 摄像头背景虚化 | `d7caab17` |
-| #863 | Linux HUD / Wayland resize anchor / Hyprland 光标遥测 | `05f475a1`、`26c1e363` |
-| #951 | Linux Pixi WebGPU batch shader 不匹配 | `660f2703` |
-| #996 相关 | 中文 i18n 覆盖（实际由我方自有翻译工作完成，见下） | `a117c062`、`8794de47` |
+| #421 / #422 | Windows 窗口级原生捕获 | `7fb7ef7d` |
+| #518 | Linux X11 recording overlay 输入 | `75717033` |
+| #640 | 跟随光标裁剪 + 文字焦点 / text-zoom | `199eaf25` |
+| #672 | 导出渐变背景渲染错误 | `29f18d7c` |
+| #767 | Linux 不再强制 `use-gl=egl`（AppImage GPU 崩溃） | `f03c75a9` |
+| #835 | 摄像头背景虚化 | `138d93b7` |
+| #863 | Linux HUD / Wayland resize anchor / Hyprland 光标遥测 | `343fb7ed`、`e2ae1f5d` |
+| #951 | Linux Pixi WebGPU batch shader 不匹配 | `ed20a163` |
+| #996 相关 | 中文 i18n 覆盖（实际由我方自有翻译工作完成，见下） | `befda693`、`2dbfcac6` |
 
 ## 二、未落地（9 条）——逐条结论
 
