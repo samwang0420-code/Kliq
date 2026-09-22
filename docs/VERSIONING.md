@@ -53,7 +53,7 @@ user.email = 242939827+samwang0420-code@users.noreply.github.com
 ```
 
 用 GitHub noreply 地址而不是真实邮箱，避免邮箱被写进公开提交历史。
-历史提交的作者仍是 `YanJingAI <hi@yanjingai.tech>`，**刻意不改** ——
+历史提交的作者仍是 `Kliq <hi@yanjingai.tech>`，**刻意不改** ——
 改写作者要再动一次全部 commit SHA，代价与收益不成比例。
 
 

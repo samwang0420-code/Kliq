@@ -4,7 +4,7 @@ import path from "node:path";
 /**
  * §55 — Full user flow integration test
  *
- * 模拟真实用户从「打开 yanjing-recorder」到「完成 AI 链路」的全流程:
+ * 模拟真实用户从「打开 kliq-recorder」到「完成 AI 链路」的全流程:
  *
  * 阶段 1 — 用户中心 (Account Center 入口 + 4 大块)
  *   1.1 打开 App → 进 EditorShell → AccountCenterHost
@@ -103,7 +103,7 @@ function buildLicenseRequestMailto(
 	account: string = "user@yanjingai.tech",
 ): string {
 	const subject = encodeURIComponent(
-		`言镜 Recorder · ${plan} ${reason === "purchase" ? "订单" : "支持"}`,
+		`Kliq Recorder · ${plan} ${reason === "purchase" ? "订单" : "支持"}`,
 	);
 	const body = encodeURIComponent(
 		[
@@ -736,13 +736,13 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 			{
 				reason: "purchase" as const,
 				plan: "pro_yearly",
-				expectedSubject: "言镜 Recorder · pro_yearly 订单",
+				expectedSubject: "Kliq Recorder · pro_yearly 订单",
 				expectedBodyFields: ["Plan: pro_yearly", "Quantity: 1"],
 			},
 			{
 				reason: "support" as const,
 				plan: "lifetime",
-				expectedSubject: "言镜 Recorder · lifetime 支持",
+				expectedSubject: "Kliq Recorder · lifetime 支持",
 				expectedBodyFields: ["Plan: lifetime", "Quantity: 1"],
 			},
 		];

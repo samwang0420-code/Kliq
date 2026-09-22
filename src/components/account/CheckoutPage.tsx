@@ -327,7 +327,7 @@ export function CheckoutPage({
 									}}
 									aria-hidden
 								/>
-								<span>Yanjing Recorder · v1.5.0 · AGPL 3.0</span>
+								<span>Kliq · Kliq Recorder · v1.5.0 · AGPL 3.0</span>
 							</div>
 
 							<h1
