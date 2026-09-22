@@ -1,6 +1,6 @@
-import { ArrowRight, Check, Lock, X } from "@phosphor-icons/react";
+import { Check, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 import {
 	buildLicenseRequestMailto,
@@ -8,83 +8,121 @@ import {
 	KLQ_PRO_PRICE_USD,
 	KLQ_REFUND_POLICY_URL,
 } from "@/lib/licenseConfig";
-import { cn } from "@/lib/utils";
 
 type CheckoutPageProps = {
 	open: boolean;
 	onClose: () => void;
-	/** 复用过 AccountCenterPanel 的 LIBC 调色板,避免重复定义 */
+	/** §213 极简风:仅 #22c55e 绿点状态色;按钮主体黑/白,不用 accent 染色。 */
 	accent: string;
 	proCheckoutUrl: string;
 	isProActive: boolean;
-	/** Option B Waffo Worker URL。未配置时所有购买按钮 fallback 到 proCheckoutUrl / 邮件联系。 */
+	/** Option B Waffo Worker URL。未配置时所有购买按钮 fallback 到 proCheckoutUrl / 邮件联系(mock 模式)。 */
 	workerUrl?: string;
-	/** X-KLQ-Bridge-Secret header 值。mock 模式 Worker 不强制；live 模式 Worker 必校验。 */
+	/** X-KLQ-Bridge-Secret header 值。mock 模式 Worker 不强制;live 模式 Worker 必校验。 */
 	bridgeSecret?: string;
 };
+
+/** §213 颜色铁律: 纯黑 + 纯白 + 5 档灰阶 + 仅 #22c55e 绿点状态色 */
+const C = {
+	ink: "#0a0a0a",
+	inkHover: "#18181b",
+	paper: "#ffffff",
+	g50: "#fafafa",
+	g100: "#f4f4f5",
+	g200: "#e4e4e7",
+	g400: "#a1a1aa",
+	g600: "#52525b",
+	green: "#22c55e",
+} as const;
 
 const FREE_FEATURES = [
 	"fullRecordlyFeatureSet",
 	"screenRecordAndTimeline",
 	"mp4GifWebmExport",
-	"manualSrtVttSubtitles",
 	"cursorAndWebcamStyling",
-	"keystrokeOverlayLosslessAudio",
 	"agpl30CommunitySupport",
 ] as const;
 
 const PRO_FEATURES = [
+	"keystrokeOverlayLosslessAudio",
 	"aiTranscriptionBilingualCaptions",
 	"chaptersSummariesTitlesSeoTags",
 	"multiLanguageTranslationCaptionProofreading",
 	"socialCopyForXhsWechatBilibili",
 	"semanticSearchAcrossLongRecordings",
-	"smartEditOneClickNineHotwordPacks",
 	"bringYourOwnApiKeyEmailSupport",
 ] as const;
 
 const LIFETIME_FEATURES = [
+	"smartEditOneClickNineHotwordPacks",
+	"allProFeaturesPlusPrioritySupport",
 	"featAllUpdatesFree",
 	"featPriorityEmail",
 	"featLifetimeForever",
-	"featSourceBuddyDevs",
 ] as const;
 
 const FAQ_ITEMS = [
 	{ qKey: "faqLifetimeQ", aKey: "faqLifetimeA" },
 	{ qKey: "faqAiCostQ", aKey: "faqAiCostA" },
-	{ qKey: "faqRefundQ", aKey: "faqRefundQ" },
+	{ qKey: "faqRefundQ", aKey: "faqRefundA" },
 	{ qKey: "faqTeamQ", aKey: "faqTeamA" },
-	{ qKey: "faqProExpireQ", aKey: "faqProExpireA" },
 ] as const;
 
-function FeatureList({
+/** §213: 8px 圆角统一常量 */
+const RADIUS = 8;
+
+/** §213: 120-160ms ease 动画 */
+const EASE_OUT = [0.16, 1, 0.3, 1] as const;
+
+function PriceCell({
 	features,
-	accent,
 	t,
+	highlight = false,
 }: {
 	features: readonly string[];
-	accent: string;
 	t: ReturnType<typeof useI18n>["t"];
+	highlight?: boolean;
 }) {
 	return (
-		<ul className="space-y-2.5">
+		<ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
 			{features.map((feature) => (
-				<li key={feature} className="flex items-start gap-2 text-[13px] leading-relaxed">
+				<li
+					key={feature}
+					style={{
+						display: "flex",
+						alignItems: "flex-start",
+						gap: 10,
+						padding: "8px 0",
+						fontSize: 14,
+						lineHeight: 1.5,
+						color: highlight ? C.ink : C.g600,
+					}}
+				>
 					<Check
 						size={14}
 						weight="bold"
-						className="mt-0.5 shrink-0"
-						style={{ color: accent }}
+						style={{
+							color: highlight ? C.ink : C.green,
+							flexShrink: 0,
+							marginTop: 3,
+						}}
 					/>
-					<span className="text-muted-foreground">{t(`common.yanjing.account.${feature}`, feature)}</span>
+					<span>{t(`common.yanjing.account.${feature}`, feature)}</span>
 				</li>
 			))}
 		</ul>
 	);
 }
 
-export function CheckoutPage({ open, onClose, accent, proCheckoutUrl, isProActive, workerUrl, bridgeSecret }: CheckoutPageProps) {
+export function CheckoutPage({
+	open,
+	onClose,
+	accent: _accent,
+	proCheckoutUrl,
+	isProActive,
+	workerUrl,
+	bridgeSecret,
+}: CheckoutPageProps) {
 	const { t, locale } = useI18n();
 	const isZh = locale.startsWith("zh");
 
@@ -93,18 +131,16 @@ export function CheckoutPage({ open, onClose, accent, proCheckoutUrl, isProActiv
 
 	const proPrice = KLQ_PRO_PRICE_USD.toFixed(KLQ_PRO_PRICE_USD % 1 === 0 ? 0 : 1);
 	const lifetimePrice = KLQ_LIFETIME_PRICE_USD.toFixed(0);
-	// 三条结算路径（按优先级，handleBuy 内消费）：
-	//   1. workerUrl — Option B，POST /api/waffo/checkout 创建 session 后 window.open 返回的 checkoutUrl
-	//   2. proCheckoutUrl — 兼容旧版 LS 直接跳转（构建期 VITE_KLQ_CHECKOUT_URL）
-	//   3. mailto — 兜底邮件联系（永不失效）
+
 	const checkoutReady = Boolean(proCheckoutUrl);
+	const mockMode = !workerUrl && !checkoutReady;
 
 	const handleBuy = useCallback(
 		async (kind: "pro" | "lifetime") => {
 			setPurchaseError(null);
 
-			// Path 1: Worker bridge (Option B). Waffo backend lives in CF Workers
-			// with nodejs_compat so the renderer never sees the merchant private key.
+			// Path 1: Worker bridge (Option B / Mock mode). 真实 Waffo SDK 在 CF Workers
+			// 里跑,renderer 永远拿不到 merchant private key。
 			if (workerUrl) {
 				const plan = kind === "lifetime" ? "lifetime" : "pro_yearly";
 				setPendingPlan(kind);
@@ -140,14 +176,13 @@ export function CheckoutPage({ open, onClose, accent, proCheckoutUrl, isProActiv
 				return;
 			}
 
-			// Path 2: Direct Lemon Squeezy URL (legacy). Old LS setup used the same URL
-			// for both Pro and Lifetime; the LS product page differentiates internally.
+			// Path 2: Direct Lemon Squeezy URL (legacy).
 			if (checkoutReady && proCheckoutUrl) {
 				window.open(proCheckoutUrl, "_blank", "noopener");
 				return;
 			}
 
-			// Path 3: Fallback to email (mail-order)
+			// Path 3: 邮件兜底 (mock 模式默认走这条)
 			window.open(buildLicenseRequestMailto("purchase"), "_blank", "noopener");
 		},
 		[workerUrl, bridgeSecret, checkoutReady, proCheckoutUrl],
@@ -157,6 +192,25 @@ export function CheckoutPage({ open, onClose, accent, proCheckoutUrl, isProActiv
 		window.open(buildLicenseRequestMailto("purchase"), "_blank", "noopener");
 	}, []);
 
+	/** §213: 5 档灰阶统一通过 CSS var 引用 */
+	const cssVars = useMemo(
+		() =>
+			({
+				"--kliq-ink": C.ink,
+				"--kliq-paper": C.paper,
+				"--kliq-green": C.green,
+			}) as React.CSSProperties,
+		[],
+	);
+
+	/** 主 CTA:购买 Lifetime $99(终身版),所有方案最终默认推荐 */
+	const primaryCta =
+		pendingPlan === "lifetime"
+			? t("common.yanjing.account.ctaOpeningCheckout", "正在打开结算页…")
+			: t("common.yanjing.account.ctaBuyLifetime", "立即购买 Lifetime · ${{price}}", {
+					price: lifetimePrice,
+				});
+
 	return (
 		<AnimatePresence>
 			{open && (
@@ -165,263 +219,754 @@ export function CheckoutPage({ open, onClose, accent, proCheckoutUrl, isProActiv
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
-					transition={{ duration: 0.16, ease: "easeOut" }}
-					className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-black/70 backdrop-blur-sm"
+					transition={{ duration: 0.15, ease: EASE_OUT }}
+					style={{
+						position: "fixed",
+						inset: 0,
+						zIndex: 60,
+						display: "flex",
+						alignItems: "flex-start",
+						justifyContent: "center",
+						overflowY: "auto",
+						background: "rgba(10,10,10,0.7)",
+						backdropFilter: "blur(8px)",
+						WebkitBackdropFilter: "blur(8px)",
+					}}
 					onClick={onClose}
 				>
 					<motion.section
 						key="checkout-page-modal"
 						role="dialog"
 						aria-modal="true"
-						aria-label={t("common.yanjing.account.checkoutPageTitle", "选择你的 Kliq 方案")}
+						aria-label={t("common.yanjing.account.checkoutPageTitle", "选择方案")}
 						initial={{ y: 24, opacity: 0 }}
 						animate={{ y: 0, opacity: 1 }}
 						exit={{ y: 24, opacity: 0 }}
-						transition={{ duration: 0.18, ease: "easeOut" }}
+						transition={{ duration: 0.16, ease: EASE_OUT }}
 						onClick={(e) => e.stopPropagation()}
-						className={cn(
-							"relative my-12 w-[960px] max-w-[92vw] rounded-2xl border border-border",
-							"bg-background text-foreground shadow-2xl",
-						)}
+						style={{
+							...cssVars,
+							position: "relative",
+							margin: "48px auto",
+							width: "min(1120px, 92vw)",
+							borderRadius: RADIUS,
+							border: `1px solid ${C.g200}`,
+							background: C.paper,
+							color: C.ink,
+							boxShadow: "0 24px 64px rgba(10,10,10,0.16)",
+							fontFamily:
+								'Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif',
+						}}
 					>
-						{/* Close button */}
+						{/* Close button — 极简: 8px 圆, hover 反色 */}
 						<button
 							type="button"
 							onClick={onClose}
 							aria-label={t("common.yanjing.account.close", "关闭")}
-							className="absolute right-4 top-4 z-10 inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+							style={{
+								position: "absolute",
+								top: 16,
+								right: 16,
+								zIndex: 10,
+								display: "inline-flex",
+								alignItems: "center",
+								justifyContent: "center",
+								width: 32,
+								height: 32,
+								borderRadius: RADIUS,
+								border: "1px solid transparent",
+								background: "transparent",
+								color: C.g600,
+								cursor: "pointer",
+								transition: "all 140ms ease",
+							}}
+							onMouseEnter={(e) => {
+								e.currentTarget.style.background = C.g50;
+								e.currentTarget.style.color = C.ink;
+							}}
+							onMouseLeave={(e) => {
+								e.currentTarget.style.background = "transparent";
+								e.currentTarget.style.color = C.g600;
+							}}
 						>
-							<X size={16} weight="bold" />
+							<X size={16} weight="bold" aria-hidden />
 						</button>
 
-						{/* Hero */}
-						<header className="px-10 pb-10 pt-14 text-center">
-							<div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-muted/40 px-3 py-1 text-[11px] text-muted-foreground">
-								<span className="h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
-								<span>Kliq · v1.5.0 · AGPL 3.0</span>
-							</div>
-							<h1
-								className="mx-auto max-w-[760px] font-semibold tracking-tight"
+						{/* Hero — section padding ≥120px (top + bottom) */}
+						<header
+							style={{
+								padding: "120px 80px 64px",
+								textAlign: "center",
+								borderBottom: `1px solid ${C.g200}`,
+							}}
+						>
+							{/* Status row:绿点 + 版本 + AGPL */}
+							<div
 								style={{
-									fontSize: "clamp(48px, 7vw, 84px)",
+									display: "inline-flex",
+									alignItems: "center",
+									gap: 8,
+									padding: "4px 10px",
+									borderRadius: RADIUS,
+									border: `1px solid ${C.g200}`,
+									background: C.g50,
+									fontSize: 12,
+									color: C.g600,
+									fontFamily:
+										'"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace',
+									marginBottom: 24,
+								}}
+							>
+								<span
+									style={{
+										display: "inline-block",
+										width: 6,
+										height: 6,
+										borderRadius: "50%",
+										background: C.green,
+									}}
+									aria-hidden
+								/>
+								<span>Yanjing Recorder · v1.5.0 · AGPL 3.0</span>
+							</div>
+
+							<h1
+								style={{
+									margin: "0 auto",
+									maxWidth: 880,
+									fontSize: "clamp(40px, 8vw, 84px)",
 									lineHeight: 0.98,
 									letterSpacing: "-0.04em",
+									fontWeight: 600,
+									color: C.ink,
 								}}
 							>
 								{isZh
-									? t("common.yanjing.account.checkoutHero", "让 Kliq 帮你的演示视频变得专业")
-									: t("common.yanjing.account.checkoutHeroEn", "Make your next demo beautiful.")}
+									? t(
+											"common.yanjing.account.checkoutHero",
+											"让你的演示视频,变得专业。",
+										)
+									: t(
+											"common.yanjing.account.checkoutHeroEn",
+											"Make your demos look professional.",
+										)}
 							</h1>
-							<p className="mx-auto mt-5 max-w-[560px] text-[14px] leading-relaxed text-muted-foreground">
+
+							{/* 中文副标 14px 灰 */}
+							<p
+								style={{
+									margin: "20px auto 0",
+									maxWidth: 560,
+									fontSize: 14,
+									lineHeight: 1.5,
+									color: C.g600,
+								}}
+							>
 								{isZh
-									? t("common.yanjing.account.checkoutPageSubtitle", "一次性买断 · 永久使用 · 30 天退款")
-									: t("common.yanjing.account.checkoutPageSubtitleEn", "One-time · keep forever · 30-day refund")}
+									? t(
+											"common.yanjing.account.checkoutPageSubtitle",
+											"一次性买断 · 永久使用 · 30 天退款 · AI 功能自带,API Key 你自己的。",
+										)
+									: t(
+											"common.yanjing.account.checkoutPageSubtitleEn",
+											"One-time · keep forever · 30-day refund · Bring your own API key.",
+										)}
 							</p>
 
-							{!checkoutReady && (
+							{mockMode && (
 								<div
-									className="mx-auto mt-6 inline-flex max-w-[520px] items-start gap-2 rounded-md border border-dashed border-border bg-muted/30 px-3 py-2 text-left text-[11.5px] text-muted-foreground"
+									style={{
+										display: "inline-flex",
+										alignItems: "center",
+										gap: 8,
+										marginTop: 24,
+										padding: "8px 14px",
+										borderRadius: RADIUS,
+										border: `1px solid ${C.g200}`,
+										background: C.g50,
+										fontSize: 13,
+										color: C.g600,
+									}}
 								>
-									<Lock size={14} className="mt-0.5 shrink-0" />
-									<div>
-										<p className="font-medium text-foreground/80">
-											{t("common.yanjing.account.badgeMockMode", "Mock 模式 · 支付集成未启用")}
-										</p>
-										<p className="mt-0.5 leading-relaxed">
-											{t(
-												"common.yanjing.account.badgeMockModeDesc",
-												"VITE_KLQ_CHECKOUT_URL 未配置,所有购买按钮指向邮件联系。配置后自动切换为 Waffo / Lemon Squeezy 在线支付。",
-											)}
-										</p>
-									</div>
+									<span
+										style={{
+											display: "inline-block",
+											width: 6,
+											height: 6,
+											borderRadius: "50%",
+											background: C.green,
+										}}
+										aria-hidden
+									/>
+									<span>
+										{t(
+											"common.yanjing.account.badgeMockMode",
+											"Mock 模式 · 支付集成未启用,点击购买会打开邮件申请。",
+										)}
+									</span>
 								</div>
 							)}
 						</header>
 
-						{/* 3-column pricing */}
-						<section className="px-10 pb-12">
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+						{/* 3-column pricing — 8px 圆角 1px 边框主分隔 */}
+						<section
+							style={{
+								padding: "120px 80px",
+								borderBottom: `1px solid ${C.g200}`,
+							}}
+						>
+							<div
+								style={{
+									display: "grid",
+									gridTemplateColumns: "repeat(3, 1fr)",
+									gap: 24,
+								}}
+							>
 								{/* Free */}
-								<article className="flex flex-col gap-5 rounded-xl border border-border bg-background p-6">
-									<div>
-										<p className="text-[13px] font-medium text-muted-foreground">
-											{t("common.yanjing.account.planFreeName", "免费版")}
-										</p>
-										<p className="mt-2 text-[36px] font-semibold tracking-tight">$0</p>
-										<p className="mt-1 text-[12px] text-muted-foreground">
-											{t("common.yanjing.account.planFreePrice", "永久免费")}
-										</p>
+								<article
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										padding: 32,
+										borderRadius: RADIUS,
+										border: `1px solid ${C.g200}`,
+										background: C.paper,
+									}}
+								>
+									<p
+										style={{
+											margin: 0,
+											fontSize: 14,
+											fontWeight: 500,
+											color: C.g600,
+										}}
+									>
+										{t("common.yanjing.account.planFreeName", "Free")}
+									</p>
+									<p
+										style={{
+											margin: "16px 0 0",
+											fontSize: 56,
+											fontWeight: 600,
+											letterSpacing: "-0.03em",
+											lineHeight: 1,
+											color: C.ink,
+											fontFamily:
+												'Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Noto Sans SC", sans-serif',
+										}}
+									>
+										$0
+									</p>
+									<p
+										style={{
+											margin: "8px 0 0",
+											fontSize: 13,
+											color: C.g400,
+										}}
+									>
+										{t("common.yanjing.account.planFreePrice", "Forever free")}
+									</p>
+									<div style={{ margin: "32px 0 24px" }}>
+										<PriceCell features={FREE_FEATURES} t={t} />
 									</div>
-									<FeatureList features={FREE_FEATURES} accent={accent} t={t} />
 									<button
 										type="button"
 										onClick={onClose}
-										className="mt-auto rounded-md border border-border bg-background px-4 py-2.5 text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
+										style={{
+											marginTop: "auto",
+											padding: "12px 16px",
+											borderRadius: RADIUS,
+											border: `1px solid ${C.g200}`,
+											background: C.paper,
+											color: C.ink,
+											fontSize: 14,
+											fontWeight: 500,
+											cursor: "pointer",
+											transition: "all 140ms ease",
+										}}
+										onMouseEnter={(e) => {
+											e.currentTarget.style.background = C.g50;
+										}}
+										onMouseLeave={(e) => {
+											e.currentTarget.style.background = C.paper;
+										}}
 									>
-										{t("common.yanjing.account.ctaContinueFree", "继续免费版")}
+										{t(
+											"common.yanjing.account.ctaContinueFree",
+											"Continue with Free",
+										)}
 									</button>
 								</article>
 
-								{/* Pro (yearly) */}
-								<article className="flex flex-col gap-5 rounded-xl border border-border bg-background p-6">
-									<div>
-										<p className="text-[13px] font-medium text-muted-foreground">
-											{t("common.yanjing.account.planProName", "Pro 版")}
-										</p>
-										<p className="mt-2 text-[36px] font-semibold tracking-tight">
-											${proPrice}
-											<span className="ml-1 text-[14px] font-normal text-muted-foreground">/year</span>
-										</p>
-										<p className="mt-1 text-[12px] text-muted-foreground">
-											{t("common.yanjing.account.planProPrice", "${{price}} 一次性买断", {
-												price: proPrice,
-											})}
-										</p>
-									</div>
-									<div className="-mx-1 flex-1 space-y-1 rounded-md px-1">
-										<p className="text-[11px] font-medium text-muted-foreground">
-											{t("common.yanjing.account.planProIncludes", "含免费版全部能力,另加:")}
-										</p>
-										<FeatureList features={PRO_FEATURES} accent={accent} t={t} />
-									</div>
+								{/* Pro $12.9 */}
+								<article
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										padding: 32,
+										borderRadius: RADIUS,
+										border: `1px solid ${C.g200}`,
+										background: C.paper,
+									}}
+								>
+									<p
+										style={{
+											margin: 0,
+											fontSize: 14,
+											fontWeight: 500,
+											color: C.g600,
+										}}
+									>
+										{t("common.yanjing.account.planProName", "Pro")}
+									</p>
+									<p
+										style={{
+											margin: "16px 0 0",
+											fontSize: 56,
+											fontWeight: 600,
+											letterSpacing: "-0.03em",
+											lineHeight: 1,
+											color: C.ink,
+											display: "flex",
+											alignItems: "baseline",
+											gap: 6,
+										}}
+									>
+										<span>${proPrice}</span>
+										<span
+											style={{
+												fontSize: 14,
+												fontWeight: 400,
+												color: C.g400,
+											}}
+										>
+											/year
+										</span>
+									</p>
+									<p
+										style={{
+											margin: "8px 0 0",
+											fontSize: 13,
+											color: C.g400,
+										}}
+									>
+										{t("common.yanjing.account.planProPrice", "${{price}} / year", {
+											price: proPrice,
+										})}
+									</p>
+									<p
+										style={{
+											margin: "32px 0 12px",
+											fontSize: 12,
+											color: C.g600,
+											fontWeight: 500,
+											textTransform: "uppercase",
+											letterSpacing: "0.04em",
+										}}
+									>
+										{t(
+											"common.yanjing.account.planProIncludes",
+											"Everything in Free, plus:",
+										)}
+									</p>
+									<PriceCell features={PRO_FEATURES} t={t} />
 									<button
 										type="button"
 										onClick={() => handleBuy("pro")}
 										disabled={isProActive}
-										className={cn(
-											"mt-auto inline-flex items-center justify-center gap-1.5 rounded-md border border-border bg-background px-4 py-2.5 text-[13px] font-medium transition-colors",
-											isProActive
-												? "cursor-default opacity-60"
-												: "hover:bg-muted",
-										)}
+										style={{
+											marginTop: 32,
+											padding: "12px 16px",
+											borderRadius: RADIUS,
+											border: `1px solid ${C.g200}`,
+											background: isProActive ? C.g50 : C.paper,
+											color: C.ink,
+											fontSize: 14,
+											fontWeight: 500,
+											cursor: isProActive ? "default" : "pointer",
+											opacity: isProActive ? 0.6 : 1,
+											transition: "all 140ms ease",
+										}}
+										onMouseEnter={(e) => {
+											if (!isProActive) e.currentTarget.style.background = C.g50;
+										}}
+										onMouseLeave={(e) => {
+											if (!isProActive) e.currentTarget.style.background = C.paper;
+										}}
 									>
 										{isProActive
-											? t("common.yanjing.license.activated", "Pro 已激活")
-											: t("common.yanjing.account.ctaBuyPro", "购买 Pro · ${{price}}", { price: proPrice })}
-										{!isProActive && <ArrowRight size={14} weight="bold" />}
+											? t("common.yanjing.license.activated", "Pro Active")
+											: t("common.yanjing.account.ctaBuyPro", "Buy Pro · ${{price}}", {
+													price: proPrice,
+												})}
 									</button>
 								</article>
 
-								{/* Lifetime (highlighted) */}
+								{/* Lifetime $99 — 高亮 (黑底白字) */}
 								<article
-									className="relative flex flex-col gap-5 rounded-xl border-2 bg-background p-6"
-									style={{ borderColor: accent }}
+									style={{
+										position: "relative",
+										display: "flex",
+										flexDirection: "column",
+										padding: 32,
+										borderRadius: RADIUS,
+										border: `1px solid ${C.ink}`,
+										background: C.ink,
+										color: C.paper,
+									}}
 								>
 									<div
-										className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-2.5 py-0.5 text-[10.5px] font-medium uppercase tracking-wider text-black"
-										style={{ background: accent }}
+										style={{
+											position: "absolute",
+											top: -10,
+											left: 32,
+											padding: "4px 10px",
+											borderRadius: RADIUS,
+											background: C.green,
+											color: C.ink,
+											fontSize: 11,
+											fontWeight: 600,
+											textTransform: "uppercase",
+											letterSpacing: "0.06em",
+										}}
 									>
-										{t("common.yanjing.account.planLifetimeBadge", "最受欢迎")}
+										{t("common.yanjing.account.planLifetimeBadge", "Most popular")}
 									</div>
-									<div>
-										<p className="text-[13px] font-medium text-foreground">
-											{t("common.yanjing.account.planLifetimeName", "Lifetime · 终身版")}
-										</p>
-										<p className="mt-2 text-[36px] font-semibold tracking-tight">${lifetimePrice}</p>
-										<p className="mt-1 text-[12px] text-muted-foreground">
-											{t("common.yanjing.account.planLifetimePrice", "${{price}} 一次性 · 永久免费更新", {
-												price: lifetimePrice,
-											})}
-										</p>
-									</div>
-									<div className="-mx-1 flex-1 space-y-1 rounded-md px-1">
-										<p className="text-[11px] font-medium text-muted-foreground">
-											{t("common.yanjing.account.planLifetimeIncludes", "Pro 全部能力,另加:")}
-										</p>
-										<FeatureList features={LIFETIME_FEATURES} accent={accent} t={t} />
+									<p
+										style={{
+											margin: 0,
+											fontSize: 14,
+											fontWeight: 500,
+											color: C.paper,
+										}}
+									>
+										{t(
+											"common.yanjing.account.planLifetimeName",
+											"Lifetime",
+										)}
+									</p>
+									<p
+										style={{
+											margin: "16px 0 0",
+											fontSize: 56,
+											fontWeight: 600,
+											letterSpacing: "-0.03em",
+											lineHeight: 1,
+											color: C.paper,
+										}}
+									>
+										${lifetimePrice}
+									</p>
+									<p
+										style={{
+											margin: "8px 0 0",
+											fontSize: 13,
+											color: C.g400,
+										}}
+									>
+										{t(
+											"common.yanjing.account.planLifetimePrice",
+											"${{price}} one-time · forever updates",
+											{ price: lifetimePrice },
+										)}
+									</p>
+									<p
+										style={{
+											margin: "32px 0 12px",
+											fontSize: 12,
+											color: C.g400,
+											fontWeight: 500,
+											textTransform: "uppercase",
+											letterSpacing: "0.04em",
+										}}
+									>
+										{t(
+											"common.yanjing.account.planLifetimeIncludes",
+											"Everything in Pro, plus:",
+										)}
+									</p>
+									<div style={{ marginTop: 8 }}>
+										<PriceCell
+											features={LIFETIME_FEATURES}
+											t={t}
+											highlight={true}
+										/>
 									</div>
 									<button
 										type="button"
 										onClick={() => handleBuy("lifetime")}
 										disabled={pendingPlan !== null}
-										className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-md border-0 px-4 py-2.5 text-[13px] font-medium text-black transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-										style={{ background: accent }}
+										style={{
+											marginTop: 32,
+											padding: "12px 16px",
+											borderRadius: RADIUS,
+											border: `1px solid ${C.paper}`,
+											background: C.paper,
+											color: C.ink,
+											fontSize: 14,
+											fontWeight: 500,
+											cursor:
+												pendingPlan !== null ? "not-allowed" : "pointer",
+											opacity: pendingPlan !== null ? 0.6 : 1,
+											transition: "all 140ms ease",
+										}}
+										onMouseEnter={(e) => {
+											if (pendingPlan === null)
+												e.currentTarget.style.background = C.g100;
+										}}
+										onMouseLeave={(e) => {
+											if (pendingPlan === null)
+												e.currentTarget.style.background = C.paper;
+										}}
 									>
 										{pendingPlan === "lifetime"
-											? t("common.yanjing.account.ctaOpeningCheckout", "正在打开结算页…")
-											: t("common.yanjing.account.ctaBuyLifetime", "立即购买 Lifetime · ${{price}}", {
-													price: lifetimePrice,
-												})}
-										<ArrowRight size={14} weight="bold" />
+											? t(
+													"common.yanjing.account.ctaOpeningCheckout",
+													"Opening checkout…",
+												)
+											: t(
+													"common.yanjing.account.ctaBuyLifetime",
+													"Buy Lifetime · ${{price}}",
+													{ price: lifetimePrice },
+												)}
 									</button>
 								</article>
 							</div>
 						</section>
 
-						{/* FAQ */}
-						<section className="border-t border-border px-10 py-12">
-							<h2 className="text-center text-[24px] font-semibold tracking-tight">
+						{/* FAQ — 原生 <details> 折叠,1px 边框主分隔 */}
+						<section
+							style={{
+								padding: "120px 80px",
+								borderBottom: `1px solid ${C.g200}`,
+							}}
+						>
+							<h2
+								style={{
+									margin: 0,
+									textAlign: "center",
+									fontSize: 32,
+									fontWeight: 600,
+									letterSpacing: "-0.02em",
+									color: C.ink,
+								}}
+							>
 								{isZh ? "常见问题" : "Frequently asked"}
 							</h2>
-							<div className="mx-auto mt-8 max-w-[720px] space-y-2">
+							<div
+								style={{
+									margin: "48px auto 0",
+									maxWidth: 720,
+									display: "flex",
+									flexDirection: "column",
+									gap: 8,
+								}}
+							>
 								{FAQ_ITEMS.map(({ qKey, aKey }) => (
 									<details
 										key={qKey}
-										className="group rounded-lg border border-border bg-background px-4 py-3 transition-colors hover:bg-muted/40 [&[open]]:bg-muted/40"
+										style={{
+											borderRadius: RADIUS,
+											border: `1px solid ${C.g200}`,
+											background: C.paper,
+											padding: "16px 20px",
+											transition: "background 140ms ease",
+										}}
 									>
-										<summary className="flex cursor-pointer list-none items-center justify-between text-[13.5px] font-medium">
-											<span>{t(`common.yanjing.account.${qKey}`, qKey)}</span>
-											<span className="ml-3 inline-block transition-transform group-open:rotate-45 text-muted-foreground">+</span>
+										<summary
+											style={{
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "space-between",
+												cursor: "pointer",
+												listStyle: "none",
+												fontSize: 15,
+												fontWeight: 500,
+												color: C.ink,
+											}}
+										>
+											<span>
+												{t(
+													`common.yanjing.account.${qKey}`,
+													qKey,
+												)}
+											</span>
+											<span
+												style={{
+													color: C.g600,
+													fontFamily:
+														'"JetBrains Mono", ui-monospace, monospace',
+													fontSize: 18,
+													lineHeight: 1,
+												}}
+												className="kliq-faq-icon"
+												aria-hidden
+											>
+												+
+											</span>
 										</summary>
-										<p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">
-											{t(`common.yanjing.account.${aKey}`, aKey)}
+										<p
+											style={{
+												margin: "12px 0 0",
+												fontSize: 14,
+												lineHeight: 1.6,
+												color: C.g600,
+											}}
+										>
+											{t(
+												`common.yanjing.account.${aKey}`,
+												aKey,
+											)}
 										</p>
 									</details>
 								))}
 							</div>
 						</section>
 
-						{/* Footer */}
-						<footer className="flex flex-col items-center gap-4 border-t border-border px-10 py-10 text-center">
+						{/* Footer — 1 主 CTA + 1 次按钮 + 1 fineprint */}
+						<footer
+							style={{
+								padding: "120px 80px",
+								display: "flex",
+								flexDirection: "column",
+								alignItems: "center",
+								gap: 24,
+								textAlign: "center",
+							}}
+						>
 							{purchaseError && (
 								<div
 									role="alert"
-									className="w-full max-w-[520px] rounded-lg border border-red-400/60 bg-red-50 px-4 py-2 text-[12px] text-red-700"
+									style={{
+										width: "100%",
+										maxWidth: 520,
+										padding: "10px 16px",
+										borderRadius: RADIUS,
+										border: `1px solid ${C.g200}`,
+										background: C.g50,
+										fontSize: 13,
+										color: C.ink,
+										textAlign: "left",
+									}}
 								>
 									{t(
 										"common.yanjing.account.purchaseErrorPrefix",
-										"打开结算页失败:",
+										"Couldn't open checkout:",
 									)}{" "}
 									{purchaseError}
 								</div>
 							)}
-							<div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
+
+							<div
+								style={{
+									display: "flex",
+									flexDirection: "row",
+									gap: 12,
+									flexWrap: "wrap",
+									justifyContent: "center",
+								}}
+							>
+								{/* 主 CTA — 黑底白字,带箭头 */}
 								<button
 									type="button"
 									onClick={() => handleBuy("lifetime")}
 									disabled={pendingPlan !== null}
-									className="inline-flex items-center gap-1.5 rounded-md px-5 py-2.5 text-[14px] font-medium text-black transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-									style={{ background: accent }}
+									style={{
+										display: "inline-flex",
+										alignItems: "center",
+										gap: 8,
+										padding: "14px 24px",
+										borderRadius: RADIUS,
+										border: `1px solid ${C.ink}`,
+										background: C.ink,
+										color: C.paper,
+										fontSize: 15,
+										fontWeight: 500,
+										cursor: pendingPlan !== null ? "not-allowed" : "pointer",
+										opacity: pendingPlan !== null ? 0.6 : 1,
+										transition: "all 140ms ease",
+									}}
+									onMouseEnter={(e) => {
+										if (pendingPlan === null)
+											e.currentTarget.style.background = C.inkHover;
+									}}
+									onMouseLeave={(e) => {
+										if (pendingPlan === null)
+											e.currentTarget.style.background = C.ink;
+									}}
 								>
-									{pendingPlan === "lifetime"
-										? t("common.yanjing.account.ctaOpeningCheckout", "正在打开结算页…")
-										: t("common.yanjing.account.ctaBuyLifetime", "立即购买 Lifetime · ${{price}}", {
-												price: lifetimePrice,
-											})}
-									<ArrowRight size={14} weight="bold" />
+									{primaryCta}
+									<span aria-hidden>→</span>
 								</button>
+
+								{/* 次按钮 — 白底黑边,联系销售 */}
 								<button
 									type="button"
 									onClick={handleContactSales}
-									className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-5 py-2.5 text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
+									style={{
+										display: "inline-flex",
+										alignItems: "center",
+										gap: 8,
+										padding: "14px 24px",
+										borderRadius: RADIUS,
+										border: `1px solid ${C.g200}`,
+										background: C.paper,
+										color: C.ink,
+										fontSize: 15,
+										fontWeight: 500,
+										cursor: "pointer",
+										transition: "all 140ms ease",
+									}}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.background = C.g50;
+									}}
+									onMouseLeave={(e) => {
+										e.currentTarget.style.background = C.paper;
+									}}
 								>
-									{t("common.yanjing.account.ctaContactSales", "联系销售 / 团队授权")}
+									{t(
+										"common.yanjing.account.ctaContactSales",
+										"Contact sales / Team license",
+									)}
 								</button>
 							</div>
-							<p className="max-w-[520px] text-[11.5px] text-muted-foreground">
+
+							<p
+								style={{
+									margin: 0,
+									maxWidth: 520,
+									fontSize: 12,
+									lineHeight: 1.5,
+									color: C.g400,
+								}}
+							>
 								{t(
 									"common.yanjing.account.paymentNote",
-									"支付由 Waffo / Lemon Squeezy 安全处理,我们不接触你的信用卡信息。",
+									"Payments handled securely by Waffo / Lemon Squeezy. We never see your card details.",
 								)}
 							</p>
+
 							{KLQ_REFUND_POLICY_URL && (
 								<a
 									href={KLQ_REFUND_POLICY_URL}
 									target="_blank"
 									rel="noopener"
-									className="text-[11.5px] text-muted-foreground transition-colors hover:text-foreground"
+									style={{
+										fontSize: 12,
+										color: C.g600,
+										textDecoration: "underline",
+										textDecorationColor: C.g200,
+										textUnderlineOffset: 3,
+										transition: "color 140ms ease",
+									}}
+									onMouseEnter={(e) => {
+										e.currentTarget.style.color = C.ink;
+									}}
+									onMouseLeave={(e) => {
+										e.currentTarget.style.color = C.g600;
+									}}
 								>
-									{t("common.yanjing.account.refundPolicy", "退款政策")} ↗
+									{t("common.yanjing.account.refundPolicy", "Refund policy")} ↗
 								</a>
 							)}
 						</footer>

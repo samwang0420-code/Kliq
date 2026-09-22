@@ -183,7 +183,8 @@
 			"badgeMockModeDesc": "VITE_KLQ_CHECKOUT_URL is not configured, all buy buttons fall back to email. Set this env var to switch to Waffo / Lemon Squeezy online payment.",
 			"paymentNote": "Payments handled securely by Waffo / Lemon Squeezy. We never see your card details.",
 			"ctaOpeningCheckout": "Opening checkout…",
-			"purchaseErrorPrefix": "Failed to open checkout:"
+			"purchaseErrorPrefix": "Failed to open checkout:",
+			"allProFeaturesPlusPrioritySupport": "All Pro features, plus priority support"
 		},
 		"settings": {
 			"title": "Kliq Settings",

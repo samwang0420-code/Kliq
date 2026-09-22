@@ -29,7 +29,7 @@
 	}
 
 	:root {
-		--app-font-sans: "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+		--app-font-sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
 		/* §213 极简风: 纯黑 + 绿点 */
 		--brand-accent: #0a0a0a;
 		--brand-accent-rgb: 10, 10, 10;
