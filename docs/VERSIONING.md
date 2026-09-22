@@ -57,14 +57,21 @@ user.email = 242939827+samwang0420-code@users.noreply.github.com
 改写作者要再动一次全部 commit SHA，代价与收益不成比例。
 
 
-## 2. 分支：只保留两个
+## 2. 分支：只保留 `main`（2026-09-22 起）
 
-| 分支 | 用途 | 合并规则 |
+| 分支 | 用途 | 规则 |
 |---|---|---|
-| `main` | 稳定线，始终可发布 | 只接受来自 `dev` 的合并；每次合并打 tag |
-| `dev` | 开发集成线 | 日常开发、上游 PR 移植、验收都在这里 |
+| `main` | **唯一分支**，稳定线 | 改动直接提交到 `main`；发版打 tag |
 
-临时分支（可选）：`feat/xxx`、`fix/xxx` —— 从 `dev` 切出，合并回 `dev` 后**立即删除**。
+2026-09-22 起**弃用 `dev` 开发集成线**：`dev` 已完全合并进 `main`
+（`git rev-list --count main..dev` 为 0，且 `dev` 是 `main` 的祖先），本地与 `origin/dev` 均已删除。
+需要找回只需 `git branch dev <sha>` —— 那些提交全都在 `main` 的历史里，永远可达。
+
+单线模型的代价要说清楚：**`main` 上的每一个提交都应当是可发布的**，
+不再有「先在 dev 集成、验证完再合并」这道缓冲。
+所以**提交前必须本地跑通第 6 节的全部门禁**，别指望 CI 兜底（CI 是 push 之后才跑）。
+
+临时分支（可选）：`feat/xxx`、`fix/xxx` —— 从 `main` 切出，合并回 `main` 后**立即删除**。
 
 **不要**长期保留 `pr-*` 形式的分支，原因见第 3 节。
 
@@ -88,7 +95,7 @@ git fetch upstream pull/996/head:pr-996 --depth=50
 git fetch upstream pull/996/head:tmp-pr996 --depth=50   # 重新抓取
 git fetch upstream main --depth=1                       # 取上游 main 作比较基准
 git diff FETCH_HEAD tmp-pr996 -- <目标目录>              # 看这个 PR 相对上游改了什么
-git checkout dev
+git checkout main
 git checkout tmp-pr996 -- <要移植的文件>                  # 只取需要的文件
 # 人工适配差异后提交
 git branch -D tmp-pr996                                  # 用完即删
@@ -175,8 +182,8 @@ remote: fatal: fsck error in packed object
 ```bash
 # 在隔离仓库里检查即将推送的对象集合，等同 GitHub 的 index-pack 校验
 rm -rf /tmp/gate && mkdir -p /tmp/gate && cd /tmp/gate && git init -q -b _s .
-git fetch --no-tags <本仓库路径> "+refs/heads/main:refs/heads/main" "+refs/heads/dev:refs/heads/dev"
-git fsck --strict --no-dangling main dev     # 必须无任何输出
+git fetch --no-tags <本仓库路径> "+refs/heads/main:refs/heads/main"
+git fsck --strict --no-dangling main          # 必须无任何输出
 ```
 
 本仓库现在自身跑 `git fsck --strict --no-dangling` 也是**零输出**（旧损坏对象已于
@@ -193,14 +200,13 @@ git fsck --strict --no-dangling main dev     # 必须无任何输出
 - 发版流程：
 
 ```bash
-git checkout main && git merge --ff-only dev
 git tag -a vX.Y.Z-kliq -m "Kliq vX.Y.Z"
 git push origin main --follow-tags
 ```
 
 ## 6. 质量闸门
 
-合并 `dev` → `main` 前必须全绿，缺一不许合：
+提交到 `main` 前必须全绿，缺一不许提交：
 
 ```bash
 npx tsc --noEmit      # 类型
@@ -209,7 +215,7 @@ npm test              # vitest
 npm run i18n:check    # 语言包双向对齐
 ```
 
-CI 见 `.github/workflows/quality.yml`（`push` 已覆盖 `main` 与 `dev`）。
+CI 见 `.github/workflows/quality.yml`（`push` 覆盖 `main`，`pull_request` 全分支都跑）。
 
 ## 7. 相关文档
 
