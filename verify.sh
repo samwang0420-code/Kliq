@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Kliq (Kliq) — 源码完整性验证脚本
+# Kliq — 源码完整性验证脚本
 #
 # 用途: 用户解压 tarball 后,跑这个脚本确认所有关键文件就位
 # 期望: 全部 ✅ OK,0 ❌ MISSING
@@ -12,7 +12,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "========================================="
-echo "  Kliq (Kliq) — 验证脚本"
+echo "  Kliq — 验证脚本"
 echo "========================================="
 echo ""
 echo "工作目录: $SCRIPT_DIR"
@@ -53,7 +53,7 @@ FILES=(
     "src/i18n/locales/zh-CN/common.json"
     "src/i18n/locales/en/common.json"
     # Cloudflare 部署
-    "cloudflare/api/license-validate.ts"
+    "functions/api/license-validate.ts"
     "cloudflare/pages/index.html"
     # CSS 主题
     "src/index.css"

@@ -13,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 echo "================================================="
-echo "  Kliq (Kliq) — 本地设置脚本"
+echo "  Kliq — 本地设置脚本"
 echo "================================================="
 echo ""
 
@@ -118,7 +118,7 @@ with open(f'{GIT_DIR}/HEAD', 'w') as f: f.write('ref: refs/heads/main\n')
 with open(f'{GIT_DIR}/config', 'w') as f:
     f.write('[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n\tignorecase = true\n[user]\n\tname = yanjingai\n\temail = hi@yanjingai.tech\n[remote \"origin\"]\n\turl = https://github.com/yanjingai/recorder.git\n\tfetch = +refs/heads/*:refs/remotes/origin/*\n')
 with open(f'{GIT_DIR}/description', 'w') as f:
-    f.write('Kliq (Kliq) - AI 增强的开源屏幕录制器\n')
+    f.write('Kliq - AI 增强的开源屏幕录制器\n')
 with open(f'{GIT_DIR}/packed-refs', 'w') as f:
     f.write('# pack-refs with: peeled fully-peeled sorted\n')
 

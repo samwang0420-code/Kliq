@@ -1,4 +1,4 @@
-# Changelog — Kliq (Kliq)
+# Changelog — Kliq
 
 所有相对于上游 [Recordly v1.4.0](https://github.com/webadderallorg/Recordly) 的变更都记录在此。
 
