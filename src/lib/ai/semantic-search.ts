@@ -70,7 +70,7 @@ async function embed(text: string, apiKey: string, baseUrl: string): Promise<num
 }
 
 /** 余弦相似度 */
-function cosineSimilarity(a: number[], b: number[]): number {
+export function cosineSimilarity(a: number[], b: number[]): number {
 	if (a.length !== b.length) return 0;
 	let dot = 0;
 	let normA = 0;
@@ -135,9 +135,8 @@ export async function indexTranscript(
 export async function semanticSearch(options: SearchOptions): Promise<SearchHit[]> {
 	const entry = await import("../apiKeys").then((m) => m.getApiKey("openai"));
 	if (!entry) {
-		throw new Error(
-			"语义搜索需要 OpenAI API key（embeddings 端点）。请到「个人中心 → AI 服务」配置。",
-		);
+		// §51 fix: 优雅降级 — 没配 OpenAI key 时返空数组, 让 UI 不至于整页崩
+		return [];
 	}
 
 	const transcripts = options.transcripts ?? loadFromCache();
@@ -193,6 +192,7 @@ function extractHighlights(query: string, text: string): string[] {
 
 function saveToCache(transcript: IndexedTranscript) {
 	if (typeof localStorage === "undefined") return;
+	if (typeof localStorage.setItem !== "function") return;
 	try {
 		const all = loadFromCache();
 		// 去重 + 保留最近 50 个
@@ -207,6 +207,7 @@ function saveToCache(transcript: IndexedTranscript) {
 
 function loadFromCache(): IndexedTranscript[] {
 	if (typeof localStorage === "undefined") return [];
+	if (typeof localStorage.getItem !== "function") return [];
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
 		if (!raw) return [];
@@ -218,7 +219,10 @@ function loadFromCache(): IndexedTranscript[] {
 
 /** 清空缓存 */
 export function clearSemanticCache(): void {
+	// §51 fix: 测试环境下 vi.unstubAllGlobals() 后 localStorage 可能是
+	// 已 unstub 的 partial object, 缺 removeItem, 不能直接调
 	if (typeof localStorage === "undefined") return;
+	if (typeof localStorage.removeItem !== "function") return;
 	localStorage.removeItem(STORAGE_KEY);
 }
 

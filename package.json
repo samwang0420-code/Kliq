@@ -1,8 +1,8 @@
 {
-	"name": "kliq-recorder",
-	"productName": "Kliq",
-	"description": "Kliq — AI 双语字幕 + 智能剪辑的开源屏幕录制器。基于 Recordly (AGPL 3.0) 修改而来。",
-	"author": "Kliq <hi@yanjingai.tech>",
+	"name": "yanjing-recorder",
+	"productName": "言镜",
+	"description": "言镜 — AI 双语字幕 + 智能剪辑的开源屏幕录制器。基于 Recordly (AGPL 3.0) 修改而来。",
+	"author": "YanJingAI <hi@yanjingai.tech>",
 	"homepage": "https://yanjingai.tech",
 	"repository": {
 		"type": "git",

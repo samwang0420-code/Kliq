@@ -107,10 +107,12 @@ export async function transcribeWithWhisper(options: TranscribeOptions): Promise
 		};
 	}
 
-	const text = await response.text();
+	// §51 fix: response_format=json 时 OpenAI 返的是 `{"text": "..."}` 而不是裸 text。
+	// 旧代码 await response.text() 会把整段 JSON 当成 caption 显示 —— 这里改成解析 JSON。
+	const json = (await response.json()) as { text?: string };
 	return {
 		language: options.language ?? "auto",
-		text,
+		text: json.text ?? "",
 	};
 }
 

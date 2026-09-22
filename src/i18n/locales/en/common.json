@@ -28,7 +28,6 @@
 			"tagline": "AI-powered open-source screen recorder",
 			"version": "v0.1.0"
 		},
-
 		"license": {
 			"section": "License",
 			"free": "Free Edition",
@@ -68,7 +67,6 @@
 			"deactivating": "Deactivating…",
 			"deactivated": "License deactivated"
 		},
-
 		"account": {
 			"ai": {
 				"title": "AI service",
@@ -167,7 +165,7 @@
 			"featLifetimeForever": "Every future AI feature, included",
 			"featSourceBuddyDevs": "Become a long-term partner",
 			"ctaBuyLifetime": "Buy Lifetime · ${{price}}",
-			"ctaBuyPro": "Buy Pro · ${{price}}/year",
+			"ctaBuyPro": "Buy Pro · ${{price}}",
 			"ctaContactSales": "Contact sales / Team license",
 			"ctaContinueFree": "Continue with Free",
 			"faqLifetimeQ": "What is the difference between Pro and Lifetime?",
@@ -187,7 +185,6 @@
 			"ctaOpeningCheckout": "Opening checkout…",
 			"purchaseErrorPrefix": "Failed to open checkout:"
 		},
-
 		"settings": {
 			"title": "Kliq Settings",
 			"save": "Save",

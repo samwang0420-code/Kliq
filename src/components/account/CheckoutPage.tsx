@@ -297,7 +297,7 @@ export function CheckoutPage({ open, onClose, accent, proCheckoutUrl, isProActiv
 									>
 										{isProActive
 											? t("common.yanjing.license.activated", "Pro 已激活")
-											: t("common.yanjing.account.ctaBuyPro", "订阅 Pro · ${{price}}/年", { price: proPrice })}
+											: t("common.yanjing.account.ctaBuyPro", "购买 Pro · ${{price}}", { price: proPrice })}
 										{!isProActive && <ArrowRight size={14} weight="bold" />}
 									</button>
 								</article>

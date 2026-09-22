@@ -95,8 +95,14 @@ ${captions.map((c) => `[${c.id}] ${c.start}-${c.end}s: "${c.text}" | "${c.text}"
 			maxTokens: 2000,
 		});
 
-		const jsonMatch = response.match(/\[[\s\S]*\]/);
-		if (!jsonMatch) {
+		// §51 fix: 旧版 regex /\[[\s\S]*\]/ 只匹配纯数组, 但 GPT 实际返的是对象
+		// { issues: [...], correctedCaptions: [...] }, 所以总是 fallback 返空。
+		// 现在先剥掉 markdown fence ```json ... ```, 再提取首个完整 JSON object。
+		const fenced = response.match(/```(?:json)?\s*([\s\S]*?)```/);
+		const candidate = (fenced ? fenced[1] : response).trim();
+		const objectMatch = candidate.match(/\{[\s\S]*\}/);
+		if (!objectMatch) {
+			console.warn("[caption-polish] GPT-4 返的 JSON 无法解析:", response.slice(0, 200));
 			return {
 				issues: [],
 				correctedCaptions: captions,
@@ -105,10 +111,11 @@ ${captions.map((c) => `[${c.id}] ${c.start}-${c.end}s: "${c.text}" | "${c.text}"
 			};
 		}
 
-		const parsed = JSON.parse(jsonMatch[0]) as Array<
-			Omit<ProofreadIssue, "captionId"> & { id: string }
-		>;
-		const issues: ProofreadIssue[] = parsed.map((p) => ({
+		const parsed = JSON.parse(objectMatch[0]) as {
+			issues?: Array<Omit<ProofreadIssue, "captionId"> & { id: string }>;
+			correctedCaptions?: Array<{ id: number | string; start?: number; end?: number; text: string }>;
+		};
+		const issues: ProofreadIssue[] = (parsed.issues ?? []).map((p) => ({
 			captionId: String(p.id),
 			originalText: p.originalText,
 			suggestedText: p.suggestedText,

@@ -1,7 +1,7 @@
 Language: EN | [简中](README.zh-CN.md)
 
 <p align="center">
-  <img width="220" alt="Kliq Logo" src="https://github.com/user-attachments/assets/414b8838-6731-45d4-a815-6e3c0aa1fe52" />
+  <img width="220" alt="言镜 Logo" src="https://github.com/user-attachments/assets/414b8838-6731-45d4-a815-6e3c0aa1fe52" />
 </p>
 
 <p align="center">
@@ -11,14 +11,14 @@ Language: EN | [简中](README.zh-CN.md)
 </p>
 
 ### Create polished demo videos with AI — 在几分钟内做出精致的演示视频
-**Kliq** 是一款基于 [Recordly](https://github.com/webadderallorg/Recordly) 的开源屏幕录制器,加入了 **AI 双语字幕、智能剪辑、行业热词、AI 章节摘要**。  
+**言镜** 是一款基于 [Recordly](https://github.com/webadderallorg/Recordly) 的开源屏幕录制器,加入了 **AI 双语字幕、智能剪辑、行业热词、AI 章节摘要**。  
 **Open source.** [yanjingai.tech](https://yanjingai.tech) · [hi@yanjingai.tech](mailto:hi@yanjingai.tech) · [ATTRIBUTION](./ATTRIBUTION.md)
 
 > 本软件是基于 Recordly 修改而来的衍生作品 (AGPL 3.0)。感谢 [@webadderall](https://github.com/webadderall) 的开源贡献。
 
-## What is Kliq?
+## What is 言镜?
 
-Kliq 是一款桌面应用,用于录制和编辑屏幕内容,内置面向演示视频的动态呈现工具。基于上游 Recordly,我们加入了 **AI 增强**: 双语字幕、行业热词、智能章节、标题生成、社媒文案。原始的屏幕录制、动态缩放、光标润色、样式化背景等核心功能全部保留。
+言镜 是一款桌面应用,用于录制和编辑屏幕内容,内置面向演示视频的动态呈现工具。基于上游 Recordly,我们加入了 **AI 增强**: 双语字幕、行业热词、智能章节、标题生成、社媒文案。原始的屏幕录制、动态缩放、光标润色、样式化背景等核心功能全部保留。
 
 Recordly runs on:
 
@@ -39,7 +39,7 @@ Platform notes:
 
 ---
 
-## What's new in Kliq (vs upstream Recordly)?
+## What's new in 言镜 (vs upstream Recordly)?
 
 ### ✨ AI 双语字幕 (P0)
 基于 OpenAI Whisper 转录 + GPT-4 翻译,一键生成中英/中法/中日等双语字幕。**行业热词可选**:法律 / 医疗 / 电商 / 教育。
@@ -223,7 +223,7 @@ sudo apt install build-essential cmake libx11-dev libxtst-dev libxrandr-dev libx
 ### Steps
 
 ```bash
-git clone https://github.com/samwang0420-code/Kliq.git kliq
+git clone https://github.com/samwang0420-code/Kliq.git yanjing-recorder
 cd recordly
 npm install
 npm run dev
@@ -404,6 +404,6 @@ Many features of OpenScreen such as its zoom animations are directly ported from
 Recordly was created by  
 [@webadderall](https://x.com/webadderall)
 
-Kliq is maintained independently — see [ATTRIBUTION](./ATTRIBUTION.md).
+言镜是 maintained independently — see [ATTRIBUTION](./ATTRIBUTION.md).
 
 ---

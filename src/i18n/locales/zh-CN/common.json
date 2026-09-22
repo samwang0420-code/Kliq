@@ -28,7 +28,6 @@
 			"tagline": "AI 增强的开源屏幕录制器",
 			"version": "v0.1.0"
 		},
-
 		"license": {
 			"section": "许可证",
 			"free": "免费版",
@@ -68,7 +67,6 @@
 			"deactivating": "停用中…",
 			"deactivated": "License 已停用"
 		},
-
 		"account": {
 			"ai": {
 				"title": "AI 服务",
@@ -167,7 +165,7 @@
 			"featLifetimeForever": "所有未来 AI 功能自动包含",
 			"featSourceBuddyDevs": "成为我们的长期伙伴",
 			"ctaBuyLifetime": "立即购买 Lifetime · ${{price}}",
-			"ctaBuyPro": "订阅 Pro · ${{price}}/年",
+			"ctaBuyPro": "购买 Pro · ${{price}}",
 			"ctaContactSales": "联系销售 / 团队授权",
 			"ctaContinueFree": "继续免费版",
 			"faqLifetimeQ": "Lifetime 跟 Pro 有什么区别?",
@@ -187,7 +185,6 @@
 			"ctaOpeningCheckout": "正在打开结算页…",
 			"purchaseErrorPrefix": "打开结算页失败:"
 		},
-
 		"settings": {
 			"title": "Kliq 设置",
 			"save": "保存",

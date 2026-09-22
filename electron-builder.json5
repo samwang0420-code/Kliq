@@ -10,7 +10,7 @@
     "node_modules/uiohook-napi/**",
     "electron/native/bin/**"
   ],
-  "productName": "Kliq",
+  "productName": "言镜",
   "npmRebuild": true,
   "buildDependenciesFromSource": true,
   "compression": "normal",
@@ -46,7 +46,7 @@
   "publish": null,
 
   "mac": {
-    "identity": "Kliq Dev",
+    "identity": "YanJing Dev",
     "hardenedRuntime": true,
     "entitlements": "build/entitlements.mac.plist",
     "entitlementsInherit": "build/entitlements.mac.inherit.plist",
@@ -61,16 +61,16 @@
       }
     ],
     "icon": "icons/icons/mac/icon.icns",
-    "artifactName": "Kliq-${version}-${arch}.${ext}",
+    "artifactName": "言镜-${version}-${arch}.${ext}",
     "extendInfo": {
-      "NSAudioCaptureUsageDescription": "Kliq needs audio capture permission to record system audio.",
-      "NSCameraUsageDescription": "Kliq needs camera access to record webcam video.",
-      "NSMicrophoneUsageDescription": "Kliq needs microphone access to record voice audio.",
+      "NSAudioCaptureUsageDescription": "needs audio capture permission to record system audio.",
+      "NSCameraUsageDescription": "needs camera access to record webcam video.",
+      "NSMicrophoneUsageDescription": "needs microphone access to record voice audio.",
       "NSCameraUseContinuityCameraDeviceType": true,
       "com.apple.security.device.audio-input": true,
       "CFBundleDocumentTypes": [
         {
-          "CFBundleTypeName": "Kliq Project",
+          "CFBundleTypeName": "言镜 Project",
           "CFBundleTypeRole": "Editor",
           "CFBundleTypeExtensions": ["yanjing"],
           "CFBundleTypeIconFile": "icon.icns",
@@ -81,7 +81,7 @@
       "UTExportedTypeDeclarations": [
         {
           "UTTypeIdentifier": "tech.yanjingai.recorder.project",
-          "UTTypeDescription": "Kliq Project",
+          "UTTypeDescription": "言镜 Project",
           "UTTypeConformsTo": ["public.json"],
           "UTTypeTagSpecification": {
             "public.filename-extension": ["yanjing"],
@@ -96,7 +96,7 @@
       "AppImage"
     ],
     "icon": "icons/icons/png",
-    "artifactName": "Kliq-${version}-linux-x64.${ext}",
+    "artifactName": "言镜-${version}-linux-x64.${ext}",
     "category": "AudioVideo"
   },
   "win": {
@@ -104,14 +104,14 @@
       "nsis"
     ],
     "icon": "icons/icons/win/icon.ico",
-    "executableName": "Kliq",
-    "artifactName": "Kliq-${version}-windows-${arch}.${ext}"
+    "executableName": "言镜",
+    "artifactName": "言镜-${version}-windows-${arch}.${ext}"
   },
   "nsis": {
     "oneClick": false,
     "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "shortcutName": "Kliq"
+    "shortcutName": "言镜"
   }
 }
