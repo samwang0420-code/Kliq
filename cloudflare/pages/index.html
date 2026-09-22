@@ -89,10 +89,10 @@
   "applicationCategory": "MultimediaApplication",
   "applicationSubCategory": "Screen Recording Software",
   "operatingSystem": "macOS 14.0+, Windows 10 Build 19041+, Linux",
-  "softwareVersion": "1.4.0",
+  "softwareVersion": "1.5.0",
   "fileSize": "104.2MB",
   "datePublished": "2026-09-04",
-  "dateModified": "2026-09-18",
+  "dateModified": "2026-09-22",
   "downloadUrl": "https://github.com/samwang0420-code/Kliq/releases",
   "softwareRequirements": "macOS 14.0+, Windows 10 Build 19041+, or modern Linux distribution",
   "memoryRequirements": "512MB RAM minimum",
@@ -113,7 +113,7 @@
   ],
   "offers": {
     "@type": "Offer",
-    "price": "9.90",
+    "price": "12.90",
     "priceCurrency": "USD",
     "priceValidUntil": "2027-12-31",
     "availability": "https://schema.org/InStock",
@@ -194,7 +194,7 @@
       "name": "What's the difference between Free and Pro?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Free includes everything from upstream Recordly, plus keystroke overlay and lossless system-audio capture. Pro ($9.9 one-time, 1 year of updates) adds the AI layer: transcription, bilingual captions, chapters, summaries, titles, SEO tags, social copy, multi-language translation, caption proofreading and semantic search. You bring your own API key."
+        "text": "Free includes everything from upstream Recordly, plus keystroke overlay and lossless system-audio capture. Pro ($12.9 one-time, 1 year of updates) adds the AI layer: transcription, bilingual captions, chapters, summaries, titles, SEO tags, social copy, multi-language translation, caption proofreading and semantic search. You bring your own API key."
       }
     }
   ]
@@ -269,8 +269,8 @@ nav .wrap {
   color: #fafafa;
 }
 .logo-mark {
-  width: 24px; height: 24px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #fafafa, #a1a1aa 60%, #3f3f46);
+  width: 28px; height: 28px; border-radius: 7px;
+  background: url('/media/kliq-mark-64.png') center/cover no-repeat, #0a0a0a;
 }
 .nav-links {
   display: flex; align-items: center; gap: 32px;
@@ -343,6 +343,13 @@ h1 {
   margin-top: 28px;
   font-size: 12px; color: #52525b;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.hero-logo {
+  width: 96px; height: 96px;
+  border-radius: 22px;
+  margin: 0 auto 28px;
+  display: block;
+  box-shadow: 0 12px 40px -8px rgba(0,0,0,0.5);
 }
 
 /* ── Hero demo (full-bleed, no chrome) ── */
@@ -647,6 +654,8 @@ footer .wrap {
 }
 footer a { color: #71717a; transition: color 120ms ease; }
 footer a:hover { color: #ededed; }
+footer .footer-brand { display: inline-flex; align-items: center; gap: 8px; }
+footer .footer-mark { width: 18px; height: 18px; border-radius: 4px; }
 
 /* ── Responsive ── */
 @media (max-width: 880px) {
@@ -695,9 +704,10 @@ footer a:hover { color: #ededed; }
 
 <!-- ============ HERO ============ -->
 <header class="wrap hero">
+  <img src="/media/kliq-logo-256.png" alt="Kliq" width="96" height="96" class="hero-logo" />
   <div class="badge">
     <span class="dot"></span>
-    <span data-bind="badge">v1.4.0 · AGPL 3.0 · macOS · Windows · Linux</span>
+    <span data-bind="badge">v1.5.0 · AGPL 3.0 · macOS · Windows · Linux</span>
   </div>
   <h1 data-bind="h1">Make beautiful<br />screen recordings</h1>
   <p class="lead" data-bind="lead">Open-source recorder forked from Recordly. Native timeline editor, cursor polish, auto-zoom, and AI captions, chapters, summaries — plug in your own API key.</p>
@@ -820,7 +830,7 @@ footer a:hover { color: #ededed; }
   </div>
 </section>
 
-<!-- ============ PRICING (Stripe-style, $9.9) ============ -->
+<!-- ============ PRICING (Stripe-style, $12.9) ============ -->
 <section id="pricing">
   <div class="wrap">
     <h2 data-bind="pr_h2">Free forever. Pro for AI.</h2>
@@ -844,7 +854,7 @@ footer a:hover { color: #ededed; }
       </div>
       <div class="price-card featured">
         <div class="tag" data-bind="pr_pro_tag">Pro · License Key</div>
-        <div class="amount"><span class="currency">$</span>9.9</div>
+        <div class="amount"><span class="currency">$</span>12.9</div>
         <div class="period" data-bind="pr_pro_period">One-time · 1 year of updates</div>
         <ul>
           <li data-bind="pr_pro_1"><strong>Everything in Free</strong></li>
@@ -856,7 +866,7 @@ footer a:hover { color: #ededed; }
           <li data-bind="pr_pro_7">One-click smart edit + 9 industry hotword packs</li>
           <li data-bind="pr_pro_8">Your own API key (OpenAI / DeepSeek) · email support</li>
         </ul>
-        <a class="btn btn-solid" href="mailto:sam.wang01@icloud.com?subject=Kliq%20Pro%20license%20request" data-bind="pr_pro_cta" data-purchase-cta>Buy Pro · $9.9</a>
+        <a class="btn btn-solid" href="mailto:sam.wang01@icloud.com?subject=Kliq%20Pro%20license%20request" data-bind="pr_pro_cta" data-purchase-cta>Buy Pro · $12.9</a>
         <p style="margin-top:12px;text-align:center;font-size:12px;opacity:.75;">
           <a data-bind="pr_recover" href="mailto:sam.wang01@icloud.com?subject=Kliq%20Pro%20license%20recover">Already bought? Recover your license key</a>
         </p>
@@ -875,7 +885,7 @@ footer a:hover { color: #ededed; }
       <details><summary data-bind="faq_q3">Why AGPL 3.0? Can I use this commercially?</summary><div class="answer" data-bind="faq_a3">AGPL 3.0 means you can use it, modify it, and ship it — as long as your modifications are also open-source under AGPL. Internal tools, SaaS, commercial distributions all need source published. For a different license, talk to the original <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly maintainer</a>.</div></details>
       <details><summary data-bind="faq_q4">Which AI provider is cheapest?</summary><div class="answer" data-bind="faq_a4">DeepSeek-V3 via DeepSeek's OpenAI-compatible API is roughly 10× cheaper than GPT-4o for the same summary quality on Chinese + English content. For pure English, GPT-4o-mini is competitive.</div></details>
       <details><summary data-bind="faq_q5">Is this a paid SaaS? Will my recordings leave my computer?</summary><div class="answer" data-bind="faq_a5">No SaaS, no cloud. Recordings stay on your disk. Only the audio you submit to Whisper and the text you submit to GPT go to the AI provider you configured.</div></details>
-      <details><summary data-bind="faq_q6">What's the difference between Free and Pro?</summary><div class="answer" data-bind="faq_a6">Free includes everything from upstream Recordly, plus keystroke overlay and lossless system-audio capture. Pro ($9.9 one-time, 1 year of updates) adds the AI layer: transcription, bilingual captions, chapters, summaries, titles, SEO tags, social copy, multi-language translation, caption proofreading and semantic search. You bring your own API key.</div></details>
+      <details><summary data-bind="faq_q6">What's the difference between Free and Pro?</summary><div class="answer" data-bind="faq_a6">Free includes everything from upstream Recordly, plus keystroke overlay and lossless system-audio capture. Pro ($12.9 one-time, 1 year of updates) adds the AI layer: transcription, bilingual captions, chapters, summaries, titles, SEO tags, social copy, multi-language translation, caption proofreading and semantic search. You bring your own API key.</div></details>
     </div>
   </div>
 </section>
@@ -926,14 +936,17 @@ footer a:hover { color: #ededed; }
   <div class="ctas">
     <a class="btn btn-solid btn-lg" href="https://github.com/samwang0420-code/Kliq/releases" data-bind="cta_download">Download for macOS · Windows · Linux</a>
     <a class="btn btn-ghost btn-lg" href="https://github.com/samwang0420-code/Kliq" data-bind="cta_star">★ on GitHub</a>
-    <a class="btn btn-solid btn-lg" href="mailto:sam.wang01@icloud.com?subject=Kliq%20Pro%20license%20request" data-bind="cta_buy" data-purchase-cta>Buy Pro · $9.9</a>
+    <a class="btn btn-solid btn-lg" href="mailto:sam.wang01@icloud.com?subject=Kliq%20Pro%20license%20request" data-bind="cta_buy" data-purchase-cta>Buy Pro · $12.9</a>
   </div>
 </div>
 
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="wrap">
-    <span data-bind="footer_left">Kliq · v1.4.0 · Kliq · 言灵录</span>
+    <span class="footer-brand">
+      <img src="/media/kliq-mark-32.png" alt="Kliq" width="18" height="18" class="footer-mark" />
+      <span data-bind="footer_left">Kliq · v1.5.0 · 言灵录</span>
+    </span>
     <span data-bind="footer_right">AGPL 3.0 · forked from <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly</a> · <a href="/refund">Refund policy</a> · <a href="mailto:hi@yanjingai.tech">hi@yanjingai.tech</a></span>
   </div>
 </footer>
@@ -962,7 +975,7 @@ footer a:hover { color: #ededed; }
 
   const I18N = {
     en: {
-      badge: 'v1.4.0 · AGPL 3.0 · macOS · Windows · Linux',
+      badge: 'v1.5.0 · AGPL 3.0 · macOS · Windows · Linux',
       h1: 'Make beautiful<br />screen recordings',
       lead: 'Open-source recorder forked from Recordly. Native timeline editor, cursor polish, auto-zoom, and AI captions, chapters, summaries — plug in your own API key.',
       download: 'Download for macOS', see_features: 'See all features',
@@ -1017,7 +1030,7 @@ footer a:hover { color: #ededed; }
       pr_pro_6: 'Semantic search across long recordings',
       pr_pro_7: 'One-click smart edit + 9 industry hotword packs',
       pr_pro_8: 'Your own API key (OpenAI / DeepSeek) · email support',
-      pr_pro_cta: 'Buy Pro · $9.9',
+      pr_pro_cta: 'Buy Pro · $12.9',
       pr_recover: 'Already bought? Recover your license key',
       faq_h2: "We've got answers.",
       faq_q1: 'Why fork Recordly instead of building from scratch?',
@@ -1031,7 +1044,7 @@ footer a:hover { color: #ededed; }
       faq_q5: 'Is this a paid SaaS? Will my recordings leave my computer?',
       faq_a5: 'No SaaS, no cloud. Recordings stay on your disk. Only the audio you submit to Whisper and the text you submit to GPT go to the AI provider you configured.',
       faq_q6: "What's the difference between Free and Pro?",
-      faq_a6: "Free includes everything from upstream Recordly, plus keystroke overlay and lossless system-audio capture. Pro ($9.9 one-time, 1 year of updates) adds the AI layer: transcription, bilingual captions, chapters, summaries, titles, SEO tags, social copy, multi-language translation, caption proofreading and semantic search. You bring your own API key.",
+      faq_a6: "Free includes everything from upstream Recordly, plus keystroke overlay and lossless system-audio capture. Pro ($12.9 one-time, 1 year of updates) adds the AI layer: transcription, bilingual captions, chapters, summaries, titles, SEO tags, social copy, multi-language translation, caption proofreading and semantic search. You bring your own API key.",
       pv_h2: 'Maximum Privacy.',
       pv_lead: 'Your recordings are protected with cutting-edge privacy protocols. No SaaS, no cloud, no analytics. Source code audited under AGPL 3.0.',
       pv_1_h: 'On your disk',
@@ -1050,12 +1063,12 @@ footer a:hover { color: #ededed; }
       cta_p: 'Free forever. Open source. Bring your own AI.',
       cta_download: 'Download for macOS · Windows · Linux',
       cta_star: '★ on GitHub',
-      cta_buy: 'Buy Pro · $9.9',
-      footer_left: 'Kliq · v1.4.0 · Kliq',
+      cta_buy: 'Buy Pro · $12.9',
+      footer_left: 'Kliq · v1.5.0 · 言灵录',
       footer_right: 'AGPL 3.0 · forked from <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly</a> · <a href="/refund">Refund policy</a> · <a href="mailto:hi@yanjingai.tech">hi@yanjingai.tech</a>'
     },
     zh: {
-      badge: 'v1.4.0 · AGPL 3.0 · macOS · Windows · Linux',
+      badge: 'v1.5.0 · AGPL 3.0 · macOS · Windows · Linux',
       h1: '做出精致<br />屏幕录制',
       lead: '基于 Recordly 的开源屏幕录制器。原生时间线编辑器 + 光标润色 + 自动缩放,叠加 AI 字幕、章节、摘要 —— 自带 API Key,按用量计费。',
       download: '下载 macOS 版', see_features: '查看全部功能',
@@ -1110,7 +1123,7 @@ footer a:hover { color: #ededed; }
       pr_pro_6: '语义搜索 —— 长录屏秒级定位',
       pr_pro_7: '一键智能剪辑 + 9 个行业热词词库',
       pr_pro_8: '自带 API Key（OpenAI / DeepSeek）· 邮件支持',
-      pr_pro_cta: '购买 Pro · $9.9',
+      pr_pro_cta: '购买 Pro · $12.9',
       pr_recover: '已购买？取回 License Key',
       faq_h2: '我们回答了。',
       faq_q1: '为什么不从头写,要去 fork Recordly?',
@@ -1124,7 +1137,7 @@ footer a:hover { color: #ededed; }
       faq_q5: '是付费 SaaS 吗?录制内容会上传吗?',
       faq_a5: '不是 SaaS,没有云。录制留在本地磁盘。只有你提交给 AI 服务商的音频和文本会上传。',
       faq_q6: '免费版和 Pro 有什么区别?',
-      faq_a6: '免费版包含 Recordly 上游全部功能,外加按键浮层与无损系统音频捕获。Pro（$9.9 一次性,一年更新）叠加 AI 层:转录、双语字幕、章节、摘要、标题、SEO 标签、社媒文案、多语言翻译、字幕校对与语义搜索。API Key 自带。',
+      faq_a6: '免费版包含 Recordly 上游全部功能,外加按键浮层与无损系统音频捕获。Pro（$12.9 一次性,一年更新）叠加 AI 层:转录、双语字幕、章节、摘要、标题、SEO 标签、社媒文案、多语言翻译、字幕校对与语义搜索。API Key 自带。',
       pv_h2: '极致隐私。',
       pv_lead: '你的录制由前沿隐私协议保护。无 SaaS、无云、无埋点。AGPL 3.0 公开源码审计。',
       pv_1_h: '本地存储',
@@ -1143,8 +1156,8 @@ footer a:hover { color: #ededed; }
       cta_p: '永久免费。开源。自带 AI。',
       cta_download: '下载 macOS · Windows · Linux',
       cta_star: 'GitHub ★',
-      cta_buy: '购买 Pro · $9.9',
-      footer_left: 'Kliq · v1.4.0 · Kliq',
+      cta_buy: '购买 Pro · $12.9',
+      footer_left: 'Kliq · v1.5.0 · 言灵录',
       footer_right: 'AGPL 3.0 · forked from <a href="https://github.com/webadderallorg/Recordly" target="_blank" rel="noopener">Recordly</a> · <a href="/refund">退款政策</a> · <a href="mailto:hi@yanjingai.tech">hi@yanjingai.tech</a>'
     }
   };
