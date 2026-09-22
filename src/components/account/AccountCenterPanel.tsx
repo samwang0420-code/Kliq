@@ -48,9 +48,12 @@ import {
 	KLQ_REFUND_POLICY_URL,
 	KLQ_REPO_URL,
 	KLQ_STORE_ORDERS_URL,
+	KLQ_WAFFO_BRIDGE_SECRET,
+	KLQ_WAFFO_WORKER_URL,
 } from "@/lib/licenseConfig";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
+import { CheckoutPage } from "./CheckoutPage";
 import { AiServiceSection } from "./AiServiceSection";
 
 type AccountCenterPanelProps = {
@@ -179,6 +182,7 @@ export function AccountCenterPanel({
 	const status = useLicenseStatus();
 	const [licenseKey, setLicenseKey] = useState("");
 	const [busy, setBusy] = useState<"activating" | "deactivating" | "revalidating" | null>(null);
+	const [showCheckout, setShowCheckout] = useState(false);
 	const restoreInputRef = useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {
@@ -384,8 +388,9 @@ export function AccountCenterPanel({
 		.map((item) => item.key);
 
 	return (
-		<AnimatePresence>
-			{open && (
+		<>
+			<AnimatePresence>
+				{open && (
 				<motion.aside
 						key="account-center-panel"
 						data-account-center-panel
@@ -1100,9 +1105,20 @@ export function AccountCenterPanel({
 								)}
 							</p>
 						</footer>
-					</motion.aside>
-			)}
-		</AnimatePresence>
+						</motion.aside>
+				)}
+			</AnimatePresence>
+
+			<CheckoutPage
+				open={showCheckout}
+				onClose={() => setShowCheckout(false)}
+				accent={ACCENT}
+				proCheckoutUrl={KLQ_PRO_CHECKOUT_URL}
+				isProActive={isProActive}
+				workerUrl={KLQ_WAFFO_WORKER_URL}
+				bridgeSecret={KLQ_WAFFO_BRIDGE_SECRET}
+			/>
+		</>
 	);
 }
 

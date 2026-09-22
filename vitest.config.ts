@@ -9,6 +9,7 @@ export default defineConfig({
 			"src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
 			"electron/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
 			"functions/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+			"workers/waffo/src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
 		],
 	},
 	resolve: {

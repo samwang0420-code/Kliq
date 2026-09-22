@@ -1,7 +1,7 @@
 /**
  * Kliq — 许可证 / Pro 权益模块
  *
- * 商业模式（用户拍板）：**一次性买断**，$9.9，永久使用。
+ * 商业模式(用户拍板):**一次性买断**,Pro 订阅/年 $12.9 / Lifetime 永久 $99。
  *   购买：Lemon Squeezy 结算页（URL 见 licenseConfig.ts，构建期注入）
  *   交付：用户拿到 license key → 在「个人中心」激活
  *

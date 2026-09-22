@@ -26,8 +26,11 @@ export const KLQ_LICENSE_STORAGE_KEY = "kliq.license.status";
 /** 旧品牌存储键：只读回退，读到即迁移 */
 export const LEGACY_LICENSE_STORAGE_KEYS = ["yanjing.license.status"] as const;
 
-/** 一次性买断定价（USD） */
-export const KLQ_PRO_PRICE_USD = 9.9;
+/** 一次性买断定价(USD) — Pro 订阅/年 */
+export const KLQ_PRO_PRICE_USD = 12.9;
+
+/** 一次性买断定价(USD) — Lifetime 永久买断(§50 新增) */
+export const KLQ_LIFETIME_PRICE_USD = 99;
 
 const rawEnv = (import.meta.env ?? {}) as Record<string, string | undefined>;
 
@@ -47,6 +50,16 @@ export const KLQ_PRO_CHECKOUT_URL = normalizeUrl(rawEnv.VITE_KLQ_CHECKOUT_URL);
 
 /** 退款政策页（可选） */
 export const KLQ_REFUND_POLICY_URL = KLQ_SITE_URL ? `${KLQ_SITE_URL}/refund` : "";
+
+/**
+ * Option B Waffo Worker 端点（Cloudflare Workers，AGENTS.md §GSPR-2）。
+ * 未配置时 fallback 到 KLQ_PRO_CHECKOUT_URL 或邮件联系。Worker 自身支持 mock 模式，
+ * 所以即使没有真实 Waffo merchant creds，本地 `wrangler dev --local` 也能跑通完整流程。
+ */
+export const KLQ_WAFFO_WORKER_URL = normalizeUrl(rawEnv.VITE_KLQ_WAFFO_WORKER_URL);
+
+/** Worker bridge 共享密钥（X-KLQ-Bridge-Secret header）。mock 模式下 Worker 不强制；live 模式强制。 */
+export const KLQ_WAFFO_BRIDGE_SECRET = (rawEnv.VITE_KLQ_WAFFO_BRIDGE_SECRET ?? "").trim();
 
 /**
  * 源码仓库（AGPL 3.0 第 13 条要求：通过网络交互的用户必须能获取对应源码）。
@@ -128,6 +141,12 @@ export function getCommercialConfigStatus(): CommercialConfigItem[] {
 			scope: "build",
 			effect: "购买按钮被禁用，用户无法付款",
 			set: KLQ_PRO_CHECKOUT_URL.length > 0,
+		},
+		{
+			key: "VITE_KLQ_WAFFO_WORKER_URL",
+			scope: "build",
+			effect: "Option B Worker 未配置，CheckoutPage fallback 到 LS / 邮件联系",
+			set: KLQ_WAFFO_WORKER_URL.length > 0,
 		},
 		{
 			key: "LEMON_SQUEEZY_API_KEY",

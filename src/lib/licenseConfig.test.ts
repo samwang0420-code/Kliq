@@ -5,6 +5,10 @@ import {
 	getCommercialConfigStatus,
 	getMissingBuildConfigKeys,
 	KLQ_LICENSE_REQUEST_EMAIL,
+	KLQ_LIFETIME_PRICE_USD,
+	KLQ_PRO_PRICE_USD,
+	KLQ_WAFFO_BRIDGE_SECRET,
+	KLQ_WAFFO_WORKER_URL,
 } from "./licenseConfig";
 
 /**
@@ -99,5 +103,37 @@ describe("getCommercialConfigStatus", () => {
 			.map((i) => i.key);
 		expect(missing).toEqual(expected);
 		expect(missing.every((k) => k.startsWith("VITE_"))).toBe(true);
+	});
+});
+
+describe("§50 Option B 价格与 Worker 配置常量", () => {
+	it("KLQ_PRO_PRICE_USD 锁定为 12.9（§49 用户拍板，从 9.9 涨价）", () => {
+		expect(KLQ_PRO_PRICE_USD).toBe(12.9);
+	});
+
+	it("KLQ_LIFETIME_PRICE_USD 锁定为 99（§50 新加）", () => {
+		expect(KLQ_LIFETIME_PRICE_USD).toBe(99);
+	});
+
+	it("Lifetime 价格 > Pro 价格（99 > 12.9，避免低级错误）", () => {
+		expect(KLQ_LIFETIME_PRICE_USD).toBeGreaterThan(KLQ_PRO_PRICE_USD);
+	});
+
+	it("KLQ_WAFFO_WORKER_URL 未配置时为空串，CheckoutPage 自动 fallback", () => {
+		expect(typeof KLQ_WAFFO_WORKER_URL).toBe("string");
+		// 当前 .env.example 没填，正常情况是空
+		expect(KLQ_WAFFO_WORKER_URL.length).toBe(0);
+	});
+
+	it("KLQ_WAFFO_BRIDGE_SECRET 未配置时为空串", () => {
+		expect(typeof KLQ_WAFFO_BRIDGE_SECRET).toBe("string");
+		expect(KLQ_WAFFO_BRIDGE_SECRET.length).toBe(0);
+	});
+
+	it("getCommercialConfigStatus 包含 VITE_KLQ_WAFFO_WORKER_URL 这一行", () => {
+		const items = getCommercialConfigStatus();
+		const row = items.find((i) => i.key === "VITE_KLQ_WAFFO_WORKER_URL");
+		expect(row).toBeDefined();
+		expect(row?.scope).toBe("build");
 	});
 });

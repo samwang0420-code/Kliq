@@ -1,0 +1,17 @@
+{
+  "name": "kliq-waffo-worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Kliq (K) Waffo payment Worker mock. Runs on Cloudflare Workers with nodejs_compat (Node crypto) for HMAC signing. Mock mode skips the Waffo SDK and returns fake checkout URLs so the app can develop end-to-end before real merchant credentials are wired.",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240909.0",
+    "typescript": "^5.5.4",
+    "wrangler": "^3.78.0"
+  }
+}

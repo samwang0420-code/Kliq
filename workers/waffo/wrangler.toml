@@ -1,0 +1,29 @@
+# Kliq (K) Waffo Worker — dev / mock config
+# Production deploy: copy this file to workers/waffo/wrangler.toml with real account_id + real env vars (NEVER commit secrets)
+
+name = "kliq-waffo-mock"
+main = "src/index.ts"
+compatibility_date = "2026-09-22"
+compatibility_flags = ["nodejs_compat"]
+
+# Mock mode: when WAFFO_MOCK_MODE == "true", the Worker returns fake checkout URLs
+# without contacting Waffo. Lets the Electron app develop end-to-end before real
+# merchant / store / private-key creds are pasted from dashboard.
+[vars]
+WAFFO_MOCK_MODE = "true"
+WAFFO_ENV = "test"
+KLQ_PRO_PRICE_USD = "12.9"
+KLQ_LIFETIME_PRICE_USD = "99"
+KLQ_PRO_PRODUCT_ID = "mock_pro_yearly"
+KLQ_LIFETIME_PRODUCT_ID = "mock_lifetime_one_time"
+KLQ_STORE_ID = "STO_MOCK"
+KLQ_MERCHANT_ID = "MER_MOCK"
+KLQ_DEFAULT_SUCCESS_URL = "https://yanjingai.tech/checkout/success"
+KLQ_DEFAULT_CANCEL_URL = "https://yanjingai.tech/pricing"
+
+# Secrets — set per-environment with `wrangler secret put`:
+#   WAFFO_PRIVATE_KEY            Real merchant private key (HMAC signing key). NEVER commit.
+#   KLQ_CHECKOUT_SHARED_SECRET   Random 32-byte secret for HMAC-ing the Next.js <-> Worker bridge.
+#
+# In mock mode both are unused; the Worker still validates the bridge header to confirm
+# callers know the protocol before real keys are wired.
