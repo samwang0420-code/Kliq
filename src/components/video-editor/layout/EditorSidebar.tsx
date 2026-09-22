@@ -10,7 +10,9 @@ import {
 import { motion } from "motion/react";
 import type { ComponentProps, Dispatch, SetStateAction } from "react";
 import { useMemo } from "react";
-import { toast } from "@/lib/toast";
+import { openAccountCenter } from "@/lib/proGate";
+import { useIsPro } from "@/hooks/useLicenseStatus";
+import { cn } from "@/lib/utils";
 import type { useI18n } from "@/contexts/I18nContext";
 import ExtensionManager from "../ExtensionManager";
 import { SettingsPanel } from "../SettingsPanel";
@@ -24,6 +26,7 @@ type Props = {
 };
 
 export function EditorSidebar({ t, activeSection, setActiveSection, settingsPanelProps }: Props) {
+	const isPro = useIsPro();
 	const sections = useMemo(
 		() => [
 			{ id: "scene" as const, label: t("settings.sections.scene", "Scene"), icon: Sparkle },
@@ -100,16 +103,23 @@ export function EditorSidebar({ t, activeSection, setActiveSection, settingsPane
 				<div className="mt-auto flex flex-col items-center gap-0.5 pt-3">
 					<motion.button
 						type="button"
-						onClick={() =>
-							toast.info(t("editor.account.comingSoon", "Account coming soon"))
-						}
+						onClick={() => openAccountCenter()}
 						title={t("editor.account.title", "Account")}
-						className="group relative flex h-9 w-9 items-center justify-center rounded-lg text-foreground/55 outline-none transition hover:text-foreground focus:outline-none focus-visible:outline-none"
+						aria-label={t("editor.account.title", "Account")}
+						data-testid="account-center-trigger"
+						className="group relative flex h-9 w-9 items-center justify-center rounded-lg text-foreground/65 outline-none transition hover:text-foreground focus:outline-none focus-visible:outline-none"
 						whileHover={{ opacity: 1 }}
-						initial={{ opacity: 0.55 }}
+						initial={{ opacity: 0.65 }}
 					>
 						<motion.span className="absolute inset-0 rounded-lg bg-foreground/[0.04] opacity-0 transition group-hover:opacity-100" />
 						<UserCircle className="relative z-10 h-[22px] w-[22px]" />
+						<span
+							aria-hidden="true"
+							className={cn(
+								"absolute right-0.5 top-0.5 z-20 h-2 w-2 rounded-full",
+								isPro ? "bg-[#22c55e] shadow-[0_0_4px_rgba(34,197,94,0.45)]" : "bg-foreground/15"
+							)}
+						/>
 					</motion.button>
 				</div>
 			</div>

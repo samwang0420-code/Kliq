@@ -186,8 +186,19 @@ export function AccountCenterPanel({
 		const onKeyDown = (event: KeyboardEvent) => {
 			if (event.key === "Escape") onClose();
 		};
+		const onMouseDown = (event: MouseEvent) => {
+			const target = event.target;
+			if (target instanceof Element && target.closest("[data-account-center-panel]")) {
+				return;
+			}
+			onClose();
+		};
 		window.addEventListener("keydown", onKeyDown);
-		return () => window.removeEventListener("keydown", onKeyDown);
+		document.addEventListener("mousedown", onMouseDown);
+		return () => {
+			window.removeEventListener("keydown", onKeyDown);
+			document.removeEventListener("mousedown", onMouseDown);
+		};
 	}, [open, onClose]);
 
 	const handleActivate = useCallback(async () => {
@@ -375,26 +386,19 @@ export function AccountCenterPanel({
 	return (
 		<AnimatePresence>
 			{open && (
-				<>
-					<motion.div
-						key="account-center-backdrop"
-						className="fixed inset-0 z-40 bg-black/25 backdrop-blur-[1px]"
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						transition={{ duration: 0.16 }}
-						onClick={onClose}
-					/>
-					<motion.aside
+				<motion.aside
 						key="account-center-panel"
+						data-account-center-panel
+						role="dialog"
+						aria-modal="false"
 						className={cn(
-							"fixed right-0 top-0 z-50 flex h-full w-[380px] max-w-[92vw] flex-col",
-							"border-l border-border bg-editor-dialog text-foreground shadow-2xl",
+							"fixed bottom-3 left-14 z-50 flex max-h-[78vh] w-[380px] max-w-[92vw] flex-col overflow-hidden",
+							"rounded-xl border border-border bg-editor-dialog text-foreground shadow-2xl",
 						)}
-						initial={{ x: 380 }}
-						animate={{ x: 0 }}
-						exit={{ x: 380 }}
-						transition={{ type: "spring", stiffness: 320, damping: 34 }}
+						initial={{ y: 12, opacity: 0 }}
+						animate={{ y: 0, opacity: 1 }}
+						exit={{ y: 12, opacity: 0 }}
+						transition={{ duration: 0.14, ease: "easeOut" }}
 						aria-label={t("common.yanjing.account.title", "个人中心")}
 					>
 						{/* 头部 */}
@@ -1097,7 +1101,6 @@ export function AccountCenterPanel({
 							</p>
 						</footer>
 					</motion.aside>
-				</>
 			)}
 		</AnimatePresence>
 	);
