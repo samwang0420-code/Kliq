@@ -31,11 +31,7 @@ import {
 	useState,
 } from "react";
 import { useAIActions } from "@/hooks/useAIActions";
-import {
-	getScenarioTemplate,
-	SCENARIO_TEMPLATES,
-	type ScenarioTemplateId,
-} from "@/lib/presets";
+import { getScenarioTemplate, SCENARIO_TEMPLATES, type ScenarioTemplateId } from "@/lib/presets";
 import {
 	ACTION_LABEL_ZH,
 	AI_ACTION_BUSY_EVENT,
@@ -508,12 +504,14 @@ function AIEnhancePanelImpl(): ReactNode {
 										data-ai-enhance-template={scenario.id}
 										onMouseEnter={(event) => {
 											if (!active) {
-												event.currentTarget.style.background = COLORS.bgSecondary;
+												event.currentTarget.style.background =
+													COLORS.bgSecondary;
 											}
 										}}
 										onMouseLeave={(event) => {
 											if (!active) {
-												event.currentTarget.style.background = COLORS.bgPrimary;
+												event.currentTarget.style.background =
+													COLORS.bgPrimary;
 											}
 										}}
 									>
@@ -587,7 +585,9 @@ function AIEnhancePanelImpl(): ReactNode {
 							<ul style={HISTORY_LIST_STYLE}>
 								{history.map((item) => {
 									const dotStyle =
-										item.status === "error" ? STATUS_DOT_FAIL_STYLE : STATUS_DOT_DONE_STYLE;
+										item.status === "error"
+											? STATUS_DOT_FAIL_STYLE
+											: STATUS_DOT_DONE_STYLE;
 									const timeStr = new Date(item.timestamp).toLocaleTimeString(
 										"zh-CN",
 										{ hour: "2-digit", minute: "2-digit" },
@@ -597,7 +597,8 @@ function AIEnhancePanelImpl(): ReactNode {
 										<li key={item.id} style={HISTORY_ITEM_STYLE}>
 											<span style={dotStyle} />
 											<span style={{ flex: 1 }}>
-												{timeStr} · {item.scenarioName} · {item.actionCount} 项 · {durStr}
+												{timeStr} · {item.scenarioName} · {item.actionCount}{" "}
+												项 · {durStr}
 											</span>
 											<span
 												style={{
