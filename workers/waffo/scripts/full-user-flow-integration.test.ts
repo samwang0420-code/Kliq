@@ -91,6 +91,7 @@ import {
 	getHotwords,
 	listDomains,
 } from "@/lib/hotwords";
+import { execSync as es } from "node:child_process";
 
 const stepResults: Array<{ stage: string; step: string; ok: boolean; detail: string }> = [];
 
@@ -869,6 +870,45 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 		ok_("8.4", "AIEnhancePanel §58-3 历史侧栏", aiEnhanceContent.includes("data-ai-enhance-history"));
 		ok_("8.4", "AIEnhancePanel §58-3 居中大对话框", aiEnhanceContent.includes("data-ai-enhance-panel"));
 		ok_("8.4", "AIEnhancePanel §58-3 progress bar", aiEnhanceContent.includes("data-ai-enhance-progress"));
+
+		// ===== 阶段 9 — §59 注册用户系统 + 简化 AI + Free/Lifetime 集成验证 =====
+		// 9.1 §59-7/§59-8: Auth API + AccountTab 注册/登录形态 (注册走 §59-7, 旧 license 输入已删)
+		const accountTabContent = fs.readFileSync(path.resolve(process.cwd(), "src/components/account/tabs/AccountTab.tsx"), "utf-8");
+		ok_("9.1", "AccountTab §59-7 含注册 / 登录表单 (§59-7 形态)", accountTabContent.includes("注册") && accountTabContent.includes("登录"));
+		ok_("9.1", "AccountTab §59-7 引用 authApi register / login", accountTabContent.includes("apiRegister") && accountTabContent.includes("login"));
+
+		// 9.2 §59-8: ProTab 2 档 (Free + Lifetime only, 已 8.2 验证, 这里加 grep 反向断言)
+		ok_("9.2", "ProTab §59-8 全工作区无 'id: \"pro\"' tier id", !proTabContent.includes("id: \"pro\""));
+		ok_("9.2", "ProTab §59-8 全工作区无 'id: \"team\"' tier id", !proTabContent.includes("id: \"team\""));
+		ok_("9.2", "ProTab §59-8 改用 useAuth 推断 tier", proTabContent.includes("useAuth"));
+
+		// 9.3 §59-9: AiServiceSection 单 dropdown (§213 inline 极简风, §59-10 已删 anthropic/custom)
+		const aiServiceContent = fs.readFileSync(path.resolve(process.cwd(), "src/components/account/AiServiceSection.tsx"), "utf-8");
+		ok_("9.3", "AiServiceSection §59-9 单 dropdown (data-testid ai-backend-select)", aiServiceContent.includes("data-testid=\"ai-backend-select\""));
+		ok_("9.3", "AiServiceSection §59-9 单 key 输入 (data-testid ai-key-input)", aiServiceContent.includes("data-testid=\"ai-key-input\""));
+		ok_("9.3", "AiServiceSection §59-9 删 ProviderCard 双卡", !aiServiceContent.includes("ProviderCard"));
+		ok_("9.3", "AiServiceSection §59-9 §213 inline 极简风 (黑/白/8px 圆角/160ms ease)", aiServiceContent.includes("§213") || aiServiceContent.includes("cubic-bezier(0.16, 1, 0.3, 1)"));
+
+		// 9.4 §59-10: apiKeys.ts 删 anthropic / custom, 只 openai / deepseek
+		const apiKeysContent = fs.readFileSync(path.resolve(process.cwd(), "src/lib/apiKeys.ts"), "utf-8");
+		ok_("9.4", "apiKeys.ts §59-10 ApiProvider 2 选 1", apiKeysContent.includes("\"openai\" | \"deepseek\""));
+		ok_("9.4", "apiKeys.ts §59-10 删 anthropic case", !apiKeysContent.includes("case \"anthropic\":"));
+		ok_("9.4", "apiKeys.ts §59-10 删 custom case", !apiKeysContent.includes("case \"custom\":"));
+		ok_("9.4", "apiKeys.ts §59-10 validateApiKeyFormat 只 2 case", (apiKeysContent.match(/case \"(openai|deepseek|anthropic|custom)\":/g) || []).length === 2);
+
+		// 9.5 §59 静态 grep: 全工作区老路径清空
+		try {
+			const proIdCount = es('grep -rn "id: \"pro\"" --include="*.ts" --include="*.tsx" src/ 2>/dev/null | grep -v ".bak" | wc -l').toString().trim();
+			ok_("9.5", "全工作区无 Pro tier id 残留 (§59-8)", proIdCount === "0");
+			const teamIdCount = es('grep -rn "id: \"team\"" --include="*.ts" --include="*.tsx" src/ 2>/dev/null | grep -v ".bak" | wc -l').toString().trim();
+			ok_("9.5", "全工作区无 Team tier id 残留 (§59-8)", teamIdCount === "0");
+			const anthropicCount = es('grep -rn "anthropic" --include="*.ts" --include="*.tsx" src/ 2>/dev/null | grep -v " * \*" | grep -v "//" | grep -v ".bak" | wc -l').toString().trim();
+			ok_("9.5", "全工作区 anthropic 零引用 (§59-10)", anthropicCount === "0");
+			const customCount = es('grep -rn "yanjing\\.apiKeys\\.custom" --include="*.ts" --include="*.tsx" src/ 2>/dev/null | grep -v ".bak" | wc -l').toString().trim();
+			ok_("9.5", "全工作区 apiKeys.custom 零引用 (§59-10)", customCount === "0");
+		} catch (err) {
+			console.warn("§59 stage 9.5 grep skipped:", err);
+		}
 
 		// ===== FINAL: 失败统计 =====
 		console.log("\n");
