@@ -24,11 +24,13 @@ export function AiTab(): ReactNode {
 				<AiServiceSection isProActive={false} />
 			</section>
 
-			<section
-				className="rounded-lg border border-dashed border-border/60 px-4 py-3"
-			>
+			<section className="rounded-lg border border-dashed border-border/60 px-4 py-3">
 				<div className="flex items-start gap-2">
-					<Lightning size={14} weight="duotone" className="mt-0.5 shrink-0 text-muted-foreground" />
+					<Lightning
+						size={14}
+						weight="duotone"
+						className="mt-0.5 shrink-0 text-muted-foreground"
+					/>
 					<div className="flex-1">
 						<p className="text-xs text-muted-foreground">
 							{t(

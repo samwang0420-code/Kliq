@@ -844,7 +844,8 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 		// 7.11 AccountCenterPanel 4 Tab 路由
 		const acpPath = path.resolve(process.cwd(), "src/components/account/AccountCenterPanel.tsx");
 		const acpContent = fs.readFileSync(acpPath, "utf-8");
-		ok_("7.11", "AccountCenterPanel import 4 tabs", acpContent.includes('import { AccountTab }') && acpContent.includes('import { ProTab }') && acpContent.includes('import { AiTab }') && acpContent.includes('import { HelpTab }'));
+		const acpFlat = acpContent.replace(/\s+/g, " ");
+		ok_("7.11", "AccountCenterPanel import 4 tabs", ["AccountTab", "ProTab", "AiTab", "HelpTab"].every((t) => new RegExp(`\\b${t}\\b`).test(acpFlat)));
 		ok_("7.11", "AccountCenterPanel TABS 4 个", (acpContent.match(/"id": "account"|\{ id: "account"|\{ id: "pro"|\{ id: "ai"|\{ id: "help"/g) || []).length >= 4);
 
 		// ===== 阶段 8 — §58 重设计: 居中大对话框 + ProTab 4 档 + AI 增强 workbuddy 模式 =====

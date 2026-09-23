@@ -550,9 +550,13 @@ export function CheckoutPage({
 											color: C.g400,
 										}}
 									>
-										{t("common.yanjing.account.planProPrice", "${{price}} / year", {
-											price: proPrice,
-										})}
+										{t(
+											"common.yanjing.account.planProPrice",
+											"${{price}} / year",
+											{
+												price: proPrice,
+											},
+										)}
 									</p>
 									<p
 										style={{
@@ -588,17 +592,23 @@ export function CheckoutPage({
 											transition: "all 140ms ease",
 										}}
 										onMouseEnter={(e) => {
-											if (!isProActive) e.currentTarget.style.background = C.g50;
+											if (!isProActive)
+												e.currentTarget.style.background = C.g50;
 										}}
 										onMouseLeave={(e) => {
-											if (!isProActive) e.currentTarget.style.background = C.paper;
+											if (!isProActive)
+												e.currentTarget.style.background = C.paper;
 										}}
 									>
 										{isProActive
 											? t("common.yanjing.license.activated", "Pro Active")
-											: t("common.yanjing.account.ctaBuyPro", "Buy Pro · ${{price}}", {
-													price: proPrice,
-												})}
+											: t(
+													"common.yanjing.account.ctaBuyPro",
+													"Buy Pro · ${{price}}",
+													{
+														price: proPrice,
+													},
+												)}
 									</button>
 								</article>
 
@@ -630,7 +640,10 @@ export function CheckoutPage({
 											letterSpacing: "0.06em",
 										}}
 									>
-										{t("common.yanjing.account.planLifetimeBadge", "Most popular")}
+										{t(
+											"common.yanjing.account.planLifetimeBadge",
+											"Most popular",
+										)}
 									</div>
 									<p
 										style={{
@@ -640,10 +653,7 @@ export function CheckoutPage({
 											color: C.paper,
 										}}
 									>
-										{t(
-											"common.yanjing.account.planLifetimeName",
-											"Lifetime",
-										)}
+										{t("common.yanjing.account.planLifetimeName", "Lifetime")}
 									</p>
 									<p
 										style={{
@@ -785,12 +795,7 @@ export function CheckoutPage({
 												color: C.ink,
 											}}
 										>
-											<span>
-												{t(
-													`common.yanjing.account.${qKey}`,
-													qKey,
-												)}
-											</span>
+											<span>{t(`common.yanjing.account.${qKey}`, qKey)}</span>
 											<span
 												style={{
 													color: C.g600,
@@ -813,10 +818,7 @@ export function CheckoutPage({
 												color: C.g600,
 											}}
 										>
-											{t(
-												`common.yanjing.account.${aKey}`,
-												aKey,
-											)}
+											{t(`common.yanjing.account.${aKey}`, aKey)}
 										</p>
 									</details>
 								))}

@@ -29,11 +29,9 @@ import {
 import { type CSSProperties, type ReactNode, useCallback, useEffect, useState } from "react";
 import { useScopedT } from "@/contexts/I18nContext";
 import { useLicenseStatus } from "@/hooks/useLicenseStatus";
+import { activateLicense, deactivateLicense } from "@/lib/license";
 import {
-	activateLicense,
-	deactivateLicense,
-} from "@/lib/license";
-import {
+	buildLicenseRequestMailto,
 	isCheckoutConfigured,
 	KLQ_LIFETIME_PRICE_USD,
 	KLQ_PRO_CHECKOUT_URL,
@@ -42,7 +40,6 @@ import {
 	KLQ_TEAM_PRICE_USD,
 	KLQ_WAFFO_BRIDGE_SECRET,
 	KLQ_WAFFO_WORKER_URL,
-	buildLicenseRequestMailto,
 } from "@/lib/licenseConfig";
 import { toast } from "@/lib/toast";
 
@@ -102,10 +99,7 @@ async function openCheckout(kind: CheckoutKind): Promise<void> {
 		}
 		window.open(data.checkoutUrl, "_blank", "noopener,noreferrer");
 	} catch (err) {
-		toast.error(
-			"打开结算页失败:" +
-				(err instanceof Error ? err.message : String(err)),
-		);
+		toast.error("打开结算页失败:" + (err instanceof Error ? err.message : String(err)));
 	}
 }
 
@@ -225,7 +219,7 @@ function getTierCardStyle(tier: Tier): CSSProperties {
 		padding: "20px 16px",
 		background: COLORS.bgPrimary,
 		display: "flex",
-			flexDirection: "column",
+		flexDirection: "column",
 		gap: "12px",
 		position: "relative",
 		transition: "all 140ms " + EASE,
@@ -427,23 +421,14 @@ export function ProTab(): ReactNode {
 		if (!key) return;
 		const result = await activateLicense(key);
 		if (!result.success) {
-			toast.error(
-				result.error ?? t("yanjing.account.revalidateFail", "校验失败"),
-			);
+			toast.error(result.error ?? t("yanjing.account.revalidateFail", "校验失败"));
 			return;
 		}
 		if (result.notice) {
-			toast.warning(
-				t(
-					"yanjing.account.revalidateOffline",
-					"校验服务不可用，仍为离线状态",
-				),
-			);
+			toast.warning(t("yanjing.account.revalidateOffline", "校验服务不可用，仍为离线状态"));
 			return;
 		}
-		toast.success(
-			t("yanjing.account.revalidateOk", "已与服务器确认，Pro 状态已更新"),
-		);
+		toast.success(t("yanjing.account.revalidateOk", "已与服务器确认，Pro 状态已更新"));
 	}, [status.licenseKey, t]);
 
 	// ----- 已激活视图 -----
@@ -453,7 +438,11 @@ export function ProTab(): ReactNode {
 				{/* Mock mode banner (即使已激活也显示, 提醒用户当前 checkout 模式) */}
 				{isMockMode && (
 					<div style={MOCK_BANNER_STYLE}>
-						<WarningCircle size={14} weight="bold" style={{ marginTop: 2, flexShrink: 0 }} />
+						<WarningCircle
+							size={14}
+							weight="bold"
+							style={{ marginTop: 2, flexShrink: 0 }}
+						/>
 						<div>
 							<p style={{ margin: 0, fontWeight: 600 }}>
 								{t("yanjing.pro.checkoutStatusMock", "Mock 模式 · 支付集成未启用")}
@@ -486,10 +475,23 @@ export function ProTab(): ReactNode {
 					<div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
 						<Crown size={28} weight="duotone" style={{ color: COLORS.accent }} />
 						<div>
-							<h2 style={{ margin: 0, fontSize: "17px", fontWeight: 600, color: COLORS.textPrimary }}>
+							<h2
+								style={{
+									margin: 0,
+									fontSize: "17px",
+									fontWeight: 600,
+									color: COLORS.textPrimary,
+								}}
+							>
 								{t("yanjing.account.tabPro", "Pro 会员")}
 							</h2>
-							<p style={{ margin: "2px 0 0 0", fontSize: "12px", color: COLORS.textSecondary }}>
+							<p
+								style={{
+									margin: "2px 0 0 0",
+									fontSize: "12px",
+									color: COLORS.textSecondary,
+								}}
+							>
 								{isLifetime
 									? t("yanjing.account.subscriptionPermanent", "永久使用")
 									: t("yanjing.account.subscriptionYearly", "年订阅")}
@@ -538,15 +540,17 @@ export function ProTab(): ReactNode {
 							<p style={{ margin: 0, fontWeight: 600, color: COLORS.textPrimary }}>
 								{t("yanjing.pro.expiryTitle", "Pro 到期")}
 							</p>
-							<p style={{ margin: "2px 0 0 0", fontSize: "12px", color: COLORS.textSecondary }}>
-								{t(
-									"yanjing.pro.expiryBody",
-									"{{date}} · 剩余 {{remain}}",
-									{
-										date: new Date(status.expiresAt).toLocaleString(),
-										remain: formatCountdown(status.expiresAt, now),
-									},
-								)}
+							<p
+								style={{
+									margin: "2px 0 0 0",
+									fontSize: "12px",
+									color: COLORS.textSecondary,
+								}}
+							>
+								{t("yanjing.pro.expiryBody", "{{date}} · 剩余 {{remain}}", {
+									date: new Date(status.expiresAt).toLocaleString(),
+									remain: formatCountdown(status.expiresAt, now),
+								})}
 							</p>
 						</div>
 					</div>
@@ -569,18 +573,10 @@ export function ProTab(): ReactNode {
 
 				{/* License 操作 */}
 				<div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-					<button
-						type="button"
-						onClick={handleRevalidate}
-						style={ACTION_BTN_STYLE}
-					>
+					<button type="button" onClick={handleRevalidate} style={ACTION_BTN_STYLE}>
 						{t("yanjing.account.ctaRevalidate", "重新校验")}
 					</button>
-					<button
-						type="button"
-						onClick={handleDeactivate}
-						style={ACTION_BTN_STYLE}
-					>
+					<button type="button" onClick={handleDeactivate} style={ACTION_BTN_STYLE}>
 						{t("yanjing.license.deactivate", "停用")}
 					</button>
 				</div>
@@ -593,7 +589,11 @@ export function ProTab(): ReactNode {
 		<div>
 			{isMockMode && (
 				<div style={{ ...MOCK_BANNER_STYLE, marginBottom: "20px" }}>
-					<WarningCircle size={14} weight="bold" style={{ marginTop: 2, flexShrink: 0 }} />
+					<WarningCircle
+						size={14}
+						weight="bold"
+						style={{ marginTop: 2, flexShrink: 0 }}
+					/>
 					<div>
 						<p style={{ margin: 0, fontWeight: 600 }}>
 							{t("yanjing.pro.checkoutStatusMock", "Mock 模式 · 支付集成未启用")}
@@ -610,7 +610,12 @@ export function ProTab(): ReactNode {
 
 			<div style={TIER_GRID_STYLE}>
 				{TIERS.map((tier) => {
-					const price = tier.id === "pro" ? KLQ_PRO_PRICE_USD : tier.id === "lifetime" ? KLQ_LIFETIME_PRICE_USD : KLQ_TEAM_PRICE_USD;
+					const price =
+						tier.id === "pro"
+							? KLQ_PRO_PRICE_USD
+							: tier.id === "lifetime"
+								? KLQ_LIFETIME_PRICE_USD
+								: KLQ_TEAM_PRICE_USD;
 					const cardStyle = getTierCardStyle(tier);
 					const ctaStyle = tier.highlight
 						? TIER_CTA_HIGHLIGHT_STYLE
@@ -625,7 +630,13 @@ export function ProTab(): ReactNode {
 								</span>
 							)}
 							<h3 style={TIER_NAME_STYLE}>
-								{tier.id === "team" ? <Users size={15} weight="duotone" /> : tier.id === "lifetime" ? <Crown size={15} weight="duotone" /> : <Sparkle size={15} weight="duotone" />}
+								{tier.id === "team" ? (
+									<Users size={15} weight="duotone" />
+								) : tier.id === "lifetime" ? (
+									<Crown size={15} weight="duotone" />
+								) : (
+									<Sparkle size={15} weight="duotone" />
+								)}
 								{t(tier.nameKey, tier.nameFallback)}
 							</h3>
 							<div>
@@ -636,11 +647,24 @@ export function ProTab(): ReactNode {
 							</div>
 							<ul style={TIER_FEATURE_LIST_STYLE}>
 								{tier.features.map((feat, idx) => (
-									<li key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "6px" }}>
+									<li
+										key={idx}
+										style={{
+											display: "flex",
+											alignItems: "flex-start",
+											gap: "6px",
+										}}
+									>
 										<Check
 											size={12}
 											weight="bold"
-											style={{ color: tier.highlight ? COLORS.accent : COLORS.textMuted, marginTop: 3, flexShrink: 0 }}
+											style={{
+												color: tier.highlight
+													? COLORS.accent
+													: COLORS.textMuted,
+												marginTop: 3,
+												flexShrink: 0,
+											}}
 										/>
 										<span>{t(feat.key, feat.fallback)}</span>
 									</li>
@@ -678,7 +702,14 @@ export function ProTab(): ReactNode {
 			</div>
 
 			{/* FAQ 提示 */}
-			<div style={{ marginTop: "20px", fontSize: "11px", color: COLORS.textMuted, lineHeight: 1.5 }}>
+			<div
+				style={{
+					marginTop: "20px",
+					fontSize: "11px",
+					color: COLORS.textMuted,
+					lineHeight: 1.5,
+				}}
+			>
 				{t(
 					"yanjing.account.tierFootnote",
 					"所有 AI 功能调用你自己的 OpenAI / DeepSeek API · Kliq 不收 AI 用量费 · 30 天无理由退款",

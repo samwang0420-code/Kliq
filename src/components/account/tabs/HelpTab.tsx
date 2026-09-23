@@ -9,11 +9,11 @@ import {
 import { type ReactNode, useState } from "react";
 import { useScopedT } from "@/contexts/I18nContext";
 import {
+	buildLicenseRequestMailto,
 	KLQ_ISSUES_URL,
 	KLQ_LICENSE_REQUEST_EMAIL,
 	KLQ_REFUND_POLICY_URL,
 	KLQ_REPO_URL,
-	buildLicenseRequestMailto,
 } from "@/lib/licenseConfig";
 
 type FaqItem = { qKey: string; qFallback: string; aKey: string; aFallback: string };
@@ -51,7 +51,15 @@ const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
 	},
 ];
 
-function MailLink({ to, subject, children }: { to: string; subject: string; children: ReactNode }): ReactNode {
+function MailLink({
+	to,
+	subject,
+	children,
+}: {
+	to: string;
+	subject: string;
+	children: ReactNode;
+}): ReactNode {
 	const href = "mailto:" + to + "?subject=" + encodeURIComponent(subject);
 	return (
 		<a
@@ -76,10 +84,7 @@ export function HelpTab(): ReactNode {
 					{t("yanjing.account.tabHelp", "帮助")}
 				</h3>
 				<div className="flex flex-col gap-2">
-					<MailLink
-						to={KLQ_LICENSE_REQUEST_EMAIL}
-						subject="Kliq Help"
-					>
+					<MailLink to={KLQ_LICENSE_REQUEST_EMAIL} subject="Kliq Help">
 						<Envelope size={13} />
 						{t("yanjing.account.recoverActionEmail", "写邮件申请")}
 					</MailLink>
@@ -147,9 +152,18 @@ export function HelpTab(): ReactNode {
 			{/* 关于 / AGPL */}
 			<section className="rounded-lg border border-dashed border-border/60 px-4 py-3">
 				<div className="flex items-start gap-2">
-					<Info size={12} weight="bold" className="mt-0.5 shrink-0 text-muted-foreground" />
+					<Info
+						size={12}
+						weight="bold"
+						className="mt-0.5 shrink-0 text-muted-foreground"
+					/>
 					<div className="flex-1 text-[11px] leading-relaxed text-muted-foreground">
-						<p>{t("yanjing.account.licenseNote", "AGPL 3.0 · 基于 Recordly 修改 · 独立维护")}</p>
+						<p>
+							{t(
+								"yanjing.account.licenseNote",
+								"AGPL 3.0 · 基于 Recordly 修改 · 独立维护",
+							)}
+						</p>
 						<a
 							href={KLQ_REPO_URL}
 							target="_blank"
@@ -165,20 +179,17 @@ export function HelpTab(): ReactNode {
 			</section>
 
 			{/* 意见反馈 (TODO 占位, 沿 §18 不主动做) */}
-			<section
-				className="rounded-lg border border-dashed border-border/60 px-4 py-3"
-			>
+			<section className="rounded-lg border border-dashed border-border/60 px-4 py-3">
 				<div className="flex items-start gap-2">
 					<ChatCircleDots size={13} className="mt-0.5 shrink-0 text-muted-foreground" />
 					<p className="text-[11px] leading-relaxed text-muted-foreground">
-						{t(
-							"yanjing.account.feedback",
-							"反馈问题",
-						)}{" "}
-						→{" "}
+						{t("yanjing.account.feedback", "反馈问题")} →{" "}
 						<MailLink
 							to={KLQ_LICENSE_REQUEST_EMAIL}
-							subject={buildLicenseRequestMailto("recover").split("?subject=")[1] ?? "Kliq Feedback"}
+							subject={
+								buildLicenseRequestMailto("recover").split("?subject=")[1] ??
+								"Kliq Feedback"
+							}
 						>
 							<Envelope size={11} />
 							{KLQ_LICENSE_REQUEST_EMAIL}

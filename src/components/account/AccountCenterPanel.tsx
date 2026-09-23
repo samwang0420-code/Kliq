@@ -13,13 +13,13 @@
  *  - 闸门命中时自动切到 Pro 会员 Tab (openAccountCenter(feature))
  */
 
-import { type CSSProperties, type ReactNode, memo, useCallback, useEffect, useState } from "react";
+import { type CSSProperties, memo, type ReactNode, useCallback, useEffect, useState } from "react";
 import { useScopedT } from "@/contexts/I18nContext";
 import { useLicenseStatus } from "@/hooks/useLicenseStatus";
-import { AccountTab } from "./tabs/AccountTab";
+import { featureLabel as _featureLabel, AccountTab } from "./tabs/AccountTab";
 import { AiTab } from "./tabs/AiTab";
-import { featureLabel as _featureLabel } from "./tabs/AccountTab";
 export const featureLabel = _featureLabel;
+
 import { HelpTab } from "./tabs/HelpTab";
 import { ProTab } from "./tabs/ProTab";
 

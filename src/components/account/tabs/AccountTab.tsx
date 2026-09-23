@@ -1,23 +1,8 @@
-import {
-	ArrowSquareOut,
-	Copy,
-	DownloadSimple,
-	Info,
-	UploadSimple,
-} from "@phosphor-icons/react";
-import {
-	type ReactNode,
-	useCallback,
-	useRef,
-	useState,
-} from "react";
+import { ArrowSquareOut, Copy, DownloadSimple, Info, UploadSimple } from "@phosphor-icons/react";
+import { type ReactNode, useCallback, useRef, useState } from "react";
 import { useScopedT } from "@/contexts/I18nContext";
 import { useLicenseStatus } from "@/hooks/useLicenseStatus";
-import {
-	activateLicense,
-	deactivateLicense,
-	maskLicenseKey,
-} from "@/lib/license";
+import { activateLicense, deactivateLicense, maskLicenseKey } from "@/lib/license";
 import {
 	buildLicenseBackup,
 	type LicenseBackupErrorReason,
@@ -25,39 +10,34 @@ import {
 	serializeLicenseBackup,
 	suggestLicenseBackupFileName,
 } from "@/lib/licenseBackup";
-import {
-	isLicenseServiceConfigured,
-	KLQ_LICENSE_REQUEST_EMAIL,
-} from "@/lib/licenseConfig";
+import { isLicenseServiceConfigured, KLQ_LICENSE_REQUEST_EMAIL } from "@/lib/licenseConfig";
 import { toast } from "@/lib/toast";
 
 const ACCENT = "#22c55e";
 
-const BACKUP_REASON_MESSAGES: Record<
-	LicenseBackupErrorReason,
-	{ key: string; fallback: string }
-> = {
-	notJson: {
-		key: "common.yanjing.account.backupReasonNotJson",
-		fallback: "文件内容不是合法的 JSON",
-	},
-	notObject: {
-		key: "common.yanjing.account.backupReasonNotObject",
-		fallback: "文件结构不对",
-	},
-	wrongFormat: {
-		key: "common.yanjing.account.backupReasonWrongFormat",
-		fallback: "这不是 Kliq 的许可证备份文件",
-	},
-	unsupportedVersion: {
-		key: "common.yanjing.account.backupReasonUnsupportedVersion",
-		fallback: "备份文件版本不受支持，请升级应用后再试",
-	},
-	invalidKey: {
-		key: "common.yanjing.account.backupReasonInvalidKey",
-		fallback: "备份里的许可证密钥格式无效",
-	},
-};
+const BACKUP_REASON_MESSAGES: Record<LicenseBackupErrorReason, { key: string; fallback: string }> =
+	{
+		notJson: {
+			key: "common.yanjing.account.backupReasonNotJson",
+			fallback: "文件内容不是合法的 JSON",
+		},
+		notObject: {
+			key: "common.yanjing.account.backupReasonNotObject",
+			fallback: "文件结构不对",
+		},
+		wrongFormat: {
+			key: "common.yanjing.account.backupReasonWrongFormat",
+			fallback: "这不是 Kliq 的许可证备份文件",
+		},
+		unsupportedVersion: {
+			key: "common.yanjing.account.backupReasonUnsupportedVersion",
+			fallback: "备份文件版本不受支持，请升级应用后再试",
+		},
+		invalidKey: {
+			key: "common.yanjing.account.backupReasonInvalidKey",
+			fallback: "备份里的许可证密钥格式无效",
+		},
+	};
 
 const FEATURE_LABEL_FALLBACKS: Record<string, string> = {
 	transcribe: "AI 转录（语音转文字）",
@@ -86,9 +66,7 @@ export function AccountTab(): ReactNode {
 	const isProActive = status.activated && status.tier === "pro";
 
 	const [licenseKey, setLicenseKey] = useState("");
-	const [busy, setBusy] = useState<"activating" | "deactivating" | "revalidating" | null>(
-		null,
-	);
+	const [busy, setBusy] = useState<"activating" | "deactivating" | "revalidating" | null>(null);
 	const restoreInputRef = useRef<HTMLInputElement | null>(null);
 
 	const handleActivate = useCallback(async () => {
@@ -101,9 +79,7 @@ export function AccountTab(): ReactNode {
 		try {
 			const result = await activateLicense(key);
 			if (!result.success) {
-				toast.error(
-					result.error ?? t("yanjing.license.invalidKey", "无效的许可证密钥"),
-				);
+				toast.error(result.error ?? t("yanjing.license.invalidKey", "无效的许可证密钥"));
 				return;
 			}
 			setLicenseKey("");
@@ -135,9 +111,7 @@ export function AccountTab(): ReactNode {
 		void navigator.clipboard
 			.writeText(key)
 			.then(() => toast.success(t("yanjing.account.copied", "已复制")))
-			.catch(() =>
-				toast.error(t("yanjing.account.copyFail", "复制失败，请手动抄写许可证")),
-			);
+			.catch(() => toast.error(t("yanjing.account.copyFail", "复制失败，请手动抄写许可证")));
 	}, [status.licenseKey, t]);
 
 	const handleRevalidate = useCallback(async () => {
@@ -147,23 +121,16 @@ export function AccountTab(): ReactNode {
 		try {
 			const result = await activateLicense(key);
 			if (!result.success) {
-				toast.error(
-					result.error ?? t("yanjing.account.revalidateFail", "校验失败"),
-				);
+				toast.error(result.error ?? t("yanjing.account.revalidateFail", "校验失败"));
 				return;
 			}
 			if (result.notice) {
 				toast.warning(
-					t(
-						"yanjing.account.revalidateOffline",
-						"校验服务不可用，仍为离线状态",
-					),
+					t("yanjing.account.revalidateOffline", "校验服务不可用，仍为离线状态"),
 				);
 				return;
 			}
-			toast.success(
-				t("yanjing.account.revalidateOk", "已与服务器确认，Pro 状态已更新"),
-			);
+			toast.success(t("yanjing.account.revalidateOk", "已与服务器确认，Pro 状态已更新"));
 		} finally {
 			setBusy(null);
 		}
@@ -190,9 +157,7 @@ export function AccountTab(): ReactNode {
 			window.setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
 			toast.success(t("yanjing.account.backupExported", "已导出备份文件"));
 		} catch {
-			toast.error(
-				t("yanjing.account.backupFailed", "导出失败，请改用上方的复制密钥"),
-			);
+			toast.error(t("yanjing.account.backupFailed", "导出失败，请改用上方的复制密钥"));
 		}
 	}, [status, t]);
 
@@ -210,14 +175,11 @@ export function AccountTab(): ReactNode {
 				const result = await activateLicense(licenseKey);
 				if (!result.success) {
 					toast.error(
-						result.error ??
-							t("yanjing.license.invalidKey", "无效的许可证密钥"),
+						result.error ?? t("yanjing.license.invalidKey", "无效的许可证密钥"),
 					);
 					return;
 				}
-				toast.success(
-					t("yanjing.account.backupRestored", "已从备份恢复，Pro 已重新激活"),
-				);
+				toast.success(t("yanjing.account.backupRestored", "已从备份恢复，Pro 已重新激活"));
 			} catch {
 				toast.error(
 					t("yanjing.account.backupReadFailed", "无法读取该文件，请确认它不是加密的"),
@@ -229,8 +191,8 @@ export function AccountTab(): ReactNode {
 
 	const machineName =
 		typeof navigator !== "undefined"
-			? (navigator as { userAgentData?: { platform?: string } }).userAgentData?.platform ??
-			  "Mac"
+			? ((navigator as { userAgentData?: { platform?: string } }).userAgentData?.platform ??
+				"Mac")
 			: "Unknown";
 
 	return (
@@ -282,7 +244,9 @@ export function AccountTab(): ReactNode {
 							<div className="flex items-center justify-between gap-4">
 								<dt>{t("yanjing.account.currentKey", "当前许可证")}</dt>
 								<dd className="flex items-center gap-1.5">
-									<span className="font-mono">{maskLicenseKey(status.licenseKey)}</span>
+									<span className="font-mono">
+										{maskLicenseKey(status.licenseKey)}
+									</span>
 									<button
 										type="button"
 										onClick={handleCopyKey}
@@ -448,7 +412,11 @@ export function AccountTab(): ReactNode {
 
 			<section className="rounded-lg border border-dashed border-border/60 px-4 py-3">
 				<div className="flex items-start gap-2">
-					<Info size={12} weight="bold" className="mt-0.5 shrink-0 text-muted-foreground" />
+					<Info
+						size={12}
+						weight="bold"
+						className="mt-0.5 shrink-0 text-muted-foreground"
+					/>
 					<p className="text-[11px] leading-relaxed text-muted-foreground">
 						{t(
 							"yanjing.account.licenseNote",
