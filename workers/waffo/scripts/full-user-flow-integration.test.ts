@@ -75,6 +75,17 @@ import {
 	validateApiKeyFormat,
 } from "@/lib/apiKeys";
 import {
+	FEATURE_LABEL_TO_ACTION,
+	resolveScenarioActions,
+	shortLabelForAction,
+	formatElapsed,
+	formatRemain,
+} from "@/components/video-editor/ai-enhance/helpers";
+import {
+	SCENARIO_TEMPLATES,
+	getScenarioTemplate,
+} from "@/lib/presets";
+import {
 	buildGptSystemPromptFragment,
 	buildWhisperPrompt,
 	getHotwords,
@@ -763,6 +774,78 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 				body.slice(0, 50),
 			);
 		}
+
+		// ===== 阶段 7 — AI 增强场景化 (§57-2) =====
+		// 7.1 5 个场景模板存在, 每个有 features array
+		const SCENARIO_IDS = ["liveStream", "teaching", "demo", "interview", "sales"] as const;
+		for (const id of SCENARIO_IDS) {
+			ok_("7.1", `场景 ${id} 在 SCENARIO_TEMPLATES`, SCENARIO_TEMPLATES[id] !== undefined);
+			ok_("7.1", `场景 ${id} 有 features`, Array.isArray(SCENARIO_TEMPLATES[id]?.features));
+		}
+
+		// 7.2 scenario features -> AIAction 映射
+		for (const id of SCENARIO_IDS) {
+			const t = SCENARIO_TEMPLATES[id];
+			const actions = resolveScenarioActions(t);
+			ok_("7.2", `${id} 解析出 actions`, actions.length > 0, `${actions.length} 个`);
+			for (const a of actions) {
+				ok_("7.2", `${id}.${a} 是合法 AIAction`, shortLabelForAction(a).length > 0);
+			}
+		}
+
+		// 7.3 dedup + 防御 typo
+		const fakeDup = { ...SCENARIO_TEMPLATES.liveStream, features: ["AI 去静音", "AI 去静音", "AI 章节"] };
+		const dedupActions = resolveScenarioActions(fakeDup);
+		ok_("7.3", "去重保留首次出现", dedupActions.length === 2 && dedupActions[0] === "ai-silence" && dedupActions[1] === "ai-chapters");
+
+		const fakeUnknown = { ...SCENARIO_TEMPLATES.liveStream, features: ["AI 去静音", "Magic 按钮", "AI 章节"] };
+		const unknownActions = resolveScenarioActions(fakeUnknown);
+		ok_("7.3", "未识别 label 静默丢弃", unknownActions.length === 2);
+
+		// 7.4 FEATURE_LABEL_TO_ACTION 覆盖 15 canonical label
+		const CANONICAL_LABELS = ["AI 去静音", "AI 去填充词", "AI 智能加速", "AI 自动取景", "AI 一键剪辑", "AI 章节", "AI 摘要", "AI 标题", "AI 标题备选", "AI 标签", "AI 字幕", "AI 双向字幕", "AI 校对", "AI 多语言字幕", "AI 社媒文案"];
+		for (const label of CANONICAL_LABELS) {
+			ok_("7.4", `FEATURE_LABEL_TO_ACTION 覆盖 "${label}"`, FEATURE_LABEL_TO_ACTION[label] !== undefined);
+		}
+
+		// 7.5 formatElapsed 边界 (<1s / sec / min)
+		ok_("7.5", "formatElapsed(0) = '0s'", formatElapsed(0) === "0s");
+		ok_("7.5", "formatElapsed(500) = '0.5s'", formatElapsed(500) === "0.5s");
+		ok_("7.5", "formatElapsed(1000) = '1s'", formatElapsed(1000) === "1s");
+		ok_("7.5", "formatElapsed(60000) = '1m00s'", formatElapsed(60000) === "1m00s");
+		ok_("7.5", "formatElapsed(83000) = '1m23s'", formatElapsed(83000) === "1m23s");
+
+		// 7.6 formatRemain 边界
+		ok_("7.6", "formatRemain(0) = '完成'", formatRemain(0) === "完成");
+		ok_("7.6", "formatRemain(5000) = '5s'", formatRemain(5000) === "5s");
+		ok_("7.6", "formatRemain(75000) = '1m15s'", formatRemain(75000) === "1m15s");
+
+		// 7.7 getScenarioTemplate
+		ok_("7.7", "getScenarioTemplate('liveStream') === SCENARIO_TEMPLATES.liveStream", getScenarioTemplate("liveStream") === SCENARIO_TEMPLATES.liveStream);
+		ok_("7.7", "getScenarioTemplate('demo') id === 'demo'", getScenarioTemplate("demo").id === "demo");
+
+		// 7.8 AIEnhancePanel 4 组件文件存在性
+		for (const file of ["AIEnhancePanel.tsx", "ScenarioCard.tsx", "FlowTimeline.tsx", "ProgressBar.tsx", "helpers.ts"]) {
+			const p = path.resolve(process.cwd(), "src/components/video-editor/ai-enhance/" + file);
+			ok_("7.8", `文件存在 ${file}`, fs.existsSync(p));
+		}
+
+		// 7.9 EditorShell 挂载 AIEnhancePanel (§57-2 commit)
+		const editorShellPath = path.resolve(process.cwd(), "src/components/video-editor/layout/EditorShell.tsx");
+		const editorShellContent = fs.readFileSync(editorShellPath, "utf-8");
+		ok_("7.9", "EditorShell 导入 AIEnhancePanel", editorShellContent.includes("import { AIEnhancePanel }"));
+		ok_("7.9", "EditorShell 渲染 <AIEnhancePanel />", editorShellContent.includes("<AIEnhancePanel />"));
+
+		// 7.10 AiTab 派发 kliq:open-ai-enhance 事件
+		const aiTabPath = path.resolve(process.cwd(), "src/components/account/tabs/AiTab.tsx");
+		const aiTabContent = fs.readFileSync(aiTabPath, "utf-8");
+		ok_("7.10", "AiTab 派发 kliq:open-ai-enhance", aiTabContent.includes("kliq:open-ai-enhance"));
+
+		// 7.11 AccountCenterPanel 4 Tab 路由
+		const acpPath = path.resolve(process.cwd(), "src/components/account/AccountCenterPanel.tsx");
+		const acpContent = fs.readFileSync(acpPath, "utf-8");
+		ok_("7.11", "AccountCenterPanel import 4 tabs", acpContent.includes('import { AccountTab }') && acpContent.includes('import { ProTab }') && acpContent.includes('import { AiTab }') && acpContent.includes('import { HelpTab }'));
+		ok_("7.11", "AccountCenterPanel TABS 4 个", (acpContent.match(/"id": "account"|\{ id: "account"|\{ id: "pro"|\{ id: "ai"|\{ id: "help"/g) || []).length >= 4);
 
 		// ===== FINAL: 失败统计 =====
 		console.log("\n");
