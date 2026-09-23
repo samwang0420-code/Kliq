@@ -847,6 +847,33 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 		ok_("7.11", "AccountCenterPanel import 4 tabs", acpContent.includes('import { AccountTab }') && acpContent.includes('import { ProTab }') && acpContent.includes('import { AiTab }') && acpContent.includes('import { HelpTab }'));
 		ok_("7.11", "AccountCenterPanel TABS 4 个", (acpContent.match(/"id": "account"|\{ id: "account"|\{ id: "pro"|\{ id: "ai"|\{ id: "help"/g) || []).length >= 4);
 
+		// ===== 阶段 8 — §58 重设计: 居中大对话框 + ProTab 4 档 + AI 增强 workbuddy 模式 =====
+		// 8.1 AccountCenterPanel §58-1: 居中大对话框 (§213 inline 极简风)
+		ok_("8.1", "AccountCenterPanel §58-1 居中大对话框 (max-width 720px)", acpContent.includes("maxWidth: \"720px\""));
+		ok_("8.1", "AccountCenterPanel §58-1 backdrop 关闭", acpContent.includes("data-account-center-overlay"));
+		ok_("8.1", "AccountCenterPanel §58-1 保留 4 Tab 路由", acpContent.includes("data-tab-id"));
+
+		// 8.2 ProTab §58-2: 4 档套餐网格
+		const proTabPath = path.resolve(process.cwd(), "src/components/account/tabs/ProTab.tsx");
+		const proTabContent = fs.readFileSync(proTabPath, "utf-8");
+		ok_("8.2", "ProTab §58-2 4 档套餐 (TIERS 4 项)", proTabContent.includes("id: \"free\"") && proTabContent.includes("id: \"pro\"") && proTabContent.includes("id: \"lifetime\"") && proTabContent.includes("id: \"team\""));
+		ok_("8.2", "ProTab §58-2 Lifetime 最佳价值 badge", proTabContent.includes("badgeBestValue"));
+		ok_("8.2", "ProTab §58-2 Team 暂未开放", proTabContent.includes("暂未开放"));
+		ok_("8.2", "ProTab §58-2 倒计时 banner (Pro 年订阅)", proTabContent.includes("expiryTitle"));
+
+		// 8.3 licenseConfig §58-2: KLQ_TEAM_PRICE_USD
+		const licenseConfigContent = fs.readFileSync(path.resolve(process.cwd(), "src/lib/licenseConfig.ts"), "utf-8");
+		ok_("8.3", "licenseConfig §58-2 加 KLQ_TEAM_PRICE_USD", licenseConfigContent.includes("KLQ_TEAM_PRICE_USD"));
+
+		// 8.4 AIEnhancePanel §58-3: workbuddy 模式
+		const aiEnhanceContent = fs.readFileSync(path.resolve(process.cwd(), "src/components/video-editor/ai-enhance/AIEnhancePanel.tsx"), "utf-8");
+		ok_("8.4", "AIEnhancePanel §58-3 textarea prompt 输入", aiEnhanceContent.includes("data-ai-enhance-prompt"));
+		ok_("8.4", "AIEnhancePanel §58-3 5 模板 chip", aiEnhanceContent.includes("data-ai-enhance-template"));
+		ok_("8.4", "AIEnhancePanel §58-3 一键增强 CTA", aiEnhanceContent.includes("data-ai-enhance-cta"));
+		ok_("8.4", "AIEnhancePanel §58-3 历史侧栏", aiEnhanceContent.includes("data-ai-enhance-history"));
+		ok_("8.4", "AIEnhancePanel §58-3 居中大对话框", aiEnhanceContent.includes("data-ai-enhance-panel"));
+		ok_("8.4", "AIEnhancePanel §58-3 progress bar", aiEnhanceContent.includes("data-ai-enhance-progress"));
+
 		// ===== FINAL: 失败统计 =====
 		console.log("\n");
 		const failed = stepResults.filter((r) => !r.ok);
