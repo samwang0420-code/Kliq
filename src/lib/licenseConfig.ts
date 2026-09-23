@@ -32,6 +32,9 @@ export const KLQ_PRO_PRICE_USD = 12.9;
 /** 一次性买断定价(USD) — Lifetime 永久买断(§50 新增) */
 export const KLQ_LIFETIME_PRICE_USD = 99;
 
+/** 团队版定价(USD) — 仅展示, 桌面离线 fork 不接支付 (§58-2 新增) */
+export const KLQ_TEAM_PRICE_USD = 39;
+
 const rawEnv = (import.meta.env ?? {}) as Record<string, string | undefined>;
 
 function normalizeUrl(value: string | undefined): string {
