@@ -57,7 +57,7 @@ import { cn } from "@/lib/utils";
 // 对外保持既有 import 路径可用（useAIActions / ExportSettingsMenu 从这里取类型）
 export type { AIAction, AIActionGroup, AIInput, AIInputState } from "@/lib/ai/action-inputs";
 
-export type AIProvider = "openai" | "anthropic" | "deepseek";
+export type AIProvider = "openai" | "deepseek";
 
 /** 动作的呈现信息。与逻辑契约（AI_ACTION_SPECS）分成两张表，各自由 Record 强制完整。 */
 type AIActionPresentation = {

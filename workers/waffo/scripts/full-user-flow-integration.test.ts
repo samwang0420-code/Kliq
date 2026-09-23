@@ -687,11 +687,6 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 		ok_("5.x", "openai key 格式对", validateApiKeyFormat("openai", "sk-abcdefghij1234567890"));
 		ok_(
 			"5.x",
-			"anthropic key 格式对",
-			validateApiKeyFormat("anthropic", "sk-ant-abcdefghij1234567890"),
-		);
-		ok_(
-			"5.x",
 			"deepseek key 格式对",
 			validateApiKeyFormat("deepseek", "sk-12345678901234567890"),
 		);

@@ -16,7 +16,7 @@ export type BilingualOptions = {
 	sourceLanguage?: string;
 	targetLanguage: string;
 	hotwordDomain?: HotwordDomain;
-	translateProvider?: "openai" | "anthropic";
+	translateProvider?: "openai" | "deepseek";
 };
 
 export type BilingualCaption = {

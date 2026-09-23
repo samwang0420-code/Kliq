@@ -39,8 +39,6 @@ function createElectronApi(initial: ElectronSettings = {}): {
 export function setupElectronApi(options: {
 	openaiKey?: string | null;
 	deepseekKey?: string | null;
-	anthropicKey?: string | null;
-	customKey?: { apiKey: string; baseUrl?: string; model?: string } | null;
 	chatProvider?: "openai" | "deepseek" | null;
 } = {}): ReturnType<typeof createElectronApi> {
 	const initial: ElectronSettings = {};
@@ -60,23 +58,6 @@ export function setupElectronApi(options: {
 			apiKey: options.deepseekKey,
 			baseUrl: "https://api.deepseek.com/v1",
 			model: "deepseek-chat",
-			updatedAt: now,
-		});
-	}
-	if (options.anthropicKey) {
-		initial["yanjing.apiKeys.anthropic"] = JSON.stringify({
-			provider: "anthropic",
-			apiKey: options.anthropicKey,
-			model: "claude-3-5-sonnet-20241022",
-			updatedAt: now,
-		});
-	}
-	if (options.customKey) {
-		initial["yanjing.apiKeys.custom"] = JSON.stringify({
-			provider: "custom",
-			apiKey: options.customKey.apiKey,
-			baseUrl: options.customKey.baseUrl ?? "http://localhost:11434/v1",
-			model: options.customKey.model ?? "llama3.1",
 			updatedAt: now,
 		});
 	}

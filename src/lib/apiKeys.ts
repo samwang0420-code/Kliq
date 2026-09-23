@@ -1,13 +1,13 @@
 /**
  * Kliq — API Key 管理模块
  *
- * 目标: 安全地把用户的 OpenAI / Anthropic API key 存储在本地,
+ * 目标: 安全地把用户的 OpenAI / DeepSeek API key 存储在本地,
  *       永远不发送到我们的服务器 (我们没有服务器)。
  *
  * 设计原则:
  * 1. **本地存储**: 通过 Electron app.getPath('userData') + electron-settings 存储
  * 2. **永不上传**: 我们的 Cloudflare Pages 是纯静态站, 没有后端
- * 3.1 **Provider**: openai / anthropic / deepseek / custom
+ * 3.1 **Provider**: openai / deepseek (§59-10 用户拍板: 删 anthropic/custom)
  * 3. **明文 vs 加密**: key 仅在用户本地加密存储, 第一次读取时要求用户输入主密码 (可选)
  * 4. **简化模式**: 默认情况下明文存储 (与 .env 文件相同), 用户可选择升级
  *
@@ -17,7 +17,7 @@
 
 const STORAGE_KEY_PREFIX = "yanjing.apiKeys.";
 
-export type ApiProvider = "openai" | "anthropic" | "deepseek" | "custom";
+export type ApiProvider = "openai" | "deepseek";
 
 export type ApiKeyEntry = {
 	provider: ApiProvider;
@@ -99,12 +99,7 @@ export function deleteApiKey(provider: ApiProvider): { success: boolean } {
  * 检查是否有任何 provider 配置
  */
 export function hasAnyApiKey(): boolean {
-	return (
-		getApiKey("openai") !== null ||
-		getApiKey("anthropic") !== null ||
-		getApiKey("deepseek") !== null ||
-		getApiKey("custom") !== null
-	);
+	return getApiKey("openai") !== null || getApiKey("deepseek") !== null;
 }
 
 /**
@@ -113,9 +108,7 @@ export function hasAnyApiKey(): boolean {
 export function listConfiguredProviders(): ApiProvider[] {
 	const providers: ApiProvider[] = [];
 	if (getApiKey("openai")) providers.push("openai");
-	if (getApiKey("anthropic")) providers.push("anthropic");
 	if (getApiKey("deepseek")) providers.push("deepseek");
-	if (getApiKey("custom")) providers.push("custom");
 	return providers;
 }
 
@@ -130,15 +123,9 @@ export function validateApiKeyFormat(provider: ApiProvider, key: string): boolea
 		case "openai":
 			// OpenAI key: sk-... or sk-proj-...
 			return trimmed.startsWith("sk-") && trimmed.length >= 20;
-		case "anthropic":
-			// Anthropic key: sk-ant-...
-			return trimmed.startsWith("sk-ant-") && trimmed.length >= 20;
 		case "deepseek":
 			// DeepSeek key: sk-... (OpenAI-compatible format)
 			return trimmed.startsWith("sk-") && trimmed.length >= 20;
-		case "custom":
-			// Custom provider: 任意非空字符串
-			return trimmed.length >= 10;
 		default:
 			return false;
 	}

@@ -136,20 +136,12 @@ describe("validateApiKeyFormat", () => {
 		expect(validateApiKeyFormat("openai", "  sk-abc123def456ghi789  ")).toBe(true);  // trim
 	});
 
-	it("anthropic key 必须 sk-ant- 开头", () => {
-		expect(validateApiKeyFormat("anthropic", "sk-ant-api03-abc123def456")).toBe(true);
-		expect(validateApiKeyFormat("anthropic", "sk-abc123def456ghi789")).toBe(false);
-	});
 
 	it("deepseek key sk- 开头 (OpenAI 兼容格式)", () => {
 		expect(validateApiKeyFormat("deepseek", "sk-deepseek-1234567890")).toBe(true);
 		expect(validateApiKeyFormat("deepseek", "sk-abc")).toBe(false);
 	});
 
-	it("custom 任意 ≥ 10 字符", () => {
-		expect(validateApiKeyFormat("custom", "my-custom-key-12345")).toBe(true);
-		expect(validateApiKeyFormat("custom", "short")).toBe(false);
-	});
 });
 
 describe("maskApiKey", () => {
