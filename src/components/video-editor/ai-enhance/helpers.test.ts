@@ -9,9 +9,14 @@ import { describe, expect, it } from "vitest";
 import { getScenarioTemplate, SCENARIO_TEMPLATES } from "@/lib/presets";
 import {
 	ACTION_LABEL_ZH,
+	AI_ACTION_BUSY_EVENT,
+	type AIActionBusyDetail,
+	DEFAULT_ACTION_REMAIN_MS,
+	dispatchAIActionBusy,
 	FEATURE_LABEL_TO_ACTION,
 	formatElapsed,
 	formatRemain,
+	isAIActionBusyDetail,
 	resolveScenarioActions,
 	shortLabelForAction,
 } from "./helpers";
@@ -124,5 +129,158 @@ describe("AI enhance helpers (§57-2)", () => {
 	it("getScenarioTemplate: returns same value as SCENARIO_TEMPLATES access", () => {
 		expect(getScenarioTemplate("liveStream")).toBe(SCENARIO_TEMPLATES.liveStream);
 		expect(getScenarioTemplate("teaching").id).toBe("teaching");
+	});
+});
+
+/* -------------------------------------------------------------------------- */
+/* §57-2 增强: kliq:ai-action-busy 事件 dispatcher + type guard 测试            */
+/* -------------------------------------------------------------------------- */
+
+describe("kliq:ai-action-busy event constants", () => {
+	it("AI_ACTION_BUSY_EVENT = 'kliq:ai-action-busy'", () => {
+		expect(AI_ACTION_BUSY_EVENT).toBe("kliq:ai-action-busy");
+	});
+
+	it("DEFAULT_ACTION_REMAIN_MS equals 30s", () => {
+		expect(DEFAULT_ACTION_REMAIN_MS).toBe(30_000);
+	});
+});
+
+describe("isAIActionBusyDetail type guard", () => {
+	it("accepts minimal valid payload", () => {
+		const detail: AIActionBusyDetail = {
+			action: "ai-titles",
+			busy: true,
+			source: "external",
+		};
+		expect(isAIActionBusyDetail(detail)).toBe(true);
+	});
+
+	it("accepts full payload with estimatedRemainMs", () => {
+		expect(
+			isAIActionBusyDetail({
+				action: "ai-silence",
+				busy: true,
+				source: "ai-toolbar",
+				estimatedRemainMs: 12000,
+			}),
+		).toBe(true);
+	});
+
+	it("accepts busy=false", () => {
+		expect(
+			isAIActionBusyDetail({
+				action: "ai-summary",
+				busy: false,
+				source: "ai-enhance-panel",
+			}),
+		).toBe(true);
+	});
+
+	it("accepts all 3 source values", () => {
+		for (const source of ["ai-enhance-panel", "ai-toolbar", "external"] as const) {
+			expect(isAIActionBusyDetail({ action: "ai-titles", busy: true, source })).toBe(true);
+		}
+	});
+
+	it("rejects missing action", () => {
+		expect(isAIActionBusyDetail({ busy: true, source: "ai-toolbar" } as unknown)).toBe(false);
+	});
+
+	it("rejects missing busy flag", () => {
+		expect(isAIActionBusyDetail({ action: "ai-titles", source: "ai-toolbar" } as unknown)).toBe(
+			false,
+		);
+	});
+
+	it("rejects unknown source", () => {
+		expect(
+			isAIActionBusyDetail({ action: "ai-titles", busy: true, source: "garbage" } as unknown),
+		).toBe(false);
+	});
+
+	it("rejects non-object", () => {
+		expect(isAIActionBusyDetail(null)).toBe(false);
+		expect(isAIActionBusyDetail("string")).toBe(false);
+		expect(isAIActionBusyDetail(undefined)).toBe(false);
+		expect(isAIActionBusyDetail(42)).toBe(false);
+	});
+});
+
+describe("dispatchAIActionBusy (window.CustomEvent stub)", () => {
+	function withStubWindow(): {
+		run: (cb: () => void) => void;
+		last: { eventName: string | null; detail: AIActionBusyDetail | null };
+	} {
+		const last = {
+			eventName: null as string | null,
+			detail: null as AIActionBusyDetail | null,
+		};
+		const originalWindow = (globalThis as Record<string, unknown>).window;
+		(globalThis as Record<string, unknown>).window = {
+			dispatchEvent: (e: Event) => {
+				last.eventName = e.type;
+				last.detail = (e as CustomEvent<AIActionBusyDetail>).detail ?? null;
+				return true;
+			},
+		};
+		return {
+			last,
+			run: (cb) => {
+				try {
+					cb();
+				} finally {
+					(globalThis as Record<string, unknown>).window = originalWindow;
+				}
+			},
+		};
+	}
+
+	it("calls window.dispatchEvent with busy=true", () => {
+		const stub = withStubWindow();
+		stub.run(() => {
+			dispatchAIActionBusy({
+				action: "ai-silence",
+				busy: true,
+				source: "ai-toolbar",
+				estimatedRemainMs: 5000,
+			});
+		});
+		expect(stub.last.eventName).toBe("kliq:ai-action-busy");
+		expect(stub.last.detail).toEqual({
+			action: "ai-silence",
+			busy: true,
+			source: "ai-toolbar",
+			estimatedRemainMs: 5000,
+		});
+	});
+
+	it("calls window.dispatchEvent with busy=false", () => {
+		const stub = withStubWindow();
+		stub.run(() => {
+			dispatchAIActionBusy({
+				action: "ai-summary",
+				busy: false,
+				source: "ai-enhance-panel",
+			});
+		});
+		expect(stub.last.detail?.busy).toBe(false);
+		expect(stub.last.detail?.source).toBe("ai-enhance-panel");
+	});
+
+	it("is a no-op when window is undefined (SSR safety)", () => {
+		const originalWindow = (globalThis as Record<string, unknown>).window;
+		(globalThis as Record<string, unknown>).window = undefined;
+		try {
+			expect(() =>
+				dispatchAIActionBusy({
+					action: "ai-titles",
+					busy: true,
+					source: "external",
+				}),
+			).not.toThrow();
+		} finally {
+			(globalThis as Record<string, unknown>).window = originalWindow;
+		}
 	});
 });

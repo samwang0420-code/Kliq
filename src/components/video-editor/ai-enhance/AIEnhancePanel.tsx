@@ -41,7 +41,14 @@ import { useAIActions } from "@/hooks/useAIActions";
 import type { AIAction } from "@/lib/ai/action-inputs";
 import { getScenarioTemplate, type ScenarioTemplate, type ScenarioTemplateId } from "@/lib/presets";
 import { type FlowStep, type FlowStepStatus, FlowTimeline } from "./FlowTimeline";
-import { resolveScenarioActions, shortLabelForAction as shortLabel } from "./helpers";
+import {
+	AI_ACTION_BUSY_EVENT,
+	type AIActionBusyDetail,
+	dispatchAIActionBusy,
+	isAIActionBusyDetail,
+	resolveScenarioActions,
+	shortLabelForAction as shortLabel,
+} from "./helpers";
 import { ProgressBar } from "./ProgressBar";
 import { ScenarioGrid } from "./ScenarioCard";
 
@@ -64,6 +71,7 @@ function useAIEnhanceState() {
 	const [activeStepIndex, setActiveStepIndex] = useState<number>(-1);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const startedAtRef = useRef<number | null>(null);
+	const [externalBusy, setExternalBusy] = useState<AIActionBusyDetail | null>(null);
 
 	return {
 		phase,
@@ -78,6 +86,8 @@ function useAIEnhanceState() {
 		setActiveStepIndex,
 		errorMessage,
 		setErrorMessage,
+		externalBusy,
+		setExternalBusy,
 		startedAtRef,
 	};
 }
@@ -106,6 +116,19 @@ export const AIEnhancePanel = memo(function AIEnhancePanel({
 		return () => window.removeEventListener("kliq:open-ai-enhance", handler as EventListener);
 	}, []);
 
+	// 监听 kliq:ai-action-busy (其他组件如 AIToolbar 在跑 AI 时通知本面板)
+	// 自身 source='ai-enhance-panel' 跳过避免自循环 (§57-2 增强)
+	useEffect(() => {
+		const handler = (e: Event) => {
+			const detail = (e as CustomEvent).detail;
+			if (!isAIActionBusyDetail(detail)) return;
+			if (detail.source === "ai-enhance-panel") return;
+			state.setExternalBusy(detail.busy ? detail : null);
+		};
+		window.addEventListener(AI_ACTION_BUSY_EVENT, handler as EventListener);
+		return () => window.removeEventListener(AI_ACTION_BUSY_EVENT, handler as EventListener);
+	}, [state]);
+
 	const handleClose = useCallback(() => {
 		state.setOpen(false);
 		// 不重置 scenario, 用户下次开还是同样的选择
@@ -130,6 +153,12 @@ export const AIEnhancePanel = memo(function AIEnhancePanel({
 		if (state.steps.length === 0) return;
 		state.setPhase("running");
 		state.startedAtRef.current = performance.now();
+		// 派发自身 busy=true (其他组件如 AIToolbar 可联动 UI 锁)
+		dispatchAIActionBusy({
+			action: (state.steps[0]?.id ?? "ai-summary") as AIAction,
+			busy: true,
+			source: "ai-enhance-panel",
+		});
 		for (let i = 0; i < state.steps.length; i += 1) {
 			const step = state.steps[i];
 			if (!step) continue;
@@ -153,10 +182,20 @@ export const AIEnhancePanel = memo(function AIEnhancePanel({
 					prev.map((s, idx) => (idx === i ? { ...s, status: "error", error: msg } : s)),
 				);
 				state.setErrorMessage(msg);
+				dispatchAIActionBusy({
+					action: (state.steps[i]?.id ?? "ai-summary") as AIAction,
+					busy: false,
+					source: "ai-enhance-panel",
+				});
 				state.setPhase("error");
 				return;
 			}
 		}
+		dispatchAIActionBusy({
+			action: (state.steps[state.steps.length - 1]?.id ?? "ai-summary") as AIAction,
+			busy: false,
+			source: "ai-enhance-panel",
+		});
 		state.setPhase("done");
 	}, [runAction, state]);
 
@@ -169,6 +208,12 @@ export const AIEnhancePanel = memo(function AIEnhancePanel({
 					: s,
 			),
 		);
+		// 派发 busy=false (取消后清状态)
+		dispatchAIActionBusy({
+			action: (state.steps[state.activeStepIndex]?.id ?? "ai-summary") as AIAction,
+			busy: false,
+			source: "ai-enhance-panel",
+		});
 		// user 关闭 dialog 在 handleClose
 	}, [state]);
 
@@ -242,6 +287,31 @@ export const AIEnhancePanel = memo(function AIEnhancePanel({
 		margin: "4px 0 0",
 		fontSize: "13px",
 		color: "#a1a1aa",
+	};
+
+	const externalBusyStyle: CSSProperties = {
+		display: "flex",
+		alignItems: "center",
+		gap: "10px",
+		padding: "12px 16px",
+		marginTop: "12px",
+		background: "rgba(251, 191, 36, 0.08)",
+		border: "1px solid #fcd34d",
+		borderRadius: RADIUS,
+		color: "#0a0a0a",
+		fontSize: "13px",
+		lineHeight: 1.4,
+		fontFamily: FONT_SANS,
+	};
+
+	const externalBusyDotStyle: CSSProperties = {
+		width: "8px",
+		height: "8px",
+		borderRadius: "50%",
+		background: "#f59e0b",
+		display: "inline-block",
+		flexShrink: 0,
+		animation: "ai-enhance-pulse 1.6s ease-in-out infinite",
 	};
 
 	const closeBtnStyle: CSSProperties = {
@@ -331,6 +401,21 @@ export const AIEnhancePanel = memo(function AIEnhancePanel({
 						<X size={14} weight="bold" />
 					</button>
 				</div>
+
+				{state.externalBusy && (
+					<div
+						data-ai-enhance-external-busy
+						role="status"
+						aria-live="polite"
+						style={externalBusyStyle}
+					>
+						<span style={externalBusyDotStyle} aria-hidden="true" />
+						<span>
+							其他位置正在跑 AI: {state.externalBusy.action}
+							{state.externalBusy.source === "ai-toolbar" && " (来自工具栏)"}
+						</span>
+					</div>
+				)}
 
 				{state.phase === "scenario" && (
 					<div data-ai-enhance-step-scenario>

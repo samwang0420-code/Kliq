@@ -87,3 +87,40 @@ export function formatRemain(ms: number): string {
 	const remainStr = remain < 10 ? "0" + remain : "" + remain;
 	return min + "m" + remainStr + "s";
 }
+
+/* -------------------------------------------------------------------------- */
+/* kliq:ai-action-busy 自定义事件 (§57-2 增强)                                 */
+/* -------------------------------------------------------------------------- */
+
+/** 事件名常量 — 跟 AIEnhancePanel.tsx 与 AIToolbar.tsx 共用 */
+export const AI_ACTION_BUSY_EVENT = "kliq:ai-action-busy" as const;
+
+/** payload: 告诉监听者谁在跑什么 AI 任务 */
+export type AIActionBusyDetail = {
+	readonly action: AIAction;
+	readonly busy: boolean;
+	/** 派发方 source — 监听端用 source 区分避免自循环 */
+	readonly source: "ai-enhance-panel" | "ai-toolbar" | "external";
+	/** 可选: 预估剩余 ms (busy=true 时), UI 渲染倒计时 */
+	readonly estimatedRemainMs?: number;
+};
+
+/** TypeScript 类型守卫 — AIEnhancePanel useEffect handler 收 event 用 */
+export function isAIActionBusyDetail(value: unknown): value is AIActionBusyDetail {
+	if (typeof value !== "object" || value === null) return false;
+	const v = value as Record<string, unknown>;
+	if (typeof v.action !== "string") return false;
+	if (typeof v.busy !== "boolean") return false;
+	if (v.source !== "ai-enhance-panel" && v.source !== "ai-toolbar" && v.source !== "external")
+		return false;
+	return true;
+}
+
+/** 派发 helper — window.CustomEvent 封装, source 透传 */
+export function dispatchAIActionBusy(detail: AIActionBusyDetail): void {
+	if (typeof window === "undefined") return;
+	window.dispatchEvent(new CustomEvent<AIActionBusyDetail>(AI_ACTION_BUSY_EVENT, { detail }));
+}
+
+/** 默认 estimated ms — 用于 AIEnhancePanel 自身不知道剩余时间时的兜底 */
+export const DEFAULT_ACTION_REMAIN_MS = 30_000 as const;

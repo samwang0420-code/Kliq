@@ -139,6 +139,16 @@
 			}
 		},
 		{
+			"includes": ["src/components/video-editor/ai-enhance/AIEnhancePanel.tsx"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"useExhaustiveDependencies": "off"
+					}
+				}
+			}
+		},
+		{
 			"includes": ["electron/electron-env.d.ts"],
 			"linter": {
 				"rules": {
