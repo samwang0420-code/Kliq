@@ -17,13 +17,12 @@ import { type CSSProperties, memo, type ReactNode, useCallback, useEffect, useSt
 import { useScopedT } from "@/contexts/I18nContext";
 import { useLicenseStatus } from "@/hooks/useLicenseStatus";
 import { featureLabel as _featureLabel, AccountTab } from "./tabs/AccountTab";
-import { AiTab } from "./tabs/AiTab";
 export const featureLabel = _featureLabel;
 
 import { HelpTab } from "./tabs/HelpTab";
 import { ProTab } from "./tabs/ProTab";
 
-type TabId = "account" | "pro" | "ai" | "help";
+type TabId = "account" | "pro" | "help";
 
 type TabDef = {
 	id: TabId;
@@ -34,7 +33,6 @@ type TabDef = {
 const TABS: ReadonlyArray<TabDef> = [
 	{ id: "account", labelKey: "yanjing.account.tabAccount", fallback: "账户" },
 	{ id: "pro", labelKey: "yanjing.account.tabPro", fallback: "Pro 会员" },
-	{ id: "ai", labelKey: "yanjing.account.tabAi", fallback: "AI 服务" },
 	{ id: "help", labelKey: "yanjing.account.tabHelp", fallback: "帮助" },
 ];
 
@@ -238,8 +236,6 @@ function AccountCenterPanelImpl({
 				return <AccountTab />;
 			case "pro":
 				return <ProTab />;
-			case "ai":
-				return <AiTab />;
 			case "help":
 				return <HelpTab />;
 			default:

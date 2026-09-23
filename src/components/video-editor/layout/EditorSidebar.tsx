@@ -1,133 +1,332 @@
+/**
+ * Kliq — Sidebar 整体重设计 (§60 用户拍板)
+ *
+ * 用户原话 (2026-09-23):
+ *   "你需要把相关的功能放到这列功能列，AI 能力等，
+ *    你要提升审美能力，现在用户中心和整体的调性差的太远了"
+ *
+ * 设计:
+ *   - 9 个图标入口（AI 增强 / AI 字幕 / AI 服务 / Cursor / Webcam / Settings / 扩展 + Account）
+ *   - AI 入口 dispatch event 弹独立面板/弹窗，不走 SettingsPanel
+ *   - 其余 4 个走 activeEffectSection（Cursor / Webcam / Settings / 扩展）
+ *   - 视觉 §213 inline 极简：黑/白/灰阶/绿点/8px 圆角/120-160ms ease/1px 边框
+ *   - 删 motion / framer / Tailwind className / 蓝色 #2563EB 激活态
+ *   - Phosphor regular → active 时 fill（重量对比代替颜色对比）
+ */
 import {
-	Camera,
-	ClosedCaptioning,
-	Cursor,
-	Gear,
-	PuzzlePiece,
-	Sparkle,
-	UserCircle,
+  Camera,
+  ChatCircle,
+  Cpu,
+  Cursor,
+  Gear,
+  PuzzlePiece,
+  Sparkle,
+  UserCircle,
 } from "@phosphor-icons/react";
-import { motion } from "motion/react";
-import type { ComponentProps, Dispatch, SetStateAction } from "react";
-import { useMemo } from "react";
+import {
+  type ComponentProps,
+  type Dispatch,
+  type SetStateAction,
+  type ReactNode,
+  useMemo,
+} from "react";
 import { openAccountCenter } from "@/lib/proGate";
 import { useIsPro } from "@/hooks/useLicenseStatus";
-import { cn } from "@/lib/utils";
 import type { useI18n } from "@/contexts/I18nContext";
 import ExtensionManager from "../ExtensionManager";
 import { SettingsPanel } from "../SettingsPanel";
 import type { EditorEffectSection } from "../types";
 
-type Props = {
-	t: ReturnType<typeof useI18n>["t"];
-	activeSection: EditorEffectSection;
-	setActiveSection: Dispatch<SetStateAction<EditorEffectSection>>;
-	settingsPanelProps: ComponentProps<typeof SettingsPanel>;
+/* §213 design tokens */
+const COLORS = {
+  black: "#0a0a0a",
+  white: "#ffffff",
+  bg: "#ffffff",
+  sidebarBg: "#fafafa",
+  border: "#e4e4e7",
+  muted: "#71717a",
+  subtleBg: "#f4f4f5",
+  accent: "#22c55e",
 };
 
-export function EditorSidebar({ t, activeSection, setActiveSection, settingsPanelProps }: Props) {
-	const isPro = useIsPro();
-	const sections = useMemo(
-		() => [
-			{ id: "scene" as const, label: t("settings.sections.scene", "Scene"), icon: Sparkle },
-			{ id: "cursor" as const, label: t("settings.sections.cursor", "Cursor"), icon: Cursor },
-			{ id: "webcam" as const, label: t("settings.sections.webcam", "Webcam"), icon: Camera },
-			{
-				id: "captions" as const,
-				label: t("settings.sections.captions", "Captions"),
-				icon: ClosedCaptioning,
-			},
-			{
-				id: "settings" as const,
-				label: t("settings.sections.settings", "Settings"),
-				icon: Gear,
-			},
-			{
-				id: "extensions" as const,
-				label: t("settings.sections.extensions", "Extensions"),
-				icon: PuzzlePiece,
-			},
-		],
-		[t],
-	);
-	return (
-		<div className="flex flex-shrink-0 gap-1.5">
-			<div className="flex flex-shrink-0 flex-col items-center gap-0.5 px-2 py-2">
-				{sections.map((section) => {
-					const isActive = activeSection === section.id;
-					return (
-						<div key={section.id} className="flex items-center">
-							<motion.button
-								type="button"
-								onClick={() => setActiveSection(section.id)}
-								title={section.label}
-								className="group relative flex h-9 w-9 items-center justify-center rounded-lg outline-none focus:outline-none focus-visible:outline-none"
-								animate={{ opacity: isActive ? 1 : 0.55 }}
-								transition={{ duration: 0.14 }}
-							>
-								{isActive ? (
-									<motion.span
-										layoutId="rail-active-bg"
-										className="absolute inset-0 rounded-lg bg-foreground/[0.08]"
-										transition={{ type: "spring", stiffness: 450, damping: 35 }}
-									/>
-								) : null}
-								<motion.span
-									className="relative z-10"
-									animate={{
-										color: isActive ? "#2563EB" : "hsl(var(--foreground))",
-									}}
-									transition={{ duration: 0.14 }}
-								>
-									<section.icon
-										className="h-[27px] w-[27px]"
-										weight={isActive ? "fill" : "regular"}
-									/>
-								</motion.span>
-							</motion.button>
-							<div className="ml-1.5 h-1.5 w-1.5 flex-shrink-0">
-								{isActive ? (
-									<motion.span
-										layoutId="rail-active-dot"
-										className="block h-1.5 w-1.5 rounded-full bg-[#2563EB]"
-										initial={{ opacity: 0, scale: 0.5 }}
-										animate={{ opacity: 1, scale: 1 }}
-										exit={{ opacity: 0, scale: 0.5 }}
-										transition={{ type: "spring", stiffness: 500, damping: 32 }}
-									/>
-								) : null}
-							</div>
-						</div>
-					);
-				})}
-				<div className="mt-auto flex flex-col items-center gap-0.5 pt-3">
-					<motion.button
-						type="button"
-						onClick={() => openAccountCenter()}
-						title={t("editor.account.title", "Account")}
-						aria-label={t("editor.account.title", "Account")}
-						data-testid="account-center-trigger"
-						className="group relative flex h-9 w-9 items-center justify-center rounded-lg text-foreground/65 outline-none transition hover:text-foreground focus:outline-none focus-visible:outline-none"
-						whileHover={{ opacity: 1 }}
-						initial={{ opacity: 0.65 }}
-					>
-						<motion.span className="absolute inset-0 rounded-lg bg-foreground/[0.04] opacity-0 transition group-hover:opacity-100" />
-						<UserCircle className="relative z-10 h-[22px] w-[22px]" />
-						<span
-							aria-hidden="true"
-							className={cn(
-								"absolute right-0.5 top-0.5 z-20 h-2 w-2 rounded-full",
-								isPro ? "bg-[#22c55e] shadow-[0_0_4px_rgba(34,197,94,0.45)]" : "bg-foreground/15"
-							)}
-						/>
-					</motion.button>
-				</div>
-			</div>
-			{activeSection === "extensions" ? (
-				<ExtensionManager />
-			) : (
-				<SettingsPanel {...settingsPanelProps} />
-			)}
-		</div>
-	);
+const RADIUS = 8;
+const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
+const DURATION_MS = 160;
+
+type SidebarAction =
+  | { kind: "section"; section: EditorEffectSection }
+  | { kind: "event"; eventName: string };
+
+type NavItem = {
+  id: string;
+  label: string;
+  icon: typeof Camera;
+  action: SidebarAction;
+};
+
+type Props = {
+  t: ReturnType<typeof useI18n>["t"];
+  activeSection: EditorEffectSection;
+  setActiveSection: Dispatch<SetStateAction<EditorEffectSection>>;
+  settingsPanelProps: ComponentProps<typeof SettingsPanel>;
+};
+
+export function EditorSidebar({
+  t,
+  activeSection,
+  setActiveSection,
+  settingsPanelProps,
+}: Props): ReactNode {
+  const isPro = useIsPro();
+
+  // §60 9 图标 — AI 能力入口优先
+  const items = useMemo<NavItem[]>(
+    () => [
+      {
+        id: "ai-enhance",
+        label: t("yanjing.sidebar.aiEnhance", "AI 增强"),
+        icon: Sparkle,
+        action: { kind: "event", eventName: "kliq:open-ai-enhance" },
+      },
+      {
+        id: "ai-captions",
+        label: t("yanjing.sidebar.aiCaptions", "AI 字幕"),
+        icon: ChatCircle,
+        action: { kind: "event", eventName: "kliq:open-ai-captions" },
+      },
+      {
+        id: "ai-service",
+        label: t("yanjing.sidebar.aiService", "AI 服务"),
+        icon: Cpu,
+        action: { kind: "event", eventName: "kliq:open-ai-service" },
+      },
+      {
+        id: "cursor",
+        label: t("settings.sections.cursor", "Cursor"),
+        icon: Cursor,
+        action: { kind: "section", section: "cursor" },
+      },
+      {
+        id: "webcam",
+        label: t("settings.sections.webcam", "Webcam"),
+        icon: Camera,
+        action: { kind: "section", section: "webcam" },
+      },
+      {
+        id: "settings",
+        label: t("settings.sections.settings", "Settings"),
+        icon: Gear,
+        action: { kind: "section", section: "settings" },
+      },
+      {
+        id: "extensions",
+        label: t("settings.sections.extensions", "Extensions"),
+        icon: PuzzlePiece,
+        action: { kind: "section", section: "extensions" },
+      },
+    ],
+    [t],
+  );
+
+  const handleClick = (item: NavItem): void => {
+    if (item.action.kind === "event") {
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent(item.action.eventName));
+      }
+      return;
+    }
+    setActiveSection(item.action.section);
+  };
+
+  const renderNavButton = (item: NavItem): ReactNode => {
+    const isActive =
+      item.action.kind === "section" ? activeSection === item.action.section : false;
+    const Icon = item.icon;
+
+    return (
+      <button
+        key={item.id}
+        type="button"
+        onClick={() => handleClick(item)}
+        title={item.label}
+        aria-label={item.label}
+        data-testid={`sidebar-${item.id}`}
+        data-active={isActive ? "true" : "false"}
+        style={{
+          position: "relative",
+          width: 40,
+          height: 40,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: RADIUS,
+          background: isActive ? COLORS.subtleBg : "transparent",
+          border: isActive
+            ? `1px solid ${COLORS.border}`
+            : "1px solid transparent",
+          cursor: "pointer",
+          padding: 0,
+          transition: `all ${DURATION_MS}ms ${EASE}`,
+        }}
+        onMouseEnter={(e) => {
+          if (!isActive) e.currentTarget.style.background = COLORS.subtleBg;
+        }}
+        onMouseLeave={(e) => {
+          if (!isActive) e.currentTarget.style.background = "transparent";
+        }}
+      >
+        <Icon
+          size={22}
+          weight={isActive ? "fill" : "regular"}
+          color={isActive ? COLORS.accent : COLORS.muted}
+          style={{ transition: `all ${DURATION_MS}ms ${EASE}` }}
+        />
+        {isActive ? (
+          <span
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              right: 6,
+              top: 6,
+              width: 6,
+              height: 6,
+              borderRadius: "50%",
+              background: COLORS.accent,
+            }}
+          />
+        ) : null}
+      </button>
+    );
+  };
+
+  const isExtensions = activeSection === "extensions";
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexShrink: 0,
+        gap: 6,
+        height: "100%",
+      }}
+    >
+      <nav
+        aria-label="Sidebar navigation"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 4,
+          padding: 12,
+          background: COLORS.sidebarBg,
+          borderRight: `1px solid ${COLORS.border}`,
+          width: 64,
+          flexShrink: 0,
+        }}
+      >
+        {/* AI 能力分组 */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 4,
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          {items.slice(0, 3).map(renderNavButton)}
+        </div>
+
+        {/* 分隔线 */}
+        <div
+          aria-hidden="true"
+          style={{
+            width: 24,
+            height: 1,
+            background: COLORS.border,
+            margin: "8px 0",
+          }}
+        />
+
+        {/* 编辑设置分组 */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 4,
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          {items.slice(3, 6).map(renderNavButton)}
+        </div>
+
+        {/* 扩展单独 */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 4,
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          {renderNavButton(items[6]!)}
+        </div>
+
+        {/* 底部 Account */}
+        <div style={{ marginTop: "auto" }}>
+          <button
+            type="button"
+            onClick={() => openAccountCenter()}
+            title={t("editor.account.title", "Account")}
+            aria-label={t("editor.account.title", "Account")}
+            data-testid="account-center-trigger"
+            style={{
+              position: "relative",
+              width: 40,
+              height: 40,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: RADIUS,
+              background: "transparent",
+              border: "1px solid transparent",
+              cursor: "pointer",
+              padding: 0,
+              transition: `all ${DURATION_MS}ms ${EASE}`,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = COLORS.subtleBg;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            <UserCircle
+              size={22}
+              weight="regular"
+              color={COLORS.muted}
+              style={{ transition: `all ${DURATION_MS}ms ${EASE}` }}
+            />
+            <span
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                right: 6,
+                top: 6,
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                background: isPro ? COLORS.accent : COLORS.subtleBg,
+                border: isPro ? "none" : `1px solid ${COLORS.border}`,
+              }}
+            />
+          </button>
+        </div>
+      </nav>
+
+      {isExtensions ? <ExtensionManager /> : <SettingsPanel {...settingsPanelProps} />}
+    </div>
+  );
 }

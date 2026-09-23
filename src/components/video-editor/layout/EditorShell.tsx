@@ -1,6 +1,8 @@
 import type { ComponentProps } from "react";
 import { AccountCenterHost } from "@/components/account/AccountCenterHost";
 import { AIEnhancePanel } from "@/components/video-editor/ai-enhance/AIEnhancePanel";
+import { AICaptionsPanel } from "@/components/video-editor/ai-enhance/AICaptionsPanel";
+import { AIServicePanel } from "@/components/video-editor/ai-enhance/AIServicePanel";
 import { EditorAnnouncementBanner } from "@/components/announcements/EditorAnnouncementBanner";
 import { Toaster } from "@/components/ui/sonner";
 import type { useI18n } from "@/contexts/I18nContext";
@@ -262,8 +264,10 @@ export function EditorShell(props: Props) {
 			/>
 			{/* 个人中心 / Pro 激活（收费闸门 UI 宿主，始终挂载） */}
 			<AccountCenterHost />
-			{/* AI 增强场景化面板 (§57-2) - 监听 kliq:open-ai-enhance 事件 */}
+			{/* AI 面板 (§57-2 §60) - 监听 kliq:open-ai-* 事件 */}
 			<AIEnhancePanel />
+			<AICaptionsPanel />
+			<AIServicePanel />
 			<Toaster className="pointer-events-auto" />
 		</div>
 	);

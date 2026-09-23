@@ -837,18 +837,19 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 		const aiTabContent = fs.readFileSync(aiTabPath, "utf-8");
 		ok_("7.10", "AiTab 派发 kliq:open-ai-enhance", aiTabContent.includes("kliq:open-ai-enhance"));
 
-		// 7.11 AccountCenterPanel 4 Tab 路由
+		// 7.11 AccountCenterPanel 3 Tab 路由 (§60 删 AiTab)
 		const acpPath = path.resolve(process.cwd(), "src/components/account/AccountCenterPanel.tsx");
 		const acpContent = fs.readFileSync(acpPath, "utf-8");
 		const acpFlat = acpContent.replace(/\s+/g, " ");
-		ok_("7.11", "AccountCenterPanel import 4 tabs", ["AccountTab", "ProTab", "AiTab", "HelpTab"].every((t) => new RegExp(`\\b${t}\\b`).test(acpFlat)));
-		ok_("7.11", "AccountCenterPanel TABS 4 个", (acpContent.match(/"id": "account"|\{ id: "account"|\{ id: "pro"|\{ id: "ai"|\{ id: "help"/g) || []).length >= 4);
-
+		ok_("7.11", "AccountCenterPanel import 3 tabs (§60 删 AiTab)", ["AccountTab", "ProTab", "HelpTab"].every((t) => new RegExp(`\\b${t}\\b`).test(acpFlat)));
+		ok_("7.11", "AccountCenterPanel 不再 import AiTab", !/\bAiTab\b/.test(acpFlat));
+		ok_("7.11", "AccountCenterPanel TABS 3 个 (§60)", (acpContent.match(/\{ id: "account"|\{ id: "pro"|\{ id: "help"/g) || []).length >= 3);
+		ok_("7.11", "AccountCenterPanel 不含 { id: \"ai\"", !acpContent.includes('{ id: "ai"'));
 		// ===== 阶段 8 — §58 重设计: 居中大对话框 + ProTab 4 档 + AI 增强 workbuddy 模式 =====
 		// 8.1 AccountCenterPanel §58-1: 居中大对话框 (§213 inline 极简风)
 		ok_("8.1", "AccountCenterPanel §58-1 居中大对话框 (max-width 720px)", acpContent.includes("maxWidth: \"720px\""));
 		ok_("8.1", "AccountCenterPanel §58-1 backdrop 关闭", acpContent.includes("data-account-center-overlay"));
-		ok_("8.1", "AccountCenterPanel §58-1 保留 4 Tab 路由", acpContent.includes("data-tab-id"));
+		ok_("8.1", "AccountCenterPanel §58-1 保留 3 Tab 路由 (§60 删 ai)", acpContent.includes("data-tab-id"));
 
 		// 8.2 ProTab §59-8: 2 档套餐 (Free + Lifetime only, §58-2 的 4 档 2192 §59-8 的 2 档)
 		const proTabPath = path.resolve(process.cwd(), "src/components/account/tabs/ProTab.tsx");
@@ -908,6 +909,50 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 			ok_("9.5", "全工作区 apiKeys.custom 零引用 (§59-10)", customCount === "0");
 		} catch (err) {
 			console.warn("§59 stage 9.5 grep skipped:", err);
+		}
+
+
+		// ===== §60 stage 10: Sidebar 整体重设计 + AI 入口 =====
+		{
+			const sidebarPath = path.resolve(__dirname, "../../../src/components/video-editor/layout/EditorSidebar.tsx");
+			const sidebarContent = fs.readFileSync(sidebarPath, "utf-8");
+			ok_("10.1", "EditorSidebar §60 含 sidebar-ai-enhance testid", sidebarContent.includes('data-testid={`sidebar-${item.id}`}') && sidebarContent.includes('"ai-enhance"'));
+			ok_("10.1", "EditorSidebar §60 含 sidebar-ai-captions", sidebarContent.includes('"ai-captions"'));
+			ok_("10.1", "EditorSidebar §60 含 sidebar-ai-service", sidebarContent.includes('"ai-service"'));
+			ok_("10.2", "EditorSidebar §60 dispatch kliq:open-ai-enhance event", sidebarContent.includes("kliq:open-ai-enhance"));
+			ok_("10.2", "EditorSidebar §60 dispatch kliq:open-ai-captions event", sidebarContent.includes("kliq:open-ai-captions"));
+			ok_("10.2", "EditorSidebar §60 dispatch kliq:open-ai-service event", sidebarContent.includes("kliq:open-ai-service"));
+			ok_("10.3", "EditorSidebar §60 删 motion import (motion/react)", !sidebarContent.includes("motion/react"));
+			ok_("10.3", "EditorSidebar §60 删 Tailwind rounded-lg className", !sidebarContent.includes('"rounded-lg"'));
+			// 检测 inline style / CSS 中实际使用 #2563EB,排除描述"已删除"的注释行
+			const blueUsage = sidebarContent.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "").match(/#2563EB/g) || [];
+			ok_("10.3", "EditorSidebar §60 删蓝色 #2563EB 激活色 (排除注释)", blueUsage.length === 0);
+			ok_("10.3", "EditorSidebar §60 含绿点 #22c55e", sidebarContent.includes("#22c55e"));
+
+			const accPath = path.resolve(__dirname, "../../../src/components/account/AccountCenterPanel.tsx");
+			const accContent = fs.readFileSync(accPath, "utf-8");
+			ok_("10.4", "AccountCenterPanel §60 TabId 删 ai", !accContent.includes('"account" | "pro" | "ai" | "help"'));
+			ok_("10.4", "AccountCenterPanel §60 TABS 数组 3 项", (accContent.match(/{ id: "/g) || []).length === 3);
+			ok_("10.4", "AccountCenterPanel §60 不再 import AiTab", !accContent.includes("import { AiTab }"));
+
+			const helpPath = path.resolve(__dirname, "../../../src/components/account/tabs/HelpTab.tsx");
+			const helpContent = fs.readFileSync(helpPath, "utf-8");
+			ok_("10.5", "HelpTab §60 §213 inline 重写 (无 Tailwind className)", !helpContent.includes('className="flex flex-col gap-2"'));
+
+			const aiCaptionsPath = path.resolve(__dirname, "../../../src/components/video-editor/ai-enhance/AICaptionsPanel.tsx");
+			const aiCaptionsContent = fs.existsSync(aiCaptionsPath) ? fs.readFileSync(aiCaptionsPath, "utf-8") : "";
+			ok_("10.6", "AICaptionsPanel §60 监听 kliq:open-ai-captions 事件", aiCaptionsContent.includes("kliq:open-ai-captions"));
+			ok_("10.6", "AICaptionsPanel §60 含 4 个 action (transcribe/bilingual/translate-multi/proofread)", aiCaptionsContent.includes("transcribe") && aiCaptionsContent.includes("bilingual") && aiCaptionsContent.includes("translate-multi") && aiCaptionsContent.includes("proofread"));
+
+			const aiServicePath = path.resolve(__dirname, "../../../src/components/video-editor/ai-enhance/AIServicePanel.tsx");
+			const aiServiceContent = fs.existsSync(aiServicePath) ? fs.readFileSync(aiServicePath, "utf-8") : "";
+			ok_("10.7", "AIServicePanel §60 监听 kliq:open-ai-service 事件", aiServiceContent.includes("kliq:open-ai-service"));
+			ok_("10.7", "AIServicePanel §60 复用 AiServiceSection", aiServiceContent.includes("AiServiceSection"));
+
+			const shellPath = path.resolve(__dirname, "../../../src/components/video-editor/layout/EditorShell.tsx");
+			const shellContent = fs.readFileSync(shellPath, "utf-8");
+			ok_("10.8", "EditorShell §60 mount AICaptionsPanel", shellContent.includes("<AICaptionsPanel />"));
+			ok_("10.8", "EditorShell §60 mount AIServicePanel", shellContent.includes("<AIServicePanel />"));
 		}
 
 		// ===== FINAL: 失败统计 =====
