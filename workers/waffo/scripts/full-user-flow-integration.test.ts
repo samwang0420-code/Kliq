@@ -854,13 +854,13 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 		ok_("8.1", "AccountCenterPanel §58-1 backdrop 关闭", acpContent.includes("data-account-center-overlay"));
 		ok_("8.1", "AccountCenterPanel §58-1 保留 4 Tab 路由", acpContent.includes("data-tab-id"));
 
-		// 8.2 ProTab §58-2: 4 档套餐网格
+		// 8.2 ProTab §59-8: 2 档套餐 (Free + Lifetime only, §58-2 的 4 档 2192 §59-8 的 2 档)
 		const proTabPath = path.resolve(process.cwd(), "src/components/account/tabs/ProTab.tsx");
 		const proTabContent = fs.readFileSync(proTabPath, "utf-8");
-		ok_("8.2", "ProTab §58-2 4 档套餐 (TIERS 4 项)", proTabContent.includes("id: \"free\"") && proTabContent.includes("id: \"pro\"") && proTabContent.includes("id: \"lifetime\"") && proTabContent.includes("id: \"team\""));
-		ok_("8.2", "ProTab §58-2 Lifetime 最佳价值 badge", proTabContent.includes("badgeBestValue"));
-		ok_("8.2", "ProTab §58-2 Team 暂未开放", proTabContent.includes("暂未开放"));
-		ok_("8.2", "ProTab §58-2 倒计时 banner (Pro 年订阅)", proTabContent.includes("expiryTitle"));
+		ok_("8.2", "ProTab §59-8 2 档套餐 (free + lifetime)", proTabContent.includes("id: \"free\"") && proTabContent.includes("id: \"lifetime\""));
+		ok_("8.2", "ProTab §59-8 Lifetime highlight (黑边 + 绿点)", proTabContent.includes("highlight: true") && proTabContent.includes("border: `2px solid ${ACCENT}`"));
+		ok_("8.2", "ProTab §59-8 删 Team 档", !proTabContent.includes("id: \"team\""));
+		ok_("8.2", "ProTab §59-8 删 Pro 倒计时 (Lifetime 无 expiry)", !proTabContent.includes("expiryTitle"));
 
 		// 8.3 licenseConfig §58-2: KLQ_TEAM_PRICE_USD
 		const licenseConfigContent = fs.readFileSync(path.resolve(process.cwd(), "src/lib/licenseConfig.ts"), "utf-8");
