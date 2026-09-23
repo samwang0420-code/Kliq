@@ -11,11 +11,11 @@
  * time compare). In mock mode the secret is optional; in production it is required.
  *
  * Routes:
- *   POST /api/waffo/checkout   → { checkoutUrl, sessionId }
- *   POST /api/waffo/webhook    → forward to fulfillment URL (Electron app)
+ *   POST /api/waffo/checkout   → { checkoutUrl, sessionId }   (buyerEmail required)
+ *   POST /api/waffo/webhook    → forward to KLQ_BILLING_UPGRADE_URL (CF Pages Function)
  *   GET  /api/health           → { ok, mode, version }
  *
- * Reference: AGENTS.md §GSPR-1 / §GSPR-2 (architecture rationale).
+ * Reference: AGENTS.md §GSPR-1 / §GSPR-2 / §59-3 (architecture + billing bridge).
  */
 
 export interface Env {
@@ -34,9 +34,17 @@ export interface Env {
 	KLQ_DEFAULT_SUCCESS_URL?: string;
 	KLQ_DEFAULT_CANCEL_URL?: string;
 	WAFFO_PRIVATE_KEY?: string;
+
+	// §59-3 — fulfillment bridge
+	// When Waffo sends a webhook, we forward it to KLQ_BILLING_UPGRADE_URL so the
+	// Next.js Pages Functions layer can verify the bridge secret + upgrade the
+	// matching D1 user. In mock mode this lets us exercise the entire billing
+	// pipeline without the real Waffo dashboard.
+	KLQ_BILLING_UPGRADE_URL?: string;
+	KLQ_BILLING_BRIDGE_SECRET?: string;
 }
 
-const VERSION = "0.1.0";
+const VERSION = "0.2.0";
 const MOCK_CHECKOUT_BASE = "https://waffo.example/checkout";
 const FORWARD_TIMEOUT_MS = 5000;
 
@@ -123,6 +131,9 @@ function uuidv4(): string {
 	return crypto.randomUUID();
 }
 
+/** Cheap RFC-5322-ish email regex. We re-validate the deeper shape on the D1 side. */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 /* -------------------------------------------------------------------------- */
 /*  POST /api/waffo/checkout                                                  */
 /* -------------------------------------------------------------------------- */
@@ -145,6 +156,7 @@ interface CheckoutResponseBody {
 	plan: CheckoutPlan;
 	productId: string;
 	priceUsd: number;
+	buyerEmail: string;
 	expiresAt: string;
 }
 
@@ -167,11 +179,26 @@ function resolvePlanDetails(plan: CheckoutPlan, env: Env): { productId: string; 
 async function handleCheckout(req: Request, env: Env): Promise<Response> {
 	const parsed = await readJsonBody<CheckoutRequestBody>(req);
 	if ("err" in parsed) return parsed.err;
-	const { plan, buyerEmail, successUrl, cancelUrl } = parsed.body;
+	const { plan, buyerEmail, successUrl, cancelUrl, metadata } = parsed.body;
 
 	if (plan !== "pro_yearly" && plan !== "lifetime") {
 		return errorResponse(`Unknown plan "${plan}". Expected "pro_yearly" or "lifetime".`, 400, "UNKNOWN_PLAN");
 	}
+
+	// §59-3 — buyerEmail (or metadata.userEmail) is now required so the Waffo
+	// checkout can be linked to a registered Kliq account at fulfillment time.
+	const finalEmail = (metadata?.userEmail ?? buyerEmail ?? "").trim();
+	if (!finalEmail) {
+		return errorResponse(
+			"buyerEmail (or metadata.userEmail) is required to bind checkout to a registered account",
+			400,
+			"BUYER_EMAIL_REQUIRED",
+		);
+	}
+	if (!EMAIL_RE.test(finalEmail)) {
+		return errorResponse("buyerEmail is not a valid email address", 400, "BUYER_EMAIL_INVALID");
+	}
+
 	const details = resolvePlanDetails(plan, env);
 	if (!details) {
 		return errorResponse(
@@ -187,16 +214,16 @@ async function handleCheckout(req: Request, env: Env): Promise<Response> {
 
 	if (env.WAFFO_MOCK_MODE === "true") {
 		// Mock mode: return a fake checkout URL the renderer can open without
-		// hitting Waffo. The URL embeds sessionId + plan so the success page
-		// can echo them back for end-to-end testing.
+		// hitting Waffo. The URL embeds sessionId + plan + email so the
+		// fulfilment pipeline can echo them back for end-to-end testing.
 		const params = new URLSearchParams({
 			session: sessionId,
 			plan,
 			product: details.productId,
 			price: details.priceUsd.toFixed(2),
 			env: env.WAFFO_ENV ?? "test",
+			email: finalEmail,
 		});
-		if (buyerEmail) params.set("email", buyerEmail);
 		const checkoutUrl = `${MOCK_CHECKOUT_BASE}/${sessionId}?${params.toString()}`;
 
 		const body: CheckoutResponseBody = {
@@ -207,6 +234,7 @@ async function handleCheckout(req: Request, env: Env): Promise<Response> {
 			plan,
 			productId: details.productId,
 			priceUsd: details.priceUsd,
+			buyerEmail: finalEmail,
 			expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
 		};
 		return jsonResponse(body, 200);
@@ -223,7 +251,7 @@ async function handleCheckout(req: Request, env: Env): Promise<Response> {
 	//     productId: details.productId,
 	//     productType: plan === "lifetime" ? "onetime" : "subscription",
 	//     currency: "USD",
-	//     buyerEmail,
+	//     buyerEmail: finalEmail,
 	//     successUrl: successUrlFinal,
 	//     cancelUrl: cancelUrlFinal,
 	//     metadata: parsed.body.metadata,
@@ -247,28 +275,97 @@ interface WebhookForwardBody {
 	event: string;
 	sessionId?: string;
 	plan?: CheckoutPlan;
+	buyerEmail?: string;
+	waffoSessionId?: string;
 	[key: string]: unknown;
 }
 
-async function handleWebhook(req: Request, _env: Env): Promise<Response> {
+/**
+ * Forward a Waffo webhook event to the Pages Function that owns D1 upgrade
+ * logic. In real mode the Waffo HMAC signature has already been verified before
+ * we get here (TODO §60 for production hardening). In mock mode we skip HMAC
+ * verification because there is no real signed body — but the bridge secret
+ * header is still required so we know the call came from a known caller.
+ *
+ * Returns `{ status, ok, body }` so the response can surface what the
+ * fulfillment endpoint actually did.
+ */
+async function forwardWebhook(
+	payload: WebhookForwardBody,
+	env: Env,
+): Promise<{ status: number; ok: boolean; body: string; error?: string }> {
+	const target = env.KLQ_BILLING_UPGRADE_URL ?? "";
+	if (!target) {
+		return { status: 0, ok: false, body: "", error: "KLQ_BILLING_UPGRADE_URL not configured" };
+	}
+	const secret = env.KLQ_BILLING_BRIDGE_SECRET ?? "";
+	if (!secret) {
+		return { status: 0, ok: false, body: "", error: "KLQ_BILLING_BRIDGE_SECRET not configured" };
+	}
+	const ctrl = new AbortController();
+	const timer = setTimeout(() => ctrl.abort(), FORWARD_TIMEOUT_MS);
+	try {
+		const res = await fetch(target, {
+			method: "POST",
+			headers: {
+				"content-type": "application/json",
+				"x-klq-bridge-secret": secret,
+			},
+			body: JSON.stringify(payload),
+			signal: ctrl.signal,
+		});
+		const body = await res.text();
+		return { status: res.status, ok: res.ok, body };
+	} catch (err) {
+		return {
+			status: 0,
+			ok: false,
+			body: "",
+			error: err instanceof Error ? err.message : "fetch failed",
+		};
+	} finally {
+		clearTimeout(timer);
+	}
+}
+
+const UPGRADE_TRIGGERING_EVENTS = new Set([
+	"order.completed",
+	"subscription.activated",
+	"lifetime.purchased",
+]);
+
+async function handleWebhook(req: Request, env: Env): Promise<Response> {
 	// In production, we would:
 	//   1. Read raw body bytes
 	//   2. Read X-Waffo-Signature header
 	//   3. Call waffo.verifyWebhook(rawBody, signature, { environment: env.WAFFO_ENV })
-	//   4. If valid, forward to Electron app fulfillment endpoint
+	//   4. If valid, forward to Pages Function /api/billing/upgrade
 	//
-	// For §50 mock mode we just echo the payload so dev can confirm routing.
+	// §59-3 mock mode: forward directly so we exercise the full billing pipeline.
 	const parsed = await readJsonBody<WebhookForwardBody>(req);
 	if ("err" in parsed) return parsed.err;
 
-	// Acknowledge immediately; forwarding is a separate concern (§GSPR-2 says
-	// the Electron main process owns fulfillment, so we don't forward from the
-	// Worker in mock mode).
+	const event = parsed.body.event;
+	const plan = parsed.body.plan;
+
+	// §59 only honours Lifetime upgrades. pro_yearly is silently acknowledged.
+	const isUpgrade = plan === "lifetime" && UPGRADE_TRIGGERING_EVENTS.has(event);
+
+	if (!isUpgrade) {
+		return jsonResponse({
+			ok: true,
+			mode: "mock",
+			forwarded: false,
+			reason: `event "${event}" + plan "${plan}" does not trigger a D1 upgrade`,
+		});
+	}
+
+	const forward = await forwardWebhook(parsed.body, env);
 	return jsonResponse({
-		ok: true,
+		ok: forward.ok,
 		mode: "mock",
-		received: parsed.body,
-		note: "Mock mode: webhook acknowledged but not forwarded. Production mode will forward to Electron main process fulfillment endpoint via signed POST.",
+		forwarded: true,
+		forward,
 	});
 }
 
@@ -285,6 +382,7 @@ function handleHealth(env: Env): Response {
 		env: env.WAFFO_ENV ?? "test",
 		storeConfigured: Boolean(env.KLQ_STORE_ID && env.KLQ_MERCHANT_ID),
 		hasPrivateKey: Boolean(env.WAFFO_PRIVATE_KEY),
+		fulfillmentConfigured: Boolean(env.KLQ_BILLING_UPGRADE_URL && env.KLQ_BILLING_BRIDGE_SECRET),
 		timestamp: new Date().toISOString(),
 	});
 }

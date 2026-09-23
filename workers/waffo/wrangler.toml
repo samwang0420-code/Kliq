@@ -21,6 +21,12 @@ KLQ_MERCHANT_ID = "MER_MOCK"
 KLQ_DEFAULT_SUCCESS_URL = "https://yanjingai.tech/checkout/success"
 KLQ_DEFAULT_CANCEL_URL = "https://yanjingai.tech/pricing"
 
+# §59-3 — fulfillment bridge
+# These point at the deployed Pages Function. In dev / mock we leave them empty so
+# webhook tests confirm the "not configured" path; integration tests stub them.
+KLQ_BILLING_UPGRADE_URL = ""
+KLQ_BILLING_BRIDGE_SECRET = ""
+
 # Secrets — set per-environment with `wrangler secret put`:
 #   WAFFO_PRIVATE_KEY            Real merchant private key (HMAC signing key). NEVER commit.
 #   KLQ_CHECKOUT_SHARED_SECRET   Random 32-byte secret for HMAC-ing the Next.js <-> Worker bridge.

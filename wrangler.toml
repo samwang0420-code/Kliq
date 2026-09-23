@@ -1,4 +1,4 @@
-# Kliq — Cloudflare Pages 部署配置（站点 + 许可证校验 API）
+# Kliq — Cloudflare Pages 部署配置（站点 + 许可证校验 API + 账户系统）
 #
 # 为什么放在仓库根：Pages 只会自动发现「部署目录同级的 functions/」。
 # 之前把静态页放在 cloudflare/pages 却从该子目录部署，导致 functions/api/license-validate.ts
@@ -8,10 +8,18 @@
 # 部署：npx wrangler pages deploy --project-name yanjingai-tech
 # 需先在 Pages 项目里配置环境变量（见 .env.example）：
 #   LEMON_SQUEEZY_API_KEY / LEMON_SQUEEZY_STORE / LEMON_SQUEEZY_PRODUCT_ID
+#   KLQ_DATABASE_ID (§59-1 D1 数据库, `wrangler d1 create kliq-db` 后填)
 
 name = "yanjingai-tech"
 compatibility_date = "2024-07-01"
 pages_build_output_dir = "cloudflare/pages"
+
+# §59-1 D1 绑定（账户系统）
+# `wrangler d1 create kliq-db` 拿 database_id 后填这里
+[[d1_databases]]
+binding = "DB"
+database_name = "kliq-db"
+database_id = "REPLACE_WITH_D1_ID_AFTER_wrangler_d1_create"
 
 [observability]
 enabled = true

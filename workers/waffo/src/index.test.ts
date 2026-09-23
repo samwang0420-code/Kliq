@@ -4,10 +4,10 @@
  * Uses the same `fetch` handler entry shape as src/index.ts so we can call
  * `default.fetch(req, env)` directly without a real network roundtrip.
  *
- * Mocks: fetch() itself + ExecutionContext (unused).
+ * Mocks: fetch() itself (for forwardWebhook test) + ExecutionContext (unused).
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import worker from "./index";
 
 function makeEnv(overrides: Partial<Env> = {}): Env {
@@ -23,6 +23,8 @@ function makeEnv(overrides: Partial<Env> = {}): Env {
 		KLQ_DEFAULT_SUCCESS_URL: "https://yanjingai.tech/checkout/success",
 		KLQ_DEFAULT_CANCEL_URL: "https://yanjingai.tech/pricing",
 		KLQ_CHECKOUT_SHARED_SECRET: "",
+		KLQ_BILLING_UPGRADE_URL: "",
+		KLQ_BILLING_BRIDGE_SECRET: "",
 		...overrides,
 	};
 }
@@ -58,21 +60,28 @@ describe("Worker health endpoint", () => {
 		expect(body.mode).toBe("mock");
 		expect(body.env).toBe("test");
 		expect(body.version).toBeDefined();
+		expect(body.fulfillmentConfigured).toBe(false);
 	});
 
 	it("returns ok + mode info (live) when WAFFO_MOCK_MODE = false", async () => {
+		const env = makeEnv({
+			WAFFO_MOCK_MODE: "false",
+			KLQ_BILLING_UPGRADE_URL: "https://example.com/api/billing/upgrade",
+			KLQ_BILLING_BRIDGE_SECRET: "secret",
+		});
 		const res = await worker.fetch(
 			makeRequest("/api/health", { method: "GET" }),
-			makeEnv({ WAFFO_MOCK_MODE: "false" }),
+			env,
 			ctx,
 		);
 		const body = (await res.json()) as Record<string, unknown>;
 		expect(body.mode).toBe("live");
+		expect(body.fulfillmentConfigured).toBe(true);
 	});
 });
 
 describe("Worker /api/waffo/checkout (mock mode)", () => {
-	it("returns a fake checkoutUrl for pro_yearly", async () => {
+	it("returns a fake checkoutUrl for pro_yearly (buyerEmail required)", async () => {
 		const res = await worker.fetch(
 			makeRequest("/api/waffo/checkout", {
 				method: "POST",
@@ -87,11 +96,45 @@ describe("Worker /api/waffo/checkout (mock mode)", () => {
 		expect(body.mode).toBe("mock");
 		expect(body.plan).toBe("pro_yearly");
 		expect(body.priceUsd).toBe(12.9);
+		expect(body.buyerEmail).toBe("test@example.com");
 		expect(String(body.checkoutUrl)).toMatch(/^https:\/\/waffo\.example\/checkout\/sess_/);
 		expect(String(body.checkoutUrl)).toContain("plan=pro_yearly");
+		expect(String(body.checkoutUrl)).toContain("email=test%40example.com");
 	});
 
-	it("returns a fake checkoutUrl for lifetime", async () => {
+	it("returns a fake checkoutUrl for lifetime (buyerEmail required)", async () => {
+		const res = await worker.fetch(
+			makeRequest("/api/waffo/checkout", {
+				method: "POST",
+				body: JSON.stringify({ plan: "lifetime", buyerEmail: "alice@example.com" }),
+			}),
+			makeEnv(),
+			ctx,
+		);
+		const body = (await res.json()) as Record<string, unknown>;
+		expect(body.plan).toBe("lifetime");
+		expect(body.priceUsd).toBe(99);
+		expect(body.buyerEmail).toBe("alice@example.com");
+	});
+
+	it("accepts metadata.userEmail as an alternative to buyerEmail", async () => {
+		const res = await worker.fetch(
+			makeRequest("/api/waffo/checkout", {
+				method: "POST",
+				body: JSON.stringify({
+					plan: "lifetime",
+					metadata: { userEmail: "bob@example.com" },
+				}),
+			}),
+			makeEnv(),
+			ctx,
+		);
+		expect(res.status).toBe(200);
+		const body = (await res.json()) as Record<string, unknown>;
+		expect(body.buyerEmail).toBe("bob@example.com");
+	});
+
+	it("rejects when neither buyerEmail nor metadata.userEmail is provided", async () => {
 		const res = await worker.fetch(
 			makeRequest("/api/waffo/checkout", {
 				method: "POST",
@@ -100,16 +143,30 @@ describe("Worker /api/waffo/checkout (mock mode)", () => {
 			makeEnv(),
 			ctx,
 		);
+		expect(res.status).toBe(400);
 		const body = (await res.json()) as Record<string, unknown>;
-		expect(body.plan).toBe("lifetime");
-		expect(body.priceUsd).toBe(99);
+		expect((body.error as { code?: string }).code).toBe("BUYER_EMAIL_REQUIRED");
+	});
+
+	it("rejects invalid email", async () => {
+		const res = await worker.fetch(
+			makeRequest("/api/waffo/checkout", {
+				method: "POST",
+				body: JSON.stringify({ plan: "lifetime", buyerEmail: "not-an-email" }),
+			}),
+			makeEnv(),
+			ctx,
+		);
+		expect(res.status).toBe(400);
+		const body = (await res.json()) as Record<string, unknown>;
+		expect((body.error as { code?: string }).code).toBe("BUYER_EMAIL_INVALID");
 	});
 
 	it("rejects unknown plan", async () => {
 		const res = await worker.fetch(
 			makeRequest("/api/waffo/checkout", {
 				method: "POST",
-				body: JSON.stringify({ plan: "weekly_drip" }),
+				body: JSON.stringify({ plan: "weekly_drip", buyerEmail: "test@example.com" }),
 			}),
 			makeEnv(),
 			ctx,
@@ -134,7 +191,7 @@ describe("Worker /api/waffo/checkout (mock mode)", () => {
 		const req = new Request(url, {
 			method: "POST",
 			headers: { "content-type": "text/plain" },
-			body: JSON.stringify({ plan: "pro_yearly" }),
+			body: JSON.stringify({ plan: "pro_yearly", buyerEmail: "test@example.com" }),
 		});
 		const res = await worker.fetch(req, makeEnv(), ctx);
 		expect(res.status).toBe(415);
@@ -142,19 +199,197 @@ describe("Worker /api/waffo/checkout (mock mode)", () => {
 });
 
 describe("Worker /api/waffo/webhook (mock mode)", () => {
-	it("acknowledges received event", async () => {
+	it("forwards lifetime+order.completed to KLQ_BILLING_UPGRADE_URL with bridge secret", async () => {
+		const fetchSpy = vi.fn().mockResolvedValue(
+			new Response(JSON.stringify({ ok: true, upgraded: true }), {
+				status: 200,
+				headers: { "content-type": "application/json" },
+			}),
+		);
+		vi.stubGlobal("fetch", fetchSpy);
+
+		const env = makeEnv({
+			KLQ_BILLING_UPGRADE_URL: "https://yanjingai.tech/api/billing/upgrade",
+			KLQ_BILLING_BRIDGE_SECRET: "bridge-secret-xyz",
+		});
+
 		const res = await worker.fetch(
 			makeRequest("/api/waffo/webhook", {
 				method: "POST",
-				body: JSON.stringify({ event: "order.completed", sessionId: "sess_abc" }),
+				body: JSON.stringify({
+					event: "order.completed",
+					plan: "lifetime",
+					buyerEmail: "alice@example.com",
+					sessionId: "sess_test",
+				}),
 			}),
-			makeEnv(),
+			env,
 			ctx,
 		);
+
 		expect(res.status).toBe(200);
+		expect(fetchSpy).toHaveBeenCalledTimes(1);
+		const [calledUrl, calledInit] = fetchSpy.mock.calls[0] as [string, RequestInit];
+		expect(calledUrl).toBe("https://yanjingai.tech/api/billing/upgrade");
+		expect(calledInit.method).toBe("POST");
+		const headers = calledInit.headers as Record<string, string>;
+		expect(headers["x-klq-bridge-secret"]).toBe("bridge-secret-xyz");
+		expect(headers["content-type"]).toBe("application/json");
+		expect(JSON.parse(calledInit.body as string)).toEqual({
+			event: "order.completed",
+			plan: "lifetime",
+			buyerEmail: "alice@example.com",
+			sessionId: "sess_test",
+		});
+
 		const body = (await res.json()) as Record<string, unknown>;
+		expect(body.forwarded).toBe(true);
 		expect(body.ok).toBe(true);
-		expect(body.mode).toBe("mock");
+
+		vi.unstubAllGlobals();
+	});
+
+	it("forwards subscription.activated event for lifetime plan", async () => {
+		const fetchSpy = vi.fn().mockResolvedValue(
+			new Response(JSON.stringify({ ok: true }), { status: 200 }),
+		);
+		vi.stubGlobal("fetch", fetchSpy);
+
+		const env = makeEnv({
+			KLQ_BILLING_UPGRADE_URL: "https://yanjingai.tech/api/billing/upgrade",
+			KLQ_BILLING_BRIDGE_SECRET: "bridge-secret",
+		});
+
+		const res = await worker.fetch(
+			makeRequest("/api/waffo/webhook", {
+				method: "POST",
+				body: JSON.stringify({
+					event: "subscription.activated",
+					plan: "lifetime",
+					buyerEmail: "bob@example.com",
+				}),
+			}),
+			env,
+			ctx,
+		);
+
+		expect(fetchSpy).toHaveBeenCalledTimes(1);
+		expect(res.status).toBe(200);
+
+		vi.unstubAllGlobals();
+	});
+
+	it("does not forward pro_yearly events (only lifetime triggers D1 upgrade)", async () => {
+		const fetchSpy = vi.fn();
+		vi.stubGlobal("fetch", fetchSpy);
+
+		const env = makeEnv({
+			KLQ_BILLING_UPGRADE_URL: "https://yanjingai.tech/api/billing/upgrade",
+			KLQ_BILLING_BRIDGE_SECRET: "bridge-secret",
+		});
+
+		const res = await worker.fetch(
+			makeRequest("/api/waffo/webhook", {
+				method: "POST",
+				body: JSON.stringify({
+					event: "order.completed",
+					plan: "pro_yearly",
+					buyerEmail: "carol@example.com",
+				}),
+			}),
+			env,
+			ctx,
+		);
+
+		expect(fetchSpy).not.toHaveBeenCalled();
+		const body = (await res.json()) as Record<string, unknown>;
+		expect(body.forwarded).toBe(false);
+
+		vi.unstubAllGlobals();
+	});
+
+	it("reports ok=false when forward fetch returns 500", async () => {
+		const fetchSpy = vi.fn().mockResolvedValue(
+			new Response("server error", { status: 500 }),
+		);
+		vi.stubGlobal("fetch", fetchSpy);
+
+		const env = makeEnv({
+			KLQ_BILLING_UPGRADE_URL: "https://yanjingai.tech/api/billing/upgrade",
+			KLQ_BILLING_BRIDGE_SECRET: "bridge-secret",
+		});
+
+		const res = await worker.fetch(
+			makeRequest("/api/waffo/webhook", {
+				method: "POST",
+				body: JSON.stringify({
+					event: "order.completed",
+					plan: "lifetime",
+					buyerEmail: "dan@example.com",
+				}),
+			}),
+			env,
+			ctx,
+		);
+
+		const body = (await res.json()) as Record<string, unknown>;
+		expect(body.ok).toBe(false);
+		const forward = body.forward as { status: number; ok: boolean };
+		expect(forward.status).toBe(500);
+		expect(forward.ok).toBe(false);
+
+		vi.unstubAllGlobals();
+	});
+
+	it("returns ok=false when KLQ_BILLING_UPGRADE_URL not configured", async () => {
+		const env = makeEnv({
+			KLQ_BILLING_UPGRADE_URL: "",
+			KLQ_BILLING_BRIDGE_SECRET: "bridge-secret",
+		});
+
+		const res = await worker.fetch(
+			makeRequest("/api/waffo/webhook", {
+				method: "POST",
+				body: JSON.stringify({
+					event: "order.completed",
+					plan: "lifetime",
+					buyerEmail: "eve@example.com",
+				}),
+			}),
+			env,
+			ctx,
+		);
+
+		const body = (await res.json()) as Record<string, unknown>;
+		expect(body.ok).toBe(false);
+		expect(body.forwarded).toBe(true);
+		const forward = body.forward as { error?: string };
+		expect(forward.error).toContain("KLQ_BILLING_UPGRADE_URL");
+	});
+
+	it("returns ok=false when KLQ_BILLING_BRIDGE_SECRET not configured", async () => {
+		const env = makeEnv({
+			KLQ_BILLING_UPGRADE_URL: "https://yanjingai.tech/api/billing/upgrade",
+			KLQ_BILLING_BRIDGE_SECRET: "",
+		});
+
+		const res = await worker.fetch(
+			makeRequest("/api/waffo/webhook", {
+				method: "POST",
+				body: JSON.stringify({
+					event: "order.completed",
+					plan: "lifetime",
+					buyerEmail: "frank@example.com",
+				}),
+			}),
+			env,
+			ctx,
+		);
+
+		const body = (await res.json()) as Record<string, unknown>;
+		expect(body.ok).toBe(false);
+		const forward = body.forward as { error?: string };
+		expect(forward.error).toContain("KLQ_BILLING_BRIDGE_SECRET");
 	});
 });
 
@@ -164,7 +399,7 @@ describe("Worker bridge auth", () => {
 		const res = await worker.fetch(
 			makeRequest("/api/waffo/checkout", {
 				method: "POST",
-				body: JSON.stringify({ plan: "pro_yearly" }),
+				body: JSON.stringify({ plan: "pro_yearly", buyerEmail: "test@example.com" }),
 			}),
 			env,
 		);
@@ -182,7 +417,7 @@ describe("Worker bridge auth", () => {
 				"content-type": "application/json",
 				"x-klq-bridge-secret": "wrongvalue",
 			},
-			body: JSON.stringify({ plan: "pro_yearly" }),
+			body: JSON.stringify({ plan: "pro_yearly", buyerEmail: "test@example.com" }),
 		});
 		const res = await worker.fetch(req, env, ctx);
 		expect(res.status).toBe(403);
@@ -199,7 +434,7 @@ describe("Worker bridge auth", () => {
 				"content-type": "application/json",
 				"x-klq-bridge-secret": "supersecret123",
 			},
-			body: JSON.stringify({ plan: "pro_yearly" }),
+			body: JSON.stringify({ plan: "pro_yearly", buyerEmail: "test@example.com" }),
 		});
 		const res = await worker.fetch(req, env, ctx);
 		expect(res.status).toBe(200);
@@ -213,7 +448,7 @@ describe("Worker bridge auth", () => {
 		const res = await worker.fetch(
 			makeRequest("/api/waffo/checkout", {
 				method: "POST",
-				body: JSON.stringify({ plan: "pro_yearly" }),
+				body: JSON.stringify({ plan: "pro_yearly", buyerEmail: "test@example.com" }),
 			}),
 			env,
 		);
