@@ -1,0 +1,57 @@
+import { setupElectronApi } from "@/lib/ai/_test-helper";
+import { generateBilingualCaptions } from "@/lib/ai/bilingual-captions";
+
+setupElectronApi({ openaiKey: "sk-test-xxxxxxxxxxxxxxxxxx", chatProvider: "openai" });
+
+const sample = Buffer.alloc(44 + 30 * 16000 * 2);
+sample.write("RIFF", 0);
+sample.writeUInt32LE(36 + sample.length - 8, 4);
+sample.write("WAVE", 8);
+sample.write("fmt ", 12);
+sample.writeUInt32LE(16, 16);
+sample.writeUInt16LE(1, 20);
+sample.writeUInt16LE(1, 22);
+sample.writeUInt32LE(16000, 24);
+sample.writeUInt32LE(16000 * 2, 28);
+sample.writeUInt16LE(2, 32);
+sample.writeUInt16LE(16, 34);
+sample.write("data", 36);
+sample.writeUInt32LE(sample.length - 44, 40);
+const blob = new Blob([sample], { type: "audio/wav" });
+
+let callIdx = 0;
+globalThis.fetch = async (url, init) => {
+  callIdx++;
+  const u = url.toString();
+  console.log("fetch call", callIdx, u.includes("transcriptions") ? "whisper" : "chat");
+  if (u.includes("/audio/transcriptions")) {
+    return {
+      ok: true,
+      status: 200,
+      json: async () => ({
+        task: "transcribe",
+        language: "zh",
+        duration: 30.05,
+        text: "今天我们讨论高血压患者的手术风险评估。",
+        segments: [{ id: 0, start: 0, end: 5.5, text: "今天我们讨论高血压患者的手术风险评估。" }],
+      }),
+    };
+  }
+  return {
+    ok: true,
+    status: 200,
+    json: async () => ({
+      id: "chat",
+      choices: [{ message: { content: JSON.stringify([{ id: 0, start: 0, end: 5.5, text: "Today we discuss hypertension surgery risk assessment." }]) } }],
+    }),
+  };
+};
+
+const bilingual = await generateBilingualCaptions(blob, {
+  sourceLanguage: "zh",
+  targetLanguage: "en",
+  hotwordDomain: "medical",
+});
+console.log("---");
+console.log("bilingual.length:", bilingual.length);
+console.log("bilingual[0]:", JSON.stringify(bilingual[0], null, 2));
