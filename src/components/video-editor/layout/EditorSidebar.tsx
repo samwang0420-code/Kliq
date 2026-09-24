@@ -15,7 +15,6 @@
  */
 import {
   Camera,
-  ChatCircle,
   Cpu,
   Cursor,
   Gear,
@@ -87,12 +86,6 @@ export function EditorSidebar({
         label: t("yanjing.sidebar.aiEnhance", "AI 增强"),
         icon: Sparkle,
         action: { kind: "event", eventName: "kliq:open-ai-enhance" },
-      },
-      {
-        id: "ai-captions",
-        label: t("yanjing.sidebar.aiCaptions", "AI 字幕"),
-        icon: ChatCircle,
-        action: { kind: "event", eventName: "kliq:open-ai-captions" },
       },
       {
         id: "ai-service",

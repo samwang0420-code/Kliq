@@ -865,12 +865,16 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 
 		// 8.4 AIEnhancePanel §58-3: workbuddy 模式
 		const aiEnhanceContent = fs.readFileSync(path.resolve(process.cwd(), "src/components/video-editor/ai-enhance/AIEnhancePanel.tsx"), "utf-8");
-		ok_("8.4", "AIEnhancePanel §58-3 textarea prompt 输入", aiEnhanceContent.includes("data-ai-enhance-prompt"));
-		ok_("8.4", "AIEnhancePanel §58-3 5 模板 chip", aiEnhanceContent.includes("data-ai-enhance-template"));
-		ok_("8.4", "AIEnhancePanel §58-3 一键增强 CTA", aiEnhanceContent.includes("data-ai-enhance-cta"));
-		ok_("8.4", "AIEnhancePanel §58-3 历史侧栏", aiEnhanceContent.includes("data-ai-enhance-history"));
+		// §61: §58-3 workbuddy 模式已删 (textarea / 5 chip / CTA / 历史), 改为统一按钮入口
+		ok_("8.4", "§61 AIEnhancePanel 删 textarea prompt", !aiEnhanceContent.includes("data-ai-enhance-prompt"));
+		ok_("8.4", "§61 AIEnhancePanel 删 5 模板 chip", !aiEnhanceContent.includes("data-ai-enhance-template"));
+		ok_("8.4", "§61 AIEnhancePanel 删 一键增强 CTA", !aiEnhanceContent.includes("data-ai-enhance-cta"));
+		ok_("8.4", "§61 AIEnhancePanel 删 历史侧栏", !aiEnhanceContent.includes("data-ai-enhance-history"));
 		ok_("8.4", "AIEnhancePanel §58-3 居中大对话框", aiEnhanceContent.includes("data-ai-enhance-panel"));
 		ok_("8.4", "AIEnhancePanel §58-3 progress bar", aiEnhanceContent.includes("data-ai-enhance-progress"));
+		ok_("8.4", "§61 AIEnhancePanel 含 Hotwords dropdown", aiEnhanceContent.includes("data-ai-enhance-hotwords"));
+		ok_("8.4", "§61 AIEnhancePanel 含 Scenario dropdown", aiEnhanceContent.includes("data-ai-enhance-scenario"));
+		ok_("8.4", "§61 AIEnhancePanel 含 data-ai-enhance-action button (groupActionsByOrder 渲染)", aiEnhanceContent.includes("data-ai-enhance-action") && aiEnhanceContent.includes("groupActionsByOrder"));
 
 		// ===== 阶段 9 — §59 注册用户系统 + 简化 AI + Free/Lifetime 集成验证 =====
 		// 9.1 §59-7/§59-8: Auth API + AccountTab 注册/登录形态 (注册走 §59-7, 旧 license 输入已删)
@@ -913,18 +917,20 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 
 
 		// ===== §60 stage 10: Sidebar 整体重设计 + AI 入口 =====
+		// ===== §61 stage 10.6: AI 统一入口 + 删 AICaptionsPanel/AIToolbar/AIResultPanel =====
 		{
 			const sidebarPath = path.resolve(__dirname, "../../../src/components/video-editor/layout/EditorSidebar.tsx");
 			const sidebarContent = fs.readFileSync(sidebarPath, "utf-8");
 			ok_("10.1", "EditorSidebar §60 含 sidebar-ai-enhance testid", sidebarContent.includes('data-testid={`sidebar-${item.id}`}') && sidebarContent.includes('"ai-enhance"'));
-			ok_("10.1", "EditorSidebar §60 含 sidebar-ai-captions", sidebarContent.includes('"ai-captions"'));
+			// §61: 删 ai-captions 入口
+			ok_("10.1", "EditorSidebar §61 删 ai-captions 入口", !sidebarContent.includes('"ai-captions"'));
 			ok_("10.1", "EditorSidebar §60 含 sidebar-ai-service", sidebarContent.includes('"ai-service"'));
 			ok_("10.2", "EditorSidebar §60 dispatch kliq:open-ai-enhance event", sidebarContent.includes("kliq:open-ai-enhance"));
-			ok_("10.2", "EditorSidebar §60 dispatch kliq:open-ai-captions event", sidebarContent.includes("kliq:open-ai-captions"));
+			// §61: 删 kliq:open-ai-captions 事件派发
+			ok_("10.2", "EditorSidebar §61 删 kliq:open-ai-captions 派发", !sidebarContent.includes("kliq:open-ai-captions"));
 			ok_("10.2", "EditorSidebar §60 dispatch kliq:open-ai-service event", sidebarContent.includes("kliq:open-ai-service"));
 			ok_("10.3", "EditorSidebar §60 删 motion import (motion/react)", !sidebarContent.includes("motion/react"));
 			ok_("10.3", "EditorSidebar §60 删 Tailwind rounded-lg className", !sidebarContent.includes('"rounded-lg"'));
-			// 检测 inline style / CSS 中实际使用 #2563EB,排除描述"已删除"的注释行
 			const blueUsage = sidebarContent.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "").match(/#2563EB/g) || [];
 			ok_("10.3", "EditorSidebar §60 删蓝色 #2563EB 激活色 (排除注释)", blueUsage.length === 0);
 			ok_("10.3", "EditorSidebar §60 含绿点 #22c55e", sidebarContent.includes("#22c55e"));
@@ -939,10 +945,41 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 			const helpContent = fs.readFileSync(helpPath, "utf-8");
 			ok_("10.5", "HelpTab §60 §213 inline 重写 (无 Tailwind className)", !helpContent.includes('className="flex flex-col gap-2"'));
 
+			// §61: AICaptionsPanel.tsx 已删
 			const aiCaptionsPath = path.resolve(__dirname, "../../../src/components/video-editor/ai-enhance/AICaptionsPanel.tsx");
-			const aiCaptionsContent = fs.existsSync(aiCaptionsPath) ? fs.readFileSync(aiCaptionsPath, "utf-8") : "";
-			ok_("10.6", "AICaptionsPanel §60 监听 kliq:open-ai-captions 事件", aiCaptionsContent.includes("kliq:open-ai-captions"));
-			ok_("10.6", "AICaptionsPanel §60 含 4 个 action (transcribe/bilingual/translate-multi/proofread)", aiCaptionsContent.includes("transcribe") && aiCaptionsContent.includes("bilingual") && aiCaptionsContent.includes("translate-multi") && aiCaptionsContent.includes("proofread"));
+			ok_("10.6", "§61 AICaptionsPanel.tsx 已删除", !fs.existsSync(aiCaptionsPath));
+
+			// §61: AIToolbar.tsx 已删
+			const aiToolbarPath = path.resolve(__dirname, "../../../src/components/video-editor/AIToolbar.tsx");
+			ok_("10.6", "§61 AIToolbar.tsx 已删除", !fs.existsSync(aiToolbarPath));
+
+			// §61: AIResultPanel.tsx 已删
+			const aiResultPath = path.resolve(__dirname, "../../../src/components/video-editor/AIResultPanel.tsx");
+			ok_("10.6", "§61 AIResultPanel.tsx 已删除", !fs.existsSync(aiResultPath));
+
+			// §61: AIEnhancePanel 新设计 — 无 textarea prompt / Hotwords dropdown / Scenario dropdown / 5 组按钮
+			const enhancePath = path.resolve(__dirname, "../../../src/components/video-editor/ai-enhance/AIEnhancePanel.tsx");
+			const enhanceContent = fs.readFileSync(enhancePath, "utf-8");
+			ok_("10.6", "§61 AIEnhancePanel 不含 data-ai-enhance-prompt (§58-3 textarea prompt 已删)", !enhanceContent.includes("data-ai-enhance-prompt"));
+			ok_("10.6", "§61 AIEnhancePanel 含 kliq-ai-hotwords dropdown", enhanceContent.includes("kliq-ai-hotwords"));
+			ok_("10.6", "§61 AIEnhancePanel 含 kliq-ai-scenario dropdown", enhanceContent.includes("kliq-ai-scenario"));
+			ok_("10.6", "§61 AIEnhancePanel 含 5 个 group 名字 (transcribe/edit/generate/translate/search)", enhanceContent.includes("transcribe") && enhanceContent.includes("edit") && enhanceContent.includes("generate") && enhanceContent.includes("translate") && enhanceContent.includes("search"));
+			ok_("10.6", "§61 AIEnhancePanel 含 AI_ACTION_PRESENTATION 引用", enhanceContent.includes("AI_ACTION_PRESENTATION") || enhanceContent.includes("groupActionsByOrder"));
+
+			const helpersPath = path.resolve(__dirname, "../../../src/components/video-editor/ai-enhance/helpers.ts");
+			const helpersContent = fs.readFileSync(helpersPath, "utf-8");
+			ok_("10.6", "§61 helpers.ts 含 AI_ACTION_PRESENTATION", helpersContent.includes("AI_ACTION_PRESENTATION"));
+			ok_("10.6", "§61 helpers.ts 含 AI_ACTIONS", helpersContent.includes("export const AI_ACTIONS"));
+			ok_("10.6", "§61 helpers.ts 含 getAIActionDef", helpersContent.includes("export function getAIActionDef"));
+			ok_("10.6", "§61 helpers.ts 含 GROUP_ORDER", helpersContent.includes("GROUP_ORDER"));
+			ok_("10.6", "§61 helpers.ts 含 HOTWORD_DOMAINS", helpersContent.includes("HOTWORD_DOMAINS"));
+
+			// §61: ExportSettingsMenu 不再含 AIToolbar / AIResultPanel / useAIActions
+			const exportMenuPath = path.resolve(__dirname, "../../../src/components/video-editor/ExportSettingsMenu.tsx");
+			const exportMenuContent = fs.readFileSync(exportMenuPath, "utf-8");
+			ok_("10.6", "§61 ExportSettingsMenu 不再 import AIToolbar", !exportMenuContent.includes("AIToolbar"));
+			ok_("10.6", "§61 ExportSettingsMenu 不再 import AIResultPanel", !exportMenuContent.includes("AIResultPanel"));
+			ok_("10.6", "§61 ExportSettingsMenu 不再 useAIActions", !exportMenuContent.includes("useAIActions"));
 
 			const aiServicePath = path.resolve(__dirname, "../../../src/components/video-editor/ai-enhance/AIServicePanel.tsx");
 			const aiServiceContent = fs.existsSync(aiServicePath) ? fs.readFileSync(aiServicePath, "utf-8") : "";
@@ -951,7 +988,8 @@ describe("§55 Full User Flow Integration — AccountCenter→Checkout→AI→Ho
 
 			const shellPath = path.resolve(__dirname, "../../../src/components/video-editor/layout/EditorShell.tsx");
 			const shellContent = fs.readFileSync(shellPath, "utf-8");
-			ok_("10.8", "EditorShell §60 mount AICaptionsPanel", shellContent.includes("<AICaptionsPanel />"));
+			// §61: EditorShell 不再 mount AICaptionsPanel
+			ok_("10.8", "§61 EditorShell 不再 mount AICaptionsPanel", !shellContent.includes("<AICaptionsPanel />"));
 			ok_("10.8", "EditorShell §60 mount AIServicePanel", shellContent.includes("<AIServicePanel />"));
 		}
 

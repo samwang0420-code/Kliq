@@ -3,7 +3,7 @@
  */
 
 import { useCallback, useState } from "react";
-import type { AIAction } from "@/components/video-editor/AIToolbar";
+import type { AIAction } from "@/lib/ai/action-inputs";
 import { type BilingualCaption, generateBilingualCaptions } from "@/lib/ai/bilingual-captions";
 import {
 	proofreadCaptions,

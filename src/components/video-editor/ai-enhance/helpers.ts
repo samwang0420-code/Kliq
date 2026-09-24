@@ -124,3 +124,177 @@ export function dispatchAIActionBusy(detail: AIActionBusyDetail): void {
 
 /** 默认 estimated ms — 用于 AIEnhancePanel 自身不知道剩余时间时的兜底 */
 export const DEFAULT_ACTION_REMAIN_MS = 30_000 as const;
+
+/* -------------------------------------------------------------------------- */
+/* §61 AI Action 呈现层 (合并 AIToolbar.tsx 的 AI_ACTION_PRESENTATION)         */
+/* -------------------------------------------------------------------------- */
+
+import type { Icon } from "@phosphor-icons/react";
+import {
+	Article,
+	Binoculars,
+	CheckCircle,
+	ClosedCaptioning,
+	Crop,
+	Globe,
+	Lightning,
+	ListNumbers,
+	MagicWand,
+	Microphone,
+	Scissors,
+	ShareNetwork,
+	Sparkle,
+	SpeakerSlash,
+	Tag,
+	TextT,
+} from "@phosphor-icons/react";
+import {
+	AI_ACTION_IDS,
+	AI_ACTION_SPECS,
+	type AIActionGroup,
+	type AIInput,
+} from "@/lib/ai/action-inputs";
+
+/** 动作的呈现信息。与逻辑契约（AI_ACTION_SPECS）分成两张表，各自由 Record 强制完整。 */
+type AIActionPresentation = {
+	labelKey: string;
+	labelFallback: string;
+	/** 专业线性图标（项目规范：界面不得使用 emoji 当图标） */
+	Icon: Icon;
+};
+
+export const AI_ACTION_PRESENTATION: Record<AIAction, AIActionPresentation> = {
+	transcribe: {
+		labelKey: "yanjing.ai.actions.transcribe",
+		labelFallback: "AI Transcribe",
+		Icon: Microphone,
+	},
+	"bilingual-captions": {
+		labelKey: "yanjing.ai.actions.bilingual",
+		labelFallback: "AI Bilingual Captions",
+		Icon: ClosedCaptioning,
+	},
+	"ai-translate-multi": {
+		labelKey: "yanjing.ai.actions.translateMulti",
+		labelFallback: "AI Multi-language Captions",
+		Icon: Globe,
+	},
+	"ai-proofread": {
+		labelKey: "yanjing.ai.actions.proofread",
+		labelFallback: "AI Caption Proofread",
+		Icon: CheckCircle,
+	},
+	"ai-silence": {
+		labelKey: "yanjing.ai.actions.silence",
+		labelFallback: "AI Silence Removal",
+		Icon: SpeakerSlash,
+	},
+	"ai-fillers": {
+		labelKey: "yanjing.ai.actions.fillers",
+		labelFallback: "AI Filler Removal",
+		Icon: Scissors,
+	},
+	"ai-speed": {
+		labelKey: "yanjing.ai.actions.speed",
+		labelFallback: "AI Smart Speed",
+		Icon: Lightning,
+	},
+	"ai-zoom": {
+		labelKey: "yanjing.ai.actions.zoom",
+		labelFallback: "AI Auto Zoom",
+		Icon: Crop,
+	},
+	"ai-oneclick": {
+		labelKey: "yanjing.ai.actions.oneclick",
+		labelFallback: "AI One-click Edit",
+		Icon: MagicWand,
+	},
+	"ai-chapters": {
+		labelKey: "yanjing.ai.actions.chapters",
+		labelFallback: "AI Chapters",
+		Icon: ListNumbers,
+	},
+	"ai-summary": {
+		labelKey: "yanjing.ai.actions.summary",
+		labelFallback: "AI Summary",
+		Icon: Article,
+	},
+	"ai-titles": {
+		labelKey: "yanjing.ai.actions.titles",
+		labelFallback: "AI Titles",
+		Icon: TextT,
+	},
+	"ai-tags": {
+		labelKey: "yanjing.ai.actions.tags",
+		labelFallback: "AI Tags",
+		Icon: Tag,
+	},
+	"ai-social": {
+		labelKey: "yanjing.ai.actions.social",
+		labelFallback: "AI Social Copy",
+		Icon: ShareNetwork,
+	},
+	"ai-semantic-search": {
+		labelKey: "yanjing.ai.actions.search",
+		labelFallback: "AI Semantic Search",
+		Icon: Binoculars,
+	},
+	"ai-ui-polish": {
+		labelKey: "yanjing.ai.actions.uiPolish",
+		labelFallback: "UI Polish",
+		Icon: Sparkle,
+	},
+};
+
+export type AIActionDef = AIActionPresentation & {
+	id: AIAction;
+	group: AIActionGroup;
+	needs: AIInput[];
+};
+
+/** 逻辑契约 + 呈现信息合并后的动作清单（顺序由 AI_ACTION_IDS 决定） */
+export const AI_ACTIONS: AIActionDef[] = AI_ACTION_IDS.map((id) => ({
+	id,
+	...AI_ACTION_SPECS[id],
+	...AI_ACTION_PRESENTATION[id],
+}));
+
+const AI_ACTIONS_BY_ID = new Map<AIAction, AIActionDef>(AI_ACTIONS.map((def) => [def.id, def]));
+
+/** 取动作定义（调用方组装 params 时复用） */
+export function getAIActionDef(id: AIAction): AIActionDef | undefined {
+	return AI_ACTIONS_BY_ID.get(id);
+}
+
+/** UI 渲染顺序 — 与 trash/AIToolbar.tsx 完全一致 */
+export const GROUP_ORDER: AIActionGroup[] = [
+	"transcribe",
+	"edit",
+	"generate",
+	"translate",
+	"search",
+];
+
+/** 按组 + order 分组后的动作（用于 AIEnhancePanel 渲染按钮群） */
+export function groupActionsByOrder(): {
+	group: AIActionGroup;
+	actions: AIActionDef[];
+}[] {
+	return GROUP_ORDER.map((group) => ({
+		group,
+		actions: AI_ACTIONS.filter((action) => action.group === group),
+	})).filter((entry) => entry.actions.length > 0);
+}
+
+/** 9 个热词域 — 与 hotwords.ts 的 HotwordDomain 对齐, AIEnhancePanel dropdown 用 */
+export const HOTWORD_DOMAINS = [
+	"general",
+	"legal",
+	"medical",
+	"ecommerce",
+	"education",
+	"finance",
+	"gaming",
+	"tech",
+	"marketing",
+] as const satisfies readonly import("@/lib/hotwords").HotwordDomain[];

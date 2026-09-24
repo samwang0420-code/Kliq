@@ -1,21 +1,12 @@
 import {
 	DownloadSimple as Download,
 	FilmSlate as Film,
-	FolderOpen,
 	Image,
-	X,
 } from "@phosphor-icons/react";
 import { LayoutGroup, motion } from "motion/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { type AIAction, AIToolbar, type AIInputState } from "@/components/video-editor/AIToolbar";
-import { AIResultPanel } from "@/components/video-editor/AIResultPanel";
 import { useScopedT } from "@/contexts/I18nContext";
-import { useAIActions } from "@/hooks/useAIActions";
-import { useAIAudioFile } from "@/hooks/useAIAudioFile";
-import { buildAIActionParams } from "@/lib/ai/action-inputs";
-import type { TranscribeSegment } from "@/lib/ai/openai-client";
 import type {
 	ExportEncodingMode,
 	ExportFormat,
@@ -26,7 +17,6 @@ import type {
 	GifSizePreset,
 } from "@/lib/exporter";
 import { GIF_FRAME_RATES, GIF_SIZE_PRESETS, MP4_FRAME_RATES } from "@/lib/exporter";
-import { ProRequiredError } from "@/lib/license";
 import { cn } from "@/lib/utils";
 
 interface ExportSettingsMenuProps {
@@ -85,136 +75,6 @@ export function ExportSettingsMenu({
 	className,
 }: ExportSettingsMenuProps) {
 	const tSettings = useScopedT("settings");
-	const [aiHotwordDomain, setAiHotwordDomain] = useState<
-		| "general"
-		| "legal"
-		| "medical"
-		| "ecommerce"
-		| "education"
-		| "finance"
-		| "gaming"
-		| "tech"
-		| "marketing"
-	>("general");
-	const {
-		file: audioFile,
-		filePath: audioFilePath,
-		pickVideo,
-		clearFile,
-		isElectron,
-	} = useAIAudioFile();
-	const {
-		busy,
-		error: aiError,
-		results: aiResults,
-		runAction,
-	} = useAIActions({ hotwordDomain: aiHotwordDomain, language: "zh" });
-
-	// ---- AI 输入区状态 -------------------------------------------------------
-	// 9 个文本类动作需要 transcript / segments / query / sourceText。这些输入此前
-	// 完全没有入口，调用方一律只传 { file }，于是那些动作点下去必然抛错。
-	const [aiTranscript, setAiTranscript] = useState("");
-	const [aiSegments, setAiSegments] = useState<TranscribeSegment[]>([]);
-	const [aiQuery, setAiQuery] = useState("");
-	const [aiPolishSource, setAiPolishSource] = useState("");
-	const [aiDurationSec, setAiDurationSec] = useState<number | null>(null);
-
-	// 转写成功后自动把文本与时间轴灌进输入区，接通下游动作为一条链
-	useEffect(() => {
-		const result = aiResults.transcribeResult;
-		if (!result) return;
-		setAiTranscript(result.text ?? "");
-		setAiSegments(result.segments ?? []);
-		if (typeof result.duration === "number" && result.duration > 0) {
-			setAiDurationSec(result.duration);
-		}
-	}, [aiResults.transcribeResult]);
-
-	// 探测媒体时长（章节生成需要，单位秒）。Whisper 也回传 duration，这里先给出
-	// 一个不依赖 API 的来源，使「选文件即可用章节」成立。
-	useEffect(() => {
-		if (!audioFile) {
-			setAiDurationSec(null);
-			return;
-		}
-		let cancelled = false;
-		const url = URL.createObjectURL(audioFile);
-		const el = document.createElement("audio");
-		el.preload = "metadata";
-		const done = (value: number | null) => {
-			if (!cancelled) setAiDurationSec(value);
-			URL.revokeObjectURL(url);
-		};
-		el.onloadedmetadata = () =>
-			done(Number.isFinite(el.duration) && el.duration > 0 ? el.duration : null);
-		el.onerror = () => done(null);
-		el.src = url;
-		return () => {
-			cancelled = true;
-			URL.revokeObjectURL(url);
-		};
-	}, [audioFile]);
-
-	/**
-	 * 按动作组装 runAction 的 params。
-	 *
-	 * 此前这里对所有动作一律只传 `{ file }` —— 需要 transcript / segments /
-	 * query / sourceText 的 9 个动作因此永远不可达。实现已抽到
-	 * `@/lib/ai/action-inputs`（纯逻辑、可单测），并由该模块的测试穷举钉住
-	 * 「动作声明的 needs 必须被 params 覆盖」。
-	 */
-	const buildAIParams = useCallback(
-		(action: AIAction, file: Blob): Record<string, unknown> =>
-			buildAIActionParams(action, {
-				file,
-				transcript: aiTranscript,
-				durationSec: aiDurationSec,
-				segments: aiSegments,
-				query: aiQuery,
-				sourceText: aiPolishSource,
-			}),
-		[aiTranscript, aiDurationSec, aiSegments, aiQuery, aiPolishSource],
-	);
-
-	const handleAIAction = useCallback(
-		async (action: AIAction) => {
-			if (!audioFile) {
-				console.warn("[AI] 需要先选择视频/音频文件");
-				return;
-			}
-			try {
-				await runAction(action, buildAIParams(action, audioFile));
-				console.log(`[AI] ${action} 完成`);
-			} catch (err) {
-				// Pro 闸门拦截不是失败：runAction 已弹出个人中心引导升级
-				if (err instanceof ProRequiredError) return;
-				console.error(`[AI] ${action} 失败:`, err);
-			}
-		},
-		[audioFile, runAction, buildAIParams],
-	);
-
-	const aiInputs: AIInputState = useMemo(
-		() => ({
-			hasFile: Boolean(audioFile),
-			hasDuration: aiDurationSec !== null,
-			transcript: aiTranscript,
-			segmentCount: aiSegments.length,
-			query: aiQuery,
-			sourceText: aiPolishSource,
-		}),
-		[audioFile, aiDurationSec, aiTranscript, aiSegments, aiQuery, aiPolishSource],
-	);
-
-	const handleAIInputChange = useCallback(
-		(patch: { transcript?: string; query?: string; sourceText?: string }) => {
-			if (patch.transcript !== undefined) setAiTranscript(patch.transcript);
-			if (patch.query !== undefined) setAiQuery(patch.query);
-			if (patch.sourceText !== undefined) setAiPolishSource(patch.sourceText);
-		},
-		[],
-	);
-
 	const isLegacyModel = exportPipelineModel === "legacy";
 
 	return (
@@ -593,66 +453,6 @@ export function ExportSettingsMenu({
 				</div>
 			)}
 
-			<AIToolbar
-				selectedDomain={aiHotwordDomain}
-				onDomainChange={setAiHotwordDomain}
-				availableDomains={[
-					"general",
-					"legal",
-					"medical",
-					"ecommerce",
-					"education",
-					"finance",
-					"gaming",
-					"tech",
-					"marketing",
-				]}
-				onAction={handleAIAction}
-				busy={busy}
-				disabled={!audioFile}
-				inputs={aiInputs}
-				onInputChange={handleAIInputChange}
-			/>
-
-			{/* AI 结果展示：此前 useAIActions 的 results 全仓零消费，
-			    请求成功但界面空白，Pro 权益在体感上等于「没开发」。 */}
-			<AIResultPanel
-				results={aiResults}
-				onUseTranscript={(text) => {
-					setAiTranscript(text);
-					if (aiSegments.length === 0 && aiResults.transcribeResult?.segments) {
-						setAiSegments(aiResults.transcribeResult.segments);
-					}
-				}}
-			/>
-
-			<div className="mt-2 flex items-center gap-1.5">
-				<button
-					type="button"
-					onClick={pickVideo}
-					disabled={!isElectron}
-					className={cn(
-						"inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs transition-colors",
-						isElectron ? "hover:bg-foreground/5" : "cursor-not-allowed opacity-60",
-					)}
-				>
-					<FolderOpen size={13} />
-					{audioFile
-						? audioFilePath
-						: tSettings("export.pickFile", "Select video / audio")}
-				</button>
-				{audioFile && (
-					<button
-						type="button"
-						onClick={clearFile}
-						aria-label={tSettings("export.clearFile", "Clear file")}
-						className="inline-flex items-center rounded-md border border-border px-2 py-1 text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
-					>
-						<X size={12} weight="bold" />
-					</button>
-				)}
-				{aiError && <span className="text-[11px] text-destructive">{aiError}</span>}
-			</div>
 			<Button
 				type="button"
 				size="lg"
