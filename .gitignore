@@ -11,6 +11,7 @@ dist/
 dist-electron/
 dist-ssr/
 index-*.js
+index-*.css
 *.tsbuildinfo
 release/**
 vite.config.js

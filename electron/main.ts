@@ -1057,6 +1057,12 @@ app.whenReady().then(async () => {
 	}
 
 	createWindow();
+	// §62 Round 2: launch 时同时创建 Editor 窗口, 让用户立刻看到完整 UI
+	// (Sidebar / AI 增强 / 账户中心 — §57-§61 实现), 不再只看到 HUD overlay。
+	// 高级用户可通过 KLIQ_NO_EDITOR_ON_LAUNCH=true 关闭 (跟旧行为一致)。
+	if (!process.env.KLIQ_NO_EDITOR_ON_LAUNCH) {
+		createEditorWindowWrapper();
+	}
 	setupAutoUpdates(getUpdateDialogWindow, sendUpdateToastToWindows);
 	if (IS_DEV && process.env.RECORDLY_DEV_PREVIEW_UPDATE === "1") {
 		setTimeout(() => {
